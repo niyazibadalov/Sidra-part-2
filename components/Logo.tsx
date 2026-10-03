@@ -5,7 +5,7 @@ export function Logo({ className = "" }: { className?: string }) {
     <Link
       href="/"
       aria-label="SIDRA home"
-      className={`inline-flex flex-col items-center leading-none ${className}`}
+      className={`inline-flex cursor-pointer flex-col items-center leading-none ${className}`}
     >
       <span className="font-serif text-[26px] tracking-[0.14em] text-ink sm:text-[28px]">
         SIDRA

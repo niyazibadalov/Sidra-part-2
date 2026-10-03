@@ -181,7 +181,7 @@ export function FeaturedProducts() {
                     key={tab}
                     type="button"
                     onClick={() => setActiveTab(tab)}
-                    className={`relative pb-1 text-[13px] font-medium transition-colors sm:text-[14px] ${
+                    className={`relative cursor-pointer pb-1 text-[13px] font-medium transition-colors sm:text-[14px] ${
                       isActive
                         ? "font-semibold text-ink after:absolute after:bottom-0 after:inset-x-0 after:h-[2px] after:bg-ink"
                         : "text-muted hover:text-ink"
@@ -196,7 +196,7 @@ export function FeaturedProducts() {
 
           <Link
             href="/featured"
-            className="group flex items-center gap-1 self-start text-[12.5px] font-medium text-ink-soft transition-colors hover:text-ink sm:self-auto"
+            className="group flex cursor-pointer items-center gap-1 self-start text-[12.5px] font-medium text-ink-soft transition-colors hover:text-ink sm:self-auto"
           >
             <span>View All</span>
             <ArrowRightIcon
@@ -243,7 +243,7 @@ export function FeaturedProducts() {
                     type="button"
                     onClick={(e) => toggleWishlist(product.id, e)}
                     aria-label={isLiked ? "Remove from wishlist" : "Add to wishlist"}
-                    className="absolute top-3 right-3 z-10 grid size-8 place-items-center rounded-full text-ink transition-colors hover:text-rose-gold"
+                    className="absolute top-3 right-3 z-10 grid size-8 cursor-pointer place-items-center rounded-full text-ink transition-colors hover:text-rose-gold"
                   >
                     <HeartIcon
                       width={18}
@@ -252,7 +252,7 @@ export function FeaturedProducts() {
                     />
                   </button>
 
-                  <Link href={`/product/${product.id}`} className="absolute inset-0 block">
+                  <Link href={`/product/${product.id}`} className="absolute inset-0 block cursor-pointer">
                     <Image
                       src={product.image}
                       alt={product.name}
@@ -265,7 +265,7 @@ export function FeaturedProducts() {
 
                 {/* Product Info below the image */}
                 <div className="mt-3.5 flex flex-1 flex-col">
-                  <Link href={`/product/${product.id}`}>
+                  <Link href={`/product/${product.id}`} className="cursor-pointer">
                     <h3 className="line-clamp-1 text-[13.5px] font-medium text-ink transition-colors group-hover:text-rose-gold-dark sm:text-[14.5px]">
                       {product.name}
                     </h3>
@@ -294,7 +294,7 @@ export function FeaturedProducts() {
             type="button"
             onClick={() => scrollByPage(-1)}
             aria-label="Previous products"
-            className={`absolute top-[38%] left-0 z-20 grid size-10 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-line bg-white/95 text-ink shadow-md transition-all duration-300 hover:bg-cream-100 sm:size-11 ${
+            className={`absolute top-[38%] left-0 z-20 grid size-10 -translate-x-1/2 -translate-y-1/2 cursor-pointer place-items-center rounded-full border border-line bg-white/95 text-ink shadow-md transition-all duration-300 hover:bg-cream-100 sm:size-11 ${
               canScrollPrev ? "opacity-100" : "opacity-40 cursor-not-allowed"
             }`}
           >
@@ -305,7 +305,7 @@ export function FeaturedProducts() {
             type="button"
             onClick={() => scrollByPage(1)}
             aria-label="Next products"
-            className={`absolute top-[38%] right-0 z-20 grid size-10 translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-line bg-white/95 text-ink shadow-md transition-all duration-300 hover:bg-cream-100 sm:size-11 ${
+            className={`absolute top-[38%] right-0 z-20 grid size-10 translate-x-1/2 -translate-y-1/2 cursor-pointer place-items-center rounded-full border border-line bg-white/95 text-ink shadow-md transition-all duration-300 hover:bg-cream-100 sm:size-11 ${
               canScrollNext ? "opacity-100" : "opacity-40 cursor-not-allowed"
             }`}
           >

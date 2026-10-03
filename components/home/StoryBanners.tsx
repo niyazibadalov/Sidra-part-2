@@ -37,7 +37,7 @@ export function StoryBanners() {
             <div className="relative z-10 pt-4">
               <Link
                 href="/collections"
-                className="inline-flex items-center gap-1.5 text-[12.5px] font-medium text-white transition-colors hover:text-sand-300"
+                className="inline-flex cursor-pointer items-center gap-1.5 text-[12.5px] font-medium text-white transition-colors hover:text-sand-300"
               >
                 <span>Explore Now</span>
                 <ArrowRightIcon
@@ -75,7 +75,7 @@ export function StoryBanners() {
             <div className="relative z-10 pt-4">
               <Link
                 href="/gifts"
-                className="inline-flex items-center gap-1.5 text-[12.5px] font-medium text-ink transition-colors hover:text-rose-gold-dark"
+                className="inline-flex cursor-pointer items-center gap-1.5 text-[12.5px] font-medium text-ink transition-colors hover:text-rose-gold-dark"
               >
                 <span>Shop Gifts</span>
                 <ArrowRightIcon
@@ -115,7 +115,7 @@ export function StoryBanners() {
             <div className="relative z-10 flex items-center justify-between pt-4">
               <Link
                 href="/stories"
-                className="inline-flex items-center gap-1.5 text-[12.5px] font-medium text-white transition-colors hover:text-sand-300"
+                className="inline-flex cursor-pointer items-center gap-1.5 text-[12.5px] font-medium text-white transition-colors hover:text-sand-300"
               >
                 <span>Learn More</span>
                 <ArrowRightIcon
@@ -129,7 +129,7 @@ export function StoryBanners() {
               <button
                 type="button"
                 aria-label="Watch video"
-                className="grid size-10 place-items-center rounded-full border border-white/50 bg-white/20 text-white backdrop-blur-md transition-all duration-300 hover:scale-110 hover:bg-white/35 sm:size-11"
+                className="grid size-10 cursor-pointer place-items-center rounded-full border border-white/50 bg-white/20 text-white backdrop-blur-md transition-all duration-300 hover:scale-110 hover:bg-white/35 sm:size-11"
               >
                 <svg
                   viewBox="0 0 24 24"

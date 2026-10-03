@@ -150,7 +150,7 @@ export function TrustedBrands() {
             type="button"
             onClick={scrollPrev}
             aria-label="Previous brands"
-            className="mr-2 grid size-9 shrink-0 place-items-center rounded-full text-ink-soft transition-colors hover:bg-cream-200 hover:text-ink lg:hidden"
+            className="mr-2 grid size-9 shrink-0 cursor-pointer place-items-center rounded-full text-ink-soft transition-colors hover:bg-cream-200 hover:text-ink lg:hidden"
           >
             <ChevronLeftIcon width={20} height={20} />
           </button>
@@ -176,7 +176,7 @@ export function TrustedBrands() {
             type="button"
             onClick={scrollNext}
             aria-label="Next brands"
-            className="ml-2 grid size-9 shrink-0 place-items-center rounded-full text-ink-soft transition-colors hover:bg-cream-200 hover:text-ink lg:ml-6"
+            className="ml-2 grid size-9 shrink-0 cursor-pointer place-items-center rounded-full text-ink-soft transition-colors hover:bg-cream-200 hover:text-ink lg:ml-6"
           >
             <ChevronRightIcon width={20} height={20} />
           </button>

@@ -37,7 +37,7 @@ export function Footer() {
               <Link
                 key={link.label}
                 href={link.href}
-                className="text-[13px] font-medium text-ink-soft transition-colors hover:text-ink"
+                className="cursor-pointer text-[13px] font-medium text-ink-soft transition-colors hover:text-ink"
               >
                 {link.label}
               </Link>
@@ -55,7 +55,7 @@ export function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={social.label}
-                  className="transition-colors hover:text-ink"
+                  className="cursor-pointer transition-colors hover:text-ink"
                 >
                   <Icon width={18} height={18} />
                 </a>
@@ -82,7 +82,7 @@ export function Footer() {
               <button
                 type="submit"
                 aria-label="Subscribe"
-                className="absolute right-1 grid size-8 place-items-center rounded-full bg-ink text-white transition-colors hover:bg-ink-soft"
+                className="absolute right-1 grid size-8 cursor-pointer place-items-center rounded-full bg-ink text-white transition-colors hover:bg-ink-soft"
               >
                 <ArrowRightIcon width={14} height={14} />
               </button>
@@ -102,13 +102,13 @@ export function Footer() {
           </p>
 
           <div className="hidden items-center gap-6 lg:flex">
-            <Link href="/privacy" className="transition-colors hover:text-ink">
+            <Link href="/privacy" className="cursor-pointer transition-colors hover:text-ink">
               Privacy
             </Link>
-            <Link href="/terms" className="transition-colors hover:text-ink">
+            <Link href="/terms" className="cursor-pointer transition-colors hover:text-ink">
               Terms
             </Link>
-            <Link href="/cookies" className="transition-colors hover:text-ink">
+            <Link href="/cookies" className="cursor-pointer transition-colors hover:text-ink">
               Cookies
             </Link>
           </div>

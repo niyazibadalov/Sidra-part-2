@@ -48,7 +48,7 @@ export function ImpactBanner() {
       />
 
       {/* Subtle gradient to ensure text readability */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r via-cream-100/50 to-cream-100/80" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-cream-100/70 via-cream-100/60 to-transparent" />
 
       {/* Content row - edge-to-edge full width */}
       <div className="relative z-10 flex min-h-[175px] w-full flex-col items-center justify-center gap-6 px-4 py-8 sm:px-6 sm:py-9 lg:min-h-[190px] lg:flex-row lg:justify-between lg:gap-8 lg:px-8 lg:py-4 xl:px-12">
@@ -88,7 +88,7 @@ export function ImpactBanner() {
         <div className="flex shrink-0 flex-wrap items-center justify-center gap-4 sm:gap-6">
           <Link
             href="/impact"
-            className="group hidden items-center gap-2 rounded-full bg-ink px-6 py-2.5 text-[13px] font-medium text-white transition-colors hover:bg-ink-soft lg:inline-flex"
+            className="group hidden cursor-pointer items-center gap-2 rounded-full bg-ink px-6 py-2.5 text-[13px] font-medium text-white transition-colors hover:bg-ink-soft lg:inline-flex"
           >
             <span>Our Impact</span>
             <ArrowRightIcon

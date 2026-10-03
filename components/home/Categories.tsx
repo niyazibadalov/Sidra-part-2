@@ -44,7 +44,7 @@ export function ShopByCategory() {
           </h2>
           <Link
             href="/categories"
-            className="group flex items-center gap-1 text-[12.5px] font-medium text-ink-soft transition-colors hover:text-ink"
+            className="group flex cursor-pointer items-center gap-1 text-[12.5px] font-medium text-ink-soft transition-colors hover:text-ink"
           >
             <span>View All Categories</span>
             <ArrowRightIcon
@@ -61,7 +61,7 @@ export function ShopByCategory() {
             <Link
               key={cat.name}
               href={cat.href}
-              className="group flex flex-col items-center text-center"
+              className="group flex cursor-pointer flex-col items-center text-center"
             >
               {/* Circular image frame */}
               <div className="relative aspect-square w-full max-w-[124px] overflow-hidden rounded-full border border-line/60 bg-[#efe4d9] p-2 shadow-xs transition-all duration-300 group-hover:-translate-y-1 group-hover:border-sand-400 group-hover:shadow-md">

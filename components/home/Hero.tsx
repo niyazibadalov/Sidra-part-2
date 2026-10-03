@@ -159,14 +159,14 @@ export function Hero() {
           >
             <Link
               href="/jewellery"
-              className="group inline-flex h-9.5 items-center gap-1.5 rounded-full bg-ink px-4 text-[11.5px] font-medium text-white transition-colors hover:bg-ink-soft sm:h-10 sm:px-4.5 sm:text-[12px] md:h-10 md:px-5 md:text-[12.5px] lg:h-12 lg:px-6 lg:text-[13px]"
+              className="group inline-flex h-9.5 cursor-pointer items-center gap-1.5 rounded-full bg-ink px-4 text-[11.5px] font-medium text-white transition-colors hover:bg-ink-soft sm:h-10 sm:px-4.5 sm:text-[12px] md:h-10 md:px-5 md:text-[12.5px] lg:h-12 lg:px-6 lg:text-[13px]"
             >
               Shop Jewellery
               <ArrowRightIcon width={15} height={15} className="transition-transform group-hover:translate-x-0.5" />
             </Link>
             <Link
               href="/stories"
-              className="inline-flex h-9.5 items-center gap-1.5 rounded-full border border-ink/70 px-4 text-[11.5px] font-medium text-ink transition-colors hover:bg-ink hover:text-white sm:h-10 sm:px-4.5 sm:text-[12px] md:h-10 md:px-5 md:text-[12.5px] lg:h-12 lg:px-6 lg:text-[13px]"
+              className="inline-flex h-9.5 cursor-pointer items-center gap-1.5 rounded-full border border-ink/70 px-4 text-[11.5px] font-medium text-ink transition-colors hover:bg-ink hover:text-white sm:h-10 sm:px-4.5 sm:text-[12px] md:h-10 md:px-5 md:text-[12.5px] lg:h-12 lg:px-6 lg:text-[13px]"
             >
               Watch Our Story
               <PlayCircleIcon width={16} height={16} />
@@ -199,7 +199,7 @@ export function Hero() {
           type="button"
           onClick={() => go(-1)}
           aria-label="Previous slide"
-          className="grid size-7 place-items-center rounded-full hover:bg-white/20"
+          className="grid size-7 cursor-pointer place-items-center rounded-full hover:bg-white/20"
         >
           <ChevronLeftIcon width={16} height={16} />
         </button>
@@ -210,7 +210,7 @@ export function Hero() {
           type="button"
           onClick={() => go(1)}
           aria-label="Next slide"
-          className="grid size-7 place-items-center rounded-full hover:bg-white/20"
+          className="grid size-7 cursor-pointer place-items-center rounded-full hover:bg-white/20"
         >
           <ChevronRightIcon width={16} height={16} />
         </button>

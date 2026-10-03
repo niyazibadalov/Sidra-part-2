@@ -29,7 +29,7 @@ function BagButton() {
     <Link
       href="/bag"
       aria-label={`Shopping bag, ${BAG_COUNT} items`}
-      className="relative grid size-10 place-items-center rounded-full text-ink transition-colors hover:bg-cream-200"
+      className="relative grid size-10 cursor-pointer place-items-center rounded-full text-ink transition-colors hover:bg-cream-200"
     >
       <BagIcon width={22} height={22} />
       {BAG_COUNT > 0 && (
@@ -96,7 +96,7 @@ export function Header() {
             onClick={() => setMenuOpen(true)}
             aria-label="Open menu"
             aria-expanded={menuOpen}
-            className="-ml-2 grid size-10 place-items-center rounded-full text-ink hover:bg-cream-200 lg:hidden"
+            className="-ml-2 grid size-10 cursor-pointer place-items-center rounded-full text-ink hover:bg-cream-200 lg:hidden"
           >
             <MenuIcon width={22} height={22} />
           </button>
@@ -109,7 +109,7 @@ export function Header() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="relative py-2 text-[13px] text-ink-soft transition-colors after:absolute after:inset-x-0 after:bottom-0 after:h-px after:origin-left after:scale-x-0 after:bg-ink after:transition-transform hover:text-ink hover:after:scale-x-100"
+                    className="relative cursor-pointer py-2 text-[13px] text-ink-soft transition-colors after:absolute after:inset-x-0 after:bottom-0 after:h-px after:origin-left after:scale-x-0 after:bg-ink after:transition-transform hover:text-ink hover:after:scale-x-100"
                   >
                     {link.label}
                   </Link>
@@ -124,27 +124,27 @@ export function Header() {
             <Link
               href="/search"
               aria-label="Search"
-              className="grid size-10 place-items-center rounded-full text-ink hover:bg-cream-200 xl:hidden"
+              className="grid size-10 cursor-pointer place-items-center rounded-full text-ink hover:bg-cream-200 xl:hidden"
             >
               <SearchIcon width={21} height={21} />
             </Link>
             <Link
               href="/wishlist"
-              className="hidden h-10 items-center gap-1.5 rounded-full px-3 text-[12.5px] text-ink hover:bg-cream-200 lg:flex"
+              className="hidden h-10 cursor-pointer items-center gap-1.5 rounded-full px-3 text-[12.5px] text-ink hover:bg-cream-200 lg:flex"
             >
               <HeartIcon width={18} height={18} />
               Wishlist
             </Link>
             <Link
               href="/sign-in"
-              className="hidden h-10 items-center gap-1.5 rounded-full px-3 text-[12.5px] text-ink hover:bg-cream-200 lg:flex"
+              className="hidden h-10 cursor-pointer items-center gap-1.5 rounded-full px-3 text-[12.5px] text-ink hover:bg-cream-200 lg:flex"
             >
               <UserIcon width={18} height={18} />
               Sign in
             </Link>
             <Link
               href="/join"
-              className="mx-1 hidden h-10 items-center rounded-full bg-ink px-5 text-[12.5px] font-medium text-white transition-colors hover:bg-ink-soft lg:flex"
+              className="mx-1 hidden h-10 cursor-pointer items-center rounded-full bg-ink px-5 text-[12.5px] font-medium text-white transition-colors hover:bg-ink-soft lg:flex"
             >
               Join Sidra
             </Link>
@@ -167,7 +167,7 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
     >
       <div
         onClick={onClose}
-        className={`absolute inset-0 bg-ink/40 transition-opacity duration-300 ${
+          className={`absolute inset-0 cursor-pointer bg-ink/40 transition-opacity duration-300 ${
           open ? "opacity-100" : "opacity-0"
         }`}
       />
@@ -186,7 +186,7 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
             type="button"
             onClick={onClose}
             aria-label="Close menu"
-            className="grid size-10 place-items-center rounded-full hover:bg-cream-200"
+            className="grid size-10 cursor-pointer place-items-center rounded-full hover:bg-cream-200"
           >
             <CloseIcon width={22} height={22} />
           </button>
@@ -202,7 +202,7 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
                   <Link
                     href={link.href}
                     onClick={onClose}
-                    className="flex items-center justify-between py-4 font-serif text-xl text-ink"
+                    className="flex cursor-pointer items-center justify-between py-4 font-serif text-xl text-ink"
                   >
                     {link.label}
                     <ChevronRightIcon width={18} height={18} className="text-muted" />
@@ -214,17 +214,17 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
 
           <ul className="mt-6 space-y-1 text-sm text-ink-soft">
             <li>
-              <Link href="/wishlist" onClick={onClose} className="flex items-center gap-3 py-2.5">
+              <Link href="/wishlist" onClick={onClose} className="flex cursor-pointer items-center gap-3 py-2.5">
                 <HeartIcon width={18} height={18} /> Wishlist
               </Link>
             </li>
             <li>
-              <Link href="/sell" onClick={onClose} className="flex items-center gap-3 py-2.5">
+              <Link href="/sell" onClick={onClose} className="flex cursor-pointer items-center gap-3 py-2.5">
                 <BagIcon width={18} height={18} /> Sell on Sidra
               </Link>
             </li>
             <li>
-              <button type="button" className="flex items-center gap-3 py-2.5">
+              <button type="button" className="flex cursor-pointer items-center gap-3 py-2.5">
                 <GlobeIcon width={18} height={18} /> English · EUR
               </button>
             </li>
@@ -235,14 +235,14 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
           <Link
             href="/sign-in"
             onClick={onClose}
-            className="flex h-11 items-center justify-center rounded-full border border-ink text-sm text-ink"
+            className="flex h-11 cursor-pointer items-center justify-center rounded-full border border-ink text-sm text-ink"
           >
             Sign in
           </Link>
           <Link
             href="/join"
             onClick={onClose}
-            className="flex h-11 items-center justify-center rounded-full bg-ink text-sm text-white"
+            className="flex h-11 cursor-pointer items-center justify-center rounded-full bg-ink text-sm text-white"
           >
             Join Sidra
           </Link>

@@ -27,17 +27,17 @@ export function TopBar() {
           aria-label="Utility"
           className="absolute right-6 hidden items-center gap-2 lg:right-10 lg:flex"
         >
-          <Link href="/sell" className="hover:text-ink">
+          <Link href="/sell" className="cursor-pointer hover:text-ink">
             Sell on Sidra
           </Link>
           <span aria-hidden className="text-sand-400">|</span>
-          <Link href="/help" className="hover:text-ink">
+          <Link href="/help" className="cursor-pointer hover:text-ink">
             Help
           </Link>
           <span aria-hidden className="text-sand-400">|</span>
           <button
             type="button"
-            className="flex items-center gap-0.5 hover:text-ink"
+            className="flex cursor-pointer items-center gap-0.5 hover:text-ink"
             aria-label="Language: English"
           >
             EN

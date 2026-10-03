@@ -234,3 +234,47 @@ export const RingArt = (p: IconProps) => (
     <path d="M36 50h48M52 40l-4 10 12 20 12-20-4-10M60 40v10" />
   </svg>
 );
+
+export const GiftBoxIcon = (p: IconProps) => (
+  <Icon {...p}>
+    <polyline points="20 12 20 22 4 22 4 12" />
+    <rect width="20" height="5" x="2" y="7" rx="1" />
+    <line x1="12" x2="12" y1="22" y2="7" />
+    <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" />
+    <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" />
+  </Icon>
+);
+
+export const ScissorsIcon = (p: IconProps) => (
+  <Icon {...p}>
+    <circle cx="6" cy="6" r="3" />
+    <circle cx="6" cy="18" r="3" />
+    <line x1="20" x2="8.12" y1="4" y2="15.88" />
+    <line x1="14.47" x2="20" y1="14.48" y2="20" />
+    <line x1="8.12" x2="12" y1="8.12" y2="12" />
+  </Icon>
+);
+
+export const InsuredDeliveryIcon = (p: IconProps) => (
+  <Icon {...p}>
+    <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
+    <path d="m3.3 7 8.7 5 8.7-5" />
+    <path d="M12 22V12" />
+  </Icon>
+);
+
+export const HeartCircleIcon = (p: IconProps) => (
+  <Icon {...p}>
+    <circle cx="12" cy="12" r="10" />
+    <path d="M12 15.5s-3.8-2.3-4.5-4.5a2.2 2.2 0 0 1 3.7-2.1L12 9.6l.8-.7a2.2 2.2 0 0 1 3.7 2.1c-.7 2.2-4.5 4.5-4.5 4.5Z" />
+  </Icon>
+);
+
+export const RefreshArrowsIcon = (p: IconProps) => (
+  <Icon {...p}>
+    <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+    <path d="M3 3v5h5" />
+    <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
+    <path d="M16 16h5v5" />
+  </Icon>
+);
