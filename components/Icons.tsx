@@ -278,3 +278,73 @@ export const RefreshArrowsIcon = (p: IconProps) => (
     <path d="M16 16h5v5" />
   </Icon>
 );
+
+export const DropletIcon = (p: IconProps) => (
+  <Icon {...p}>
+    <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
+  </Icon>
+);
+
+export const SprayIcon = (p: IconProps) => (
+  <Icon {...p}>
+    <path d="M10 2h4M12 2v4M8 6h8l1 3H7l1-3zM7 9v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V9" />
+  </Icon>
+);
+
+export const SunIcon = (p: IconProps) => (
+  <Icon {...p}>
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+  </Icon>
+);
+
+export const InspectIcon = (p: IconProps) => (
+  <Icon {...p}>
+    <circle cx="11" cy="11" r="7" />
+    <path d="m20 20-3.5-3.5" />
+    <path d="m9 11 1.5 1.5 3-3" />
+  </Icon>
+);
+
+export const PouchIcon = (p: IconProps) => (
+  <Icon {...p}>
+    <path d="M7 6h10l2 4v10a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V10l2-4z" />
+    <path d="M7 6l5 4 5-4" />
+  </Icon>
+);
+
+export const ClaspIcon = (p: IconProps) => (
+  <Icon {...p}>
+    <circle cx="7" cy="12" r="4" />
+    <circle cx="17" cy="12" r="4" />
+    <path d="M11 12h2" />
+  </Icon>
+);
+
+export const HelpCircleIcon = (p: IconProps) => (
+  <Icon {...p}>
+    <circle cx="12" cy="12" r="10" />
+    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+    <line x1="12" x2="12.01" y1="17" y2="17" />
+  </Icon>
+);
+
+export const PolishIcon = (p: IconProps) => (
+  <Icon {...p}>
+    <path d="m14 7 3-3 3 3-3 3" />
+    <path d="m5 16 9-9" />
+    <path d="m3 21 3-3" />
+  </Icon>
+);
+
+export const PlusIcon = (p: IconProps) => (
+  <Icon {...p}>
+    <path d="M5 12h14M12 5v14" />
+  </Icon>
+);
+
+export const MinusIcon = (p: IconProps) => (
+  <Icon {...p}>
+    <path d="M5 12h14" />
+  </Icon>
+);
