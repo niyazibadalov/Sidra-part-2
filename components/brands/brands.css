@@ -1,0 +1,43 @@
+.brands-design {
+  background: #fdfcf9;
+  color: #161412;
+}
+
+.brands-design .font-serif {
+  font-family: var(--font-brands-display), "Times New Roman", serif;
+  font-weight: 400;
+}
+
+.brands-design .brand-directory-column {
+  min-width: 0;
+}
+
+@media (min-width: 1024px) {
+  .brands-design .brand-emerging-blend {
+    background-image: linear-gradient(
+      to right,
+      #eee3d6 0%,
+      #eee3d6 46%,
+      rgb(238 227 214 / 65%) 50%,
+      rgb(238 227 214 / 0%) 58%
+    );
+  }
+
+  .brands-design .brand-hero-blend {
+    background-image: linear-gradient(
+      to right,
+      #f3eee7 0%,
+      #f3eee7 46%,
+      rgb(243 238 231 / 80%) 49%,
+      rgb(243 238 231 / 35%) 55%,
+      rgb(243 238 231 / 0%) 62%
+    );
+  }
+}
+
+@media (min-width: 640px) {
+  .brands-design .brand-directory-column + .brand-directory-column {
+    border-left: 1px solid #eee8df;
+    padding-left: 20px;
+  }
+}

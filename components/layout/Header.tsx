@@ -60,7 +60,7 @@ function SearchField({ className = "" }: { className?: string }) {
   );
 }
 
-export function Header() {
+export function Header({ hideMobileTagline = false }: { hideMobileTagline?: boolean }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -101,7 +101,7 @@ export function Header() {
             <MenuIcon width={22} height={22} />
           </button>
 
-          <Logo className="absolute left-1/2 -translate-x-1/2 lg:static lg:translate-x-0" />
+          <Logo hideMobileTagline={hideMobileTagline} className="absolute left-1/2 -translate-x-1/2 lg:static lg:translate-x-0" />
 
           <nav aria-label="Main" className="hidden lg:block">
             <ul className="flex items-center gap-7">

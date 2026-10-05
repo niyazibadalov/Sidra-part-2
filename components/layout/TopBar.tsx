@@ -7,17 +7,17 @@ const MESSAGES = [
   "Brighter together",
 ];
 
-export function TopBar() {
+export function TopBar({ showOnMobile = false }: { showOnMobile?: boolean }) {
   return (
-    <div className="hidden border-b border-line bg-cream-200 text-[11px] text-ink-soft md:block">
+    <div className={`${showOnMobile ? "block" : "hidden md:block"} border-b border-line bg-cream-200 text-[11px] text-ink-soft`}>
       <div className="relative mx-auto flex h-8 max-w-[1440px] items-center justify-center px-6 lg:px-10">
         <ul className="flex items-center gap-3">
           {MESSAGES.map((m, i) => (
             <li
               key={m}
-              className={`flex items-center gap-3 ${i === 2 ? "hidden lg:flex" : ""}`}
+              className={`items-center gap-3 ${i === 1 && showOnMobile ? "hidden lg:flex" : i === 2 ? (showOnMobile ? "hidden sm:flex" : "hidden lg:flex") : "flex"}`}
             >
-              {i > 0 && <span aria-hidden className="text-rose-gold">✦</span>}
+              {i > 0 && <span aria-hidden className="text-rose-gold">{showOnMobile ? "•" : "✦"}</span>}
               {m}
             </li>
           ))}
