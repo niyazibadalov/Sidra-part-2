@@ -56,12 +56,12 @@ export function ShopByCategory() {
         </div>
 
         {/* 9 Circular Category Items */}
-        <div className="grid grid-cols-3 gap-3.5 sm:grid-cols-5 md:gap-5 lg:grid-cols-9 lg:gap-4">
+        <div className="flex w-full gap-3.5 overflow-x-auto pb-2 pt-1 snap-x snap-mandatory [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:grid sm:grid-cols-5 sm:gap-4 sm:overflow-visible sm:pb-0 sm:pt-0 md:gap-5 lg:grid-cols-9 lg:gap-4">
           {CATEGORIES.map((cat) => (
             <Link
               key={cat.name}
               href={cat.href}
-              className="group flex cursor-pointer flex-col items-center text-center"
+              className="group flex w-[90px] shrink-0 snap-start cursor-pointer flex-col items-center text-center sm:w-auto"
             >
               {/* Circular image frame */}
               <div className="relative aspect-square w-full max-w-[124px] overflow-hidden rounded-full border border-line/60 bg-[#efe4d9] p-2 shadow-xs transition-all duration-300 group-hover:-translate-y-1 group-hover:border-sand-400 group-hover:shadow-md">
@@ -69,7 +69,7 @@ export function ShopByCategory() {
                   src={cat.image}
                   alt={cat.name}
                   fill
-                  sizes="(max-width: 640px) 30vw, (max-width: 1024px) 20vw, 11vw"
+                  sizes="(max-width: 640px) 90px, (max-width: 1024px) 20vw, 11vw"
                   className="object-contain p-1 transition-transform duration-300 group-hover:scale-108"
                 />
               </div>

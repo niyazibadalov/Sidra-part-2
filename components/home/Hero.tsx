@@ -1,12 +1,9 @@
 "use client";
 
-import Image, { type StaticImageData } from "next/image";
+import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
-import heroImg1 from "@/app/images/heroSecImg1.png";
-import heroImg2 from "@/app/images/heroSecImg2.png";
-import heroImg3 from "@/app/images/heroSecImg3.png";
-import heroImg4 from "@/app/images/heroSecImg4.png";
+import heroSecImg from "@/app/images/heroSecImg.jpeg";
 import {
   ArrowRightIcon,
   ChevronLeftIcon,
@@ -20,7 +17,7 @@ type Slide = {
   subtitle: [string, string];
   script: string[];
   tone: string;
-  image: StaticImageData;
+  image: typeof heroSecImg;
 };
 
 const SLIDES: Slide[] = [
@@ -30,7 +27,7 @@ const SLIDES: Slide[] = [
     subtitle: ["Meaningful pieces. Extraordinary", "craftsmanship. A more brilliant tomorrow."],
     script: ["More", "Stories", "Brighter", "Lives"],
     tone: "warm",
-    image: heroImg1,
+    image: heroSecImg,
   },
   {
     eyebrow: ["New", "Collections", "2026"],
@@ -38,7 +35,7 @@ const SLIDES: Slide[] = [
     subtitle: ["Discover new designs from the world's", "most loved jewellery houses."],
     script: ["Timeless", "Pieces"],
     tone: "sand",
-    image: heroImg2,
+    image: heroSecImg,
   },
   {
     eyebrow: ["Gifts", "Moments", "Memories"],
@@ -46,7 +43,7 @@ const SLIDES: Slide[] = [
     subtitle: ["Thoughtful gifts for life's most", "special moments, beautifully wrapped."],
     script: ["Every", "Order Tells", "a New Story"],
     tone: "blush",
-    image: heroImg3,
+    image: heroSecImg,
   },
   {
     eyebrow: ["Brands", "Artisans", "Community"],
@@ -54,7 +51,7 @@ const SLIDES: Slide[] = [
     subtitle: ["People, culture and craftsmanship.", "Together, we make jewellery live further."],
     script: ["Brighter", "Together"],
     tone: "dusk",
-    image: heroImg4,
+    image: heroSecImg,
   },
 ];
 

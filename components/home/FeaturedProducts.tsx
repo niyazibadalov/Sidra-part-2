@@ -294,7 +294,7 @@ export function FeaturedProducts() {
             type="button"
             onClick={() => scrollByPage(-1)}
             aria-label="Previous products"
-            className={`absolute top-[38%] left-0 z-20 grid size-10 -translate-x-1/2 -translate-y-1/2 cursor-pointer place-items-center rounded-full border border-line bg-white/95 text-ink shadow-md transition-all duration-300 hover:bg-cream-100 sm:size-11 ${
+            className={`absolute top-[38%] left-0 z-20 grid size-10 -translate-x-1/3 -translate-y-1/2 cursor-pointer place-items-center rounded-full border border-line bg-white/95 text-ink shadow-md transition-all duration-300 hover:bg-cream-100 sm:size-11 ${
               canScrollPrev ? "opacity-100" : "opacity-40 cursor-not-allowed"
             }`}
           >
@@ -305,7 +305,7 @@ export function FeaturedProducts() {
             type="button"
             onClick={() => scrollByPage(1)}
             aria-label="Next products"
-            className={`absolute top-[38%] right-0 z-20 grid size-10 translate-x-1/2 -translate-y-1/2 cursor-pointer place-items-center rounded-full border border-line bg-white/95 text-ink shadow-md transition-all duration-300 hover:bg-cream-100 sm:size-11 ${
+            className={`absolute top-[38%] right-0 z-20 grid size-10 translate-x-1/3 -translate-y-1/2 cursor-pointer place-items-center rounded-full border border-line bg-white/95 text-ink shadow-md transition-all duration-300 hover:bg-cream-100 sm:size-11 ${
               canScrollNext ? "opacity-100" : "opacity-40 cursor-not-allowed"
             }`}
           >

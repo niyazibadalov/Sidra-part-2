@@ -311,11 +311,11 @@ export function JewelleryPage() {
         <div className="mx-auto max-w-[1440px] px-5 py-8 sm:px-8 lg:px-10 lg:py-10">
           {/* Quick Care Guides (5 Cards) */}
           <section aria-label="Care guides by material">
-            <div className="grid grid-cols-1 gap-3 min-[377px]:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 sm:gap-3.5 lg:gap-4">
+            <div className="flex w-full gap-3 overflow-x-auto pb-2 pt-0.5 snap-x snap-mandatory [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:grid sm:grid-cols-2 sm:gap-3.5 sm:overflow-visible sm:pb-0 sm:pt-0 md:grid-cols-3 xl:grid-cols-5 lg:gap-4">
               {CARE_GUIDES.map((guide) => (
                 <div
                   key={guide.title}
-                  className="group flex cursor-pointer items-center gap-3 rounded-lg border border-line/70 bg-cream-50 p-2.5 transition-all hover:border-sand-400 hover:bg-cream-100/60 sm:gap-3.5 sm:p-3"
+                  className="group flex w-[140px] shrink-0 snap-start cursor-pointer flex-col items-center rounded-lg border border-line/70 bg-cream-50  text-center transition-all hover:border-sand-400 hover:bg-cream-100/60 sm:w-auto sm:flex-row sm:items-center sm:gap-3.5 sm:text-left"
                 >
                   <div className="relative size-16 shrink-0 overflow-hidden rounded-md sm:size-16 md:size-18 xl:size-20">
                     <Image
@@ -323,14 +323,14 @@ export function JewelleryPage() {
                       alt={guide.title}
                       fill
                       sizes="(max-width: 640px) 70px, 80px"
-                      className="object-cover scale-[1.08] transition-transform duration-300 group-hover:scale-115"
+                      className="object-cover scale-[1.3] transition-transform duration-300 group-hover:scale-115"
                     />
                   </div>
-                  <div className="min-w-0 flex-1">
-                    <h3 className="text-[13.5px] font-semibold leading-snug text-ink transition-colors group-hover:text-rose-gold-dark sm:text-[14.5px]">
+                  <div className="mt-2.5 min-w-0 flex-1 sm:mt-0">
+                    <h3 className="text-[13px] font-semibold leading-snug text-ink transition-colors group-hover:text-rose-gold-dark sm:text-[14.5px]">
                       {guide.title}
                     </h3>
-                    <p className="mt-0.5 text-[11.5px] text-muted sm:text-[12px]">
+                    <p className="mt-0.5 text-[11px] text-muted sm:text-[12px]">
                       {guide.subtitle}
                     </p>
                   </div>
