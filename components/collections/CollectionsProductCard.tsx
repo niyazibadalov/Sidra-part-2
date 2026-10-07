@@ -19,7 +19,7 @@ export function CollectionsProductCard({
   return (
     <div className="group relative flex flex-col transition-all duration-300">
       {/* Image container frame */}
-      <div className="relative aspect-square w-full overflow-hidden rounded-xl border border-line/70 bg-[#f9f5f0] p-4 transition-all duration-300 group-hover:border-sand-400 group-hover:shadow-md">
+      <div className="relative aspect-square w-full overflow-hidden rounded-xl border border-line/70 bg-[#f9f5f0] transition-all duration-300 group-hover:border-sand-400 group-hover:shadow-md">
         {/* Badge */}
         {product.badge && (
           <span
@@ -61,7 +61,7 @@ export function CollectionsProductCard({
             alt={product.name}
             fill
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 22vw"
-            className="object-contain p-2 transition-transform duration-500 ease-out group-hover:scale-108"
+            className="object-contain transition-transform duration-500 ease-out"
           />
         </Link>
       </div>
