@@ -27,26 +27,31 @@ export function CollectionsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [wishlist, setWishlist] = useState<Record<string, boolean>>({});
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
-  const [selectedHeroPill, setSelectedHeroPill] = useState<string | null>(null);
 
   // Toggle wishlist
   const toggleWishlist = (id: string) => {
     setWishlist((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
-  // Hero pill quick category selector
-  const handleSelectHeroPill = (catOrGem: string) => {
-    if (selectedHeroPill === catOrGem) {
-      setSelectedHeroPill(null);
-      setFilters(INITIAL_FILTERS);
-    } else {
-      setSelectedHeroPill(catOrGem);
-      setCurrentPage(1);
-      if (catOrGem === "Diamond") {
-        setFilters({ ...INITIAL_FILTERS, gemstones: ["Diamond"] });
-      } else {
-        setFilters({ ...INITIAL_FILTERS, categories: [catOrGem] });
-      }
+  // Toggle hero pill filter
+  const handleToggleHeroPill = (pillName: string, category?: string) => {
+    setCurrentPage(1);
+    if (category) {
+      const exists = filters.categories.includes(category);
+      handleFilterChange({
+        ...filters,
+        categories: exists
+          ? filters.categories.filter((c) => c !== category)
+          : [...filters.categories, category],
+      });
+    } else if (pillName === "Diamond") {
+      const exists = filters.gemstones.includes("Diamond");
+      handleFilterChange({
+        ...filters,
+        gemstones: exists
+          ? filters.gemstones.filter((g) => g !== "Diamond")
+          : [...filters.gemstones, "Diamond"],
+      });
     }
   };
 
@@ -138,7 +143,6 @@ export function CollectionsPage() {
 
   const handleClearFilters = () => {
     setFilters(INITIAL_FILTERS);
-    setSelectedHeroPill(null);
     setBestsellerOnly(false);
     setCurrentPage(1);
   };
@@ -282,8 +286,8 @@ export function CollectionsPage() {
       <main className="flex-1 bg-cream-50" id="products">
         {/* Collections Hero */}
         <CollectionsHero
-          selectedCategory={selectedHeroPill}
-          onSelectCategory={handleSelectHeroPill}
+          filters={filters}
+          onTogglePill={handleToggleHeroPill}
         />
 
         {/* Mobile 4 Circular Category Items Carousel (under Hero only on mobile phones < md:, inside hero on tablet & desktop) */}
@@ -302,27 +306,7 @@ export function CollectionsPage() {
                   <button
                     key={pill.name}
                     type="button"
-                    onClick={() => {
-                      if (pill.category) {
-                        const exists = filters.categories.includes(pill.category);
-                        handleFilterChange({
-                          ...filters,
-                          categories: exists
-                            ? filters.categories.filter((c) => c !== pill.category)
-                            : [pill.category],
-                        });
-                        setSelectedHeroPill(exists ? null : pill.category);
-                      } else if (pill.name === "Diamond") {
-                        const exists = filters.gemstones.includes("Diamond");
-                        handleFilterChange({
-                          ...filters,
-                          gemstones: exists
-                            ? filters.gemstones.filter((g) => g !== "Diamond")
-                            : ["Diamond"],
-                        });
-                        setSelectedHeroPill(exists ? null : "Diamond");
-                      }
-                    }}
+                    onClick={() => handleToggleHeroPill(pill.name, pill.category)}
                     className="group flex flex-col items-center shrink-0 snap-start text-center cursor-pointer min-w-[72px]"
                   >
                     <div
@@ -510,13 +494,6 @@ export function CollectionsPage() {
                         </button>
                       </span>
                     ))}
-                    <button
-                      type="button"
-                      onClick={handleClearFilters}
-                      className="cursor-pointer text-[12px] text-ink-soft underline decoration-sand-400 hover:text-ink ml-2"
-                    >
-                      Clear all
-                    </button>
                   </div>
                 )}
               </div>

@@ -4,14 +4,16 @@ import Image from "next/image";
 import heroSecImg from "@/app/images/heroSecImg.jpeg";
 import { HERO_PILLS } from "./data";
 
+import { FilterState } from "./types";
+
 type CollectionsHeroProps = {
-  selectedCategory: string | null;
-  onSelectCategory: (category: string) => void;
+  filters: FilterState;
+  onTogglePill: (pillName: string, category?: string) => void;
 };
 
 export function CollectionsHero({
-  selectedCategory,
-  onSelectCategory,
+  filters,
+  onTogglePill,
 }: CollectionsHeroProps) {
   return (
     <section className="relative overflow-hidden bg-cream-200 border-b border-line/60">
@@ -59,20 +61,14 @@ export function CollectionsHero({
         <div className="mt-6 hidden flex-wrap items-center gap-2.5 sm:gap-3 md:flex">
           {HERO_PILLS.map((pill) => {
             const isActive =
-              (pill.category && selectedCategory === pill.category) ||
-              (pill.name === "Diamond" && selectedCategory === "Diamond");
+              (pill.category && filters.categories.includes(pill.category)) ||
+              (pill.name === "Diamond" && filters.gemstones.includes("Diamond"));
 
             return (
               <button
                 key={pill.name}
                 type="button"
-                onClick={() => {
-                  if (pill.category) {
-                    onSelectCategory(pill.category);
-                  } else if (pill.name === "Diamond") {
-                    onSelectCategory("Diamond");
-                  }
-                }}
+                onClick={() => onTogglePill(pill.name, pill.category)}
                 className={`group flex cursor-pointer items-center gap-2.5 rounded-full border px-3 py-1.5 transition-all sm:px-3.5 sm:py-2 ${
                   isActive
                     ? "border-ink bg-ink text-white shadow-sm"
