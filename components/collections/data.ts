@@ -31,7 +31,7 @@ export type RingProduct = {
 };
 
 export const HERO_PILLS = [
-  { name: "Engagement", image: img1, category: "Engagement Rings" },
+  { name: "Engagement", image: ring5, category: "Engagement Rings" },
   { name: "Diamond", image: diamondsImg, gemstone: "Diamond" },
   { name: "Stackable", image: timelessImg, category: "Stackable Rings" },
   { name: "Statement", image: boldImg, category: "Statement Rings" },

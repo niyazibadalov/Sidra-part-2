@@ -75,13 +75,13 @@ export function CollectionsHero({
                     : "border-line/80 bg-white/80 text-ink backdrop-blur-xs hover:border-sand-400 hover:bg-white"
                 }`}
               >
-                <div className="relative size-7 shrink-0 overflow-hidden rounded-full bg-cream-100 p-0.5 sm:size-8">
+                <div className="relative size-7 shrink-0 overflow-hidden rounded-full bg-cream-100 p-0.5 sm:size-11">
                   <Image
                     src={pill.image}
                     alt={pill.name}
                     fill
                     sizes="32px"
-                    className="object-contain p-0.5 transition-transform duration-300 group-hover:scale-110"
+                    className="object-contain p-0.5 transition-transform scale-150"
                   />
                 </div>
                 <span className="text-[12.5px] font-medium tracking-tight sm:text-[13px]">

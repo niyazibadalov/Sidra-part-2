@@ -321,7 +321,7 @@ export function CollectionsPage() {
                         alt={pill.name}
                         fill
                         sizes="80px"
-                        className="object-contain p-1 transition-transform duration-300 group-hover:scale-110"
+                        className="object-contain p-1 transition-transform duration-300 scale-150"
                       />
                     </div>
                     <span
