@@ -191,7 +191,7 @@ export function CollectionsMobileFilterDrawer({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center lg:hidden">
+    <div className="fixed inset-0 z-50 flex items-end justify-center md:items-stretch md:justify-start lg:hidden">
       {/* Backdrop */}
       <div
         className="fixed inset-0 bg-ink/50 backdrop-blur-xs transition-opacity"
@@ -199,13 +199,16 @@ export function CollectionsMobileFilterDrawer({
         aria-hidden
       />
 
-      {/* Drawer Container (bottom sheet) */}
-      <div className="relative flex max-h-[92vh] w-full max-w-lg flex-col rounded-t-3xl bg-cream-50 shadow-2xl transition-transform animate-fade-up">
-        {/* Drag handle */}
-        <div className="mx-auto mt-3 h-1.5 w-12 rounded-full bg-sand-300" />
+      {/* Drawer Container:
+          - Mobile (< md): Bottom sheet (max-h-[92vh], rounded-t-3xl, animate-fade-up)
+          - Tablet (md to lg): Left-side drawer (h-full, w-[380px] max-w-[85vw], rounded-r-2xl rounded-t-none, animate-slide-right)
+      */}
+      <div className="relative flex max-h-[92vh] w-full max-w-lg flex-col rounded-t-3xl bg-cream-50 shadow-2xl transition-transform animate-fade-up md:max-h-full md:h-full md:w-[400px] md:max-w-[85vw] md:rounded-t-none md:rounded-r-2xl md:border-r md:border-line md:animate-slide-right">
+        {/* Drag handle (mobile only) */}
+        <div className="mx-auto mt-3 h-1.5 w-12 rounded-full bg-sand-300 md:hidden" />
 
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-line px-5 py-3.5">
+        <div className="flex items-center justify-between border-b border-line px-5 py-3.5 md:py-4">
           <h2 className="font-serif text-2xl font-normal text-ink">Filters</h2>
           <div className="flex items-center gap-3">
             {appliedChips.length > 0 && (
