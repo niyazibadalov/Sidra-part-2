@@ -29,6 +29,26 @@ export const SearchIcon = (p: IconProps) => (
   </Icon>
 );
 
+export const HomeIcon = (p: IconProps) => (
+  <Icon {...p}>
+    <path d="m3 10 9-7 9 7v10H3V10Z" />
+    <path d="M9 20v-8h6v8" />
+  </Icon>
+);
+
+export const CreditCardIcon = (p: IconProps) => (
+  <Icon {...p}>
+    <rect x="2" y="5" width="20" height="14" rx="2" />
+    <path d="M2 10h20M6 15h3" />
+  </Icon>
+);
+
+export const TwitterIcon = (p: IconProps) => (
+  <Icon {...p}>
+    <path d="M22 5.9a8.5 8.5 0 0 1-2.4.7A4.2 4.2 0 0 0 21.4 4a8.5 8.5 0 0 1-2.7 1 4.2 4.2 0 0 0-7.2 3.8A12 12 0 0 1 2.8 4.4a4.2 4.2 0 0 0 1.3 5.6 4.2 4.2 0 0 1-1.9-.5 4.2 4.2 0 0 0 3.4 4.2 4.2 4.2 0 0 1-1.9.1 4.2 4.2 0 0 0 3.9 2.9A8.5 8.5 0 0 1 2 18.4a12 12 0 0 0 18.5-10.1v-.5A8.6 8.6 0 0 0 22 5.9Z" fill="currentColor" stroke="none" />
+  </Icon>
+);
+
 export const HeartIcon = (p: IconProps) => (
   <Icon {...p}>
     <path d="M12 20s-7.5-4.6-9.2-9.3C1.7 7.5 3.8 4.5 7 4.5c2 0 3.5 1.1 5 3 1.5-1.9 3-3 5-3 3.2 0 5.3 3 4.2 6.2C19.5 15.4 12 20 12 20Z" />
