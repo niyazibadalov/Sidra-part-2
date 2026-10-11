@@ -160,7 +160,7 @@ export function FeaturedProducts() {
   };
 
   return (
-    <section aria-labelledby="featured-products-title" className="py-12 sm:py-5">
+    <section aria-labelledby="featured-products-title" className="pb-12 sm:py-5">
       <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10">
         {/* Header & Tabs */}
         <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">

@@ -22,12 +22,20 @@ export type RingProduct = {
   gemstone: "Diamond" | "Sapphire" | "Emerald" | "Ruby" | "Pearl" | "Other";
   style: "Solitaire" | "Halo" | "Three Stone" | "Vintage" | "Minimal" | "Bold";
   price: number;
+  originalPrice?: number;
+  discount?: string;
+  subtitle?: string;
+  rating?: number;
+  reviewsCount?: number;
   variants: number;
   badge?: "Bestseller" | "New" | "Trending";
   inStock: boolean;
   readyToShip: boolean;
   sizes: number[];
   image: StaticImageData;
+  gallery?: StaticImageData[];
+  description?: string;
+  detailsList?: string[];
 };
 
 export const HERO_PILLS = [

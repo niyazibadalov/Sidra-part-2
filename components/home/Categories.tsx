@@ -19,20 +19,20 @@ type CategoryItem = {
 };
 
 const CATEGORIES: CategoryItem[] = [
-  { name: "Rings", href: "/category/rings", image: img1 },
-  { name: "Necklaces", href: "/category/necklaces", image: img2 },
-  { name: "Earrings", href: "/category/earrings", image: img3 },
-  { name: "Bracelets", href: "/category/bracelets", image: img4 },
-  { name: "Pendants", href: "/category/pendants", image: img5 },
-  { name: "Wedding & Engagement", href: "/category/wedding-engagement", image: img6 },
-  { name: "Men's Jewellery", href: "/category/mens-jewellery", image: img7 },
-  { name: "Sets", href: "/category/sets", image: img8 },
-  { name: "Fine Jewellery", href: "/category/fine-jewellery", image: img9 },
+  { name: "Rings", href: "/category", image: img1 },
+  { name: "Necklaces", href: "/category", image: img2 },
+  { name: "Earrings", href: "/category", image: img3 },
+  { name: "Bracelets", href: "/category", image: img4 },
+  { name: "Pendants", href: "/category", image: img5 },
+  { name: "Wedding & Engagement", href: "/category", image: img6 },
+  { name: "Men's Jewellery", href: "/category", image: img7 },
+  { name: "Sets", href: "/category", image: img8 },
+  { name: "Fine Jewellery", href: "/category", image: img9 },
 ];
 
 export function ShopByCategory() {
   return (
-    <section aria-labelledby="shop-by-category-title" className="py-12 sm:py-16">
+    <section aria-labelledby="shop-by-category-title" className="pt-12 pb-9 sm:pt-15 sm:pb-11">
       <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10">
         {/* Section Header */}
         <div className="mb-8 flex items-baseline justify-between sm:mb-10">
@@ -43,7 +43,7 @@ export function ShopByCategory() {
             Shop by Category
           </h2>
           <Link
-            href="/categories"
+            href="/category"
             className="group flex cursor-pointer items-center gap-1 text-[12.5px] font-medium text-ink-soft transition-colors hover:text-ink"
           >
             <span>View All Categories</span>

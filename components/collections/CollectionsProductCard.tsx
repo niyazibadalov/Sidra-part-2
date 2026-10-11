@@ -55,7 +55,7 @@ export function CollectionsProductCard({
         </button>
 
         {/* Ring Image */}
-        <Link href={`/product/${product.id}`} className="relative block h-full w-full">
+        <Link href={`/category/${product.id}`} className="relative block h-full w-full">
           <Image
             src={product.image}
             alt={product.name}
@@ -68,7 +68,7 @@ export function CollectionsProductCard({
 
       {/* Info details */}
       <div className="mt-3 flex flex-col">
-        <Link href={`/product/${product.id}`} className="group-hover:text-rose-gold-dark">
+        <Link href={`/category/${product.id}`} className="group-hover:text-rose-gold-dark">
           <h3 className="text-[13.5px] font-medium leading-snug text-ink transition-colors sm:text-[14px]">
             {product.name}
           </h3>
