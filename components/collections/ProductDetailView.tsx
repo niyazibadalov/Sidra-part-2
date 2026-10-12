@@ -25,6 +25,7 @@ import {
   DiamondIcon,
   LeafIcon,
   ArrowRightIcon,
+  PlayCircleIcon,
 } from "../Icons";
 
 import ring1 from "@/app/images/ring1.png";
@@ -110,7 +111,7 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
               */}
               <div className="flex flex-col lg:flex-row-reverse lg:items-start lg:gap-5">
                 {/* Main Big Image Frame */}
-                <div className="relative flex-1 aspect-square sm:aspect-4/4 lg:aspect-square w-full rounded-2xl border border-line/70 bg-[#fbf8f4] shadow-xs">
+                <div className="relative flex-1 aspect-square sm:aspect-4/4 lg:aspect-square w-full border border-line/70 bg-[#fbf8f4] shadow-xs">
                   {/* Badge (Rendered ONLY if product has badge in data!) */}
                   {product.badge && (
                     <span
@@ -181,6 +182,21 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
                       className="object-contain"
                     />
                   </div>
+
+                  {/* Video mode on main image (ONLY when 5th thumbnail / video is active) */}
+                  {activeImageIndex === 4 && (
+                    <div className="absolute inset-0 z-10 flex flex-col items-center justify-center rounded-2xl bg-gradient-to-t from-black/50 via-black/20 to-transparent">
+                      <div className="grid size-14 sm:size-16 place-items-center rounded-full bg-white/95 text-ink shadow-lg transition-transform hover:scale-105 cursor-pointer">
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                          className="size-6 sm:size-7 ml-1 text-ink"
+                        >
+                          <path d="M8 5v14l11-7z" />
+                        </svg>
+                      </div>
+                    </div>
+                  )}
 
                   {/* Cursive brand text on bottom left matching 1st screenshot (white, slightly tilted, with handwritten underline arrow) */}
                   <div className="pointer-events-none absolute bottom-5 left-5 sm:bottom-6 sm:left-6 z-10 select-none">
@@ -260,6 +276,8 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
                 <div className="mt-4 flex flex-row items-center gap-3 overflow-x-auto p-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:gap-3.5 lg:mt-0 lg:flex-col lg:overflow-visible shrink-0">
                   {galleryImages.map((img, idx) => {
                     const isActive = activeImageIndex === idx;
+                    const isVideo = idx === 4;
+
                     return (
                       <button
                         key={idx}
@@ -270,7 +288,7 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
                             ? "border-2 border-ink shadow-xs"
                             : "border border-line/70 hover:border-sand-400"
                         }`}
-                        aria-label={`View image ${idx + 1}`}
+                        aria-label={isVideo ? `Watch product video` : `View image ${idx + 1}`}
                       >
                         <Image
                           src={img}
@@ -279,6 +297,24 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
                           sizes="84px"
                           className="object-contain rounded-lg"
                         />
+
+                        {/* Video overlay with gradient from bottom to top on 5th thumbnail */}
+                        {isVideo && (
+                          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center rounded-lg bg-gradient-to-t from-black/75 via-black/35 to-transparent transition-opacity group-hover:from-black/85">
+                            <div className="grid size-6 sm:size-7 place-items-center rounded-full bg-white/95 text-ink shadow-xs">
+                              <svg
+                                viewBox="0 0 24 24"
+                                fill="currentColor"
+                                className="size-3 sm:size-3.5 ml-0.5"
+                              >
+                                <path d="M8 5v14l11-7z" />
+                              </svg>
+                            </div>
+                            <span className="mt-1 text-[8.5px] sm:text-[9.5px] font-semibold tracking-tight text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
+                              Watch Video
+                            </span>
+                          </div>
+                        )}
                       </button>
                     );
                   })}
@@ -287,44 +323,44 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
 
               {/* 4 Trust Highlights under Gallery — VISIBLE ONLY ON DESKTOP (hidden on mobile/tablet) */}
               <div className="mt-8 hidden border-t border-b border-line/60 py-6 lg:grid lg:grid-cols-4 lg:gap-6">
-                <div className="flex items-center gap-3">
-                  <div className="grid size-9 shrink-0 place-items-center rounded-full bg-sand-200/70 text-ink">
-                    <DiamondIcon width={18} height={18} />
+                <div className="flex items-center gap-3.5">
+                  <div className="grid size-9 shrink-0 place-items-center rounded-full bg-sand-200/80 text-ink shadow-2xs">
+                    <DiamondIcon width={22} height={22} />
                   </div>
-                  <span className="text-[12px] font-medium leading-tight text-ink">
+                  <span className="text-[13px] font-medium text-ink">
                     Ethically Sourced
                     <br />
                     Diamonds
                   </span>
                 </div>
 
-                <div className="flex items-center gap-3">
-                  <div className="grid size-9 shrink-0 place-items-center rounded-full bg-sand-200/70 text-ink">
-                    <ShieldCheckIcon width={18} height={18} />
+                <div className="flex items-center gap-3.5">
+                  <div className="grid size-9 shrink-0 place-items-center rounded-full bg-sand-200/80 text-ink shadow-2xs">
+                    <ShieldCheckIcon width={22} height={22} />
                   </div>
-                  <span className="text-[12px] font-medium leading-tight text-ink">
+                  <span className="text-[13px] font-medium text-ink">
                     Certified & Verified
                     <br />
                     Jewellery
                   </span>
                 </div>
 
-                <div className="flex items-center gap-3">
-                  <div className="grid size-9 shrink-0 place-items-center rounded-full bg-sand-200/70 text-ink">
-                    <TruckIcon width={18} height={18} />
+                <div className="flex items-center gap-3.5">
+                  <div className="grid size-9 shrink-0 place-items-center rounded-full bg-sand-200/80 text-ink shadow-2xs">
+                    <TruckIcon width={22} height={22} />
                   </div>
-                  <span className="text-[12px] font-medium leading-tight text-ink">
+                  <span className="text-[13px] font-medium text-ink">
                     Global Delivery
                     <br />
                     To 100+ Countries
                   </span>
                 </div>
 
-                <div className="flex items-center gap-3">
-                  <div className="grid size-9 shrink-0 place-items-center rounded-full bg-sand-200/70 text-ink">
-                    <LeafIcon width={18} height={18} />
+                <div className="flex items-center gap-3.5">
+                  <div className="grid size-9 shrink-0 place-items-center rounded-full bg-sand-200/80 text-ink shadow-2xs">
+                    <LeafIcon width={22} height={22} />
                   </div>
-                  <span className="text-[12px] font-medium leading-tight text-ink">
+                  <span className="text-[13px] font-medium text-ink">
                     A More Sustainable
                     <br />
                     Future
@@ -377,17 +413,17 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
               </span>
 
               {/* Product Name */}
-              <h1 className="mt-1 font-serif text-3xl font-normal text-ink sm:text-4xl">
+              <h1 className="mt-0.5 sm:mt-1.5 font-serif text-3xl font-normal text-ink sm:text-4xl">
                 {product.name}
               </h1>
 
               {/* Subtitle */}
-              <p className="mt-2 text-[13.5px] leading-relaxed text-ink-soft sm:text-[14px]">
+              <p className="mt-0.5 sm:mt-1.5 text-[13.5px] leading-relaxed text-ink-soft sm:text-[14px]">
                 {subtitle}
               </p>
 
               {/* Reviews & Rating */}
-              <div className="mt-3.5 flex items-center gap-2">
+              <div className="mt-2 sm:mt-3.5 flex items-center gap-2">
                 <div className="flex items-center text-amber-500">
                   {[...Array(5)].map((_, i) => (
                     <StarIcon
@@ -407,7 +443,7 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
               </div>
 
               {/* Price & Discount */}
-              <div className="mt-5 flex items-baseline gap-3">
+              <div className="mt-2 sm:mt-3.5 flex items-baseline gap-3">
                 <span className="font-serif text-3xl font-semibold text-ink sm:text-[34px]">
                   ${product.price.toLocaleString()}
                 </span>
@@ -420,18 +456,18 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
               </div>
 
               {/* Klarna Installments */}
-              <p className="mt-2 text-[12.5px] text-ink-soft">
+              <p className="mt-2 sm:mt-3.5 text-[12.5px] text-ink-soft">
                 or 4 payments of <strong className="font-semibold text-ink">${installment}</strong> with{" "}
                 <span className="font-semibold text-ink">Klarna.</span>{" "}
                 <span className="cursor-pointer text-[12px] text-muted underline">ⓘ</span>
               </p>
 
               {/* Material Selector */}
-              <div className="mt-6">
+              <div className="mt-4.5">
                 <label className="text-[13px] font-semibold text-ink">
                   Material
                 </label>
-                <div className="mt-2.5 flex flex-wrap gap-2.5">
+                <div className="mt-1 sm:mt-2 flex flex-wrap gap-2.5">
                   {MATERIALS.map((mat) => {
                     const isSelected = selectedMaterial === mat;
                     return (
@@ -453,11 +489,11 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
               </div>
 
               {/* Diamond Size Selector */}
-              <div className="mt-5">
+              <div className="mt-4">
                 <label className="text-[13px] font-semibold text-ink">
                   Diamond Size
                 </label>
-                <div className="mt-2.5 flex flex-wrap gap-2.5">
+                <div className="mt-1 sm:mt-2 flex flex-wrap gap-2.5">
                   {DIAMOND_SIZES.map((dSize) => {
                     const isSelected = selectedDiamondSize === dSize;
                     return (
@@ -479,19 +515,19 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
               </div>
 
               {/* Ring Size Selector & Size Guide */}
-              <div className="mt-5">
+              <div className="mt-4">
                 <div className="flex items-center justify-between">
                   <label className="text-[13px] font-semibold text-ink">
                     Ring Size
                   </label>
                   <button
                     type="button"
-                    className="cursor-pointer text-[12px] font-medium text-ink underline decoration-sand-400 hover:text-rose-gold-dark"
+                    className="cursor-pointer text-[12px] font-medium text-ink hover:text-rose-gold-dark"
                   >
                     Size Guide ⓘ
                   </button>
                 </div>
-                <div className="mt-2.5 flex flex-wrap gap-2">
+                <div className="mt-1 sm:mt-2.5 flex flex-wrap gap-2">
                   {RING_SIZES.map((sz) => {
                     const isSelected = selectedRingSize === sz;
                     return (
@@ -513,15 +549,15 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
               </div>
 
               {/* ACTION BUTTONS & QUANTITY:
-                  - Phone (< sm): Quantity selector on top left, Add to Cart underneath (w-full), Buy Now underneath (w-full)
-                  - Tablet (sm to lg): Quantity selector and Add to Cart side-by-side, Buy Now underneath (w-full)
-                  - Desktop (lg+): Quantity selector, Add to Cart underneath, Buy Now underneath
+                  - Mobile (< sm): Stacked — Quantity on top left, Add to Cart underneath (w-full), Buy Now underneath (w-full)
+                  - Tablet (sm to lg): Side-by-side — Quantity on left, Add to Cart on right, Buy Now underneath (w-full)
+                  - Desktop (lg+): Stacked — Quantity on top left, Add to Cart underneath (w-full), Buy Now underneath (w-full)
               */}
               <div className="mt-6 space-y-3">
-                {/* Quantity and Add to Cart row for Tablet, stacked for Phone */}
-                <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                {/* Quantity and Add to Cart row (side-by-side ONLY on tablet `sm:max-lg:flex-row`, stacked on mobile and desktop) */}
+                <div className="flex flex-col gap-3 sm:max-lg:flex-row sm:max-lg:items-center">
                   {/* Quantity selector */}
-                  <div className="inline-flex w-fit items-center rounded-xl border border-line bg-white px-3 py-1.5 shadow-2xs">
+                  <div className="inline-flex w-fit items-center rounded-[100px] border border-line bg-white px-3 py-1.5 shadow-2xs">
                     <button
                       type="button"
                       onClick={() => setQuantity((q) => Math.max(1, q - 1))}
@@ -543,10 +579,10 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
                     </button>
                   </div>
 
-                  {/* Add to Cart button (Full width on phone, flex-1 on tablet) */}
+                  {/* Add to Cart button (Full width on mobile & desktop, flex-1 on tablet) */}
                   <button
                     type="button"
-                    className="w-full sm:flex-1 cursor-pointer rounded-xl bg-ink py-3.5 text-center text-[14px] font-semibold text-white shadow-md transition-all hover:bg-ink-soft active:scale-[0.99]"
+                    className="w-full sm:max-lg:flex-1 cursor-pointer rounded-[100px] bg-ink py-3.5 text-center text-[14px] font-semibold text-white shadow-md transition-all hover:bg-ink-soft active:scale-[0.99]"
                   >
                     Add to Cart
                   </button>
@@ -555,35 +591,35 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
                 {/* Buy Now button (Full width on all screens) */}
                 <button
                   type="button"
-                  className="w-full cursor-pointer rounded-xl border border-ink bg-white py-3.5 text-center text-[14px] font-semibold text-ink shadow-xs transition-all hover:bg-cream-100 active:scale-[0.99]"
+                  className="w-full cursor-pointer rounded-[100px] border border-ink bg-white py-3.5 text-center text-[14px] font-semibold text-ink shadow-xs transition-all hover:bg-cream-100 active:scale-[0.99]"
                 >
                   Buy Now
                 </button>
               </div>
 
               {/* 4 Guarantee Badges under CTAs */}
-              <div className="mt-6 grid grid-cols-4 gap-2 border-t border-b border-line/60 py-4 text-center">
+              <div className="mt-6 grid grid-cols-4 gap-2 border-t border-b border-line/60 py-4.5 text-center">
                 <div className="flex flex-col items-center gap-1.5">
-                  <ShieldCheckIcon width={18} height={18} className="text-ink" />
-                  <span className="text-[10px] font-medium leading-tight text-ink-soft">
+                  <ShieldCheckIcon width={23} height={23} className="text-ink" />
+                  <span className="text-[11.5px] font-medium leading-tight text-ink-soft">
                     Secure Payments
                   </span>
                 </div>
                 <div className="flex flex-col items-center gap-1.5">
-                  <TruckIcon width={18} height={18} className="text-ink" />
-                  <span className="text-[10px] font-medium leading-tight text-ink-soft">
+                  <TruckIcon width={23} height={23} className="text-ink" />
+                  <span className="text-[11.5px] font-medium leading-tight text-ink-soft">
                     Global Delivery
                   </span>
                 </div>
                 <div className="flex flex-col items-center gap-1.5">
-                  <RotateCcwIcon width={18} height={18} className="text-ink" />
-                  <span className="text-[10px] font-medium leading-tight text-ink-soft">
+                  <RotateCcwIcon width={23} height={23} className="text-ink" />
+                  <span className="text-[11.5px] font-medium leading-tight text-ink-soft">
                     Easy Returns
                   </span>
                 </div>
                 <div className="flex flex-col items-center gap-1.5">
-                  <BadgeCheckIcon width={18} height={18} className="text-ink" />
-                  <span className="text-[10px] font-medium leading-tight text-ink-soft">
+                  <BadgeCheckIcon width={23} height={23} className="text-ink" />
+                  <span className="text-[11.5px] font-medium leading-tight text-ink-soft">
                     Authentic & Certified
                   </span>
                 </div>
@@ -592,7 +628,7 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
               {/* Shipping Delivery Box */}
               <div className="mt-5 flex items-center justify-between rounded-xl border border-line bg-[#fbf8f4] p-4">
                 <div className="flex items-center gap-3">
-                  <TruckIcon width={22} height={22} className="text-ink" />
+                  <TruckIcon width={23} height={23} className="text-ink" />
                   <div>
                     <p className="text-[13px] font-semibold text-ink">
                       This product is ready to ship
@@ -606,7 +642,7 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
               </div>
 
               {/* Accordions (All start closed per request) */}
-              <div className="mt-6 divide-y divide-line border-t border-b border-line">
+              <div className="mt-6 divide-y divide-line border-b border-line">
                 {/* Description */}
                 <div>
                   <button
@@ -733,7 +769,7 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
           </div>
 
           {/* You May Also Like Section for Mobile & Tablet (< lg): Placed cleanly under the main product flow */}
-          <div className="mt-12 pt-6 border-t border-line/60 lg:hidden">
+          <div className="mt-6 sm:mt-12 pt-6 lg:hidden">
             <div className="mb-6 flex items-baseline justify-between">
               <h2
                 id="related-products-title-mobile"
