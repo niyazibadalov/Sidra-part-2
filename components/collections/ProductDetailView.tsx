@@ -26,6 +26,15 @@ import {
   LeafIcon,
   ArrowRightIcon,
   PlayCircleIcon,
+  FileTextIcon,
+  SettingsIcon,
+  StoreIcon,
+  ExternalLinkIcon,
+  ClockIcon,
+  MapPinIcon,
+  MessageCircleIcon,
+  BagIcon,
+  CheckIcon,
 } from "../Icons";
 
 import ring1 from "@/app/images/ring1.png";
@@ -34,6 +43,8 @@ import ring3 from "@/app/images/ring3.png";
 import ring4 from "@/app/images/ring4.png";
 import ring5 from "@/app/images/ring5.png";
 import ring6 from "@/app/images/ring6.png";
+import certificateImg from "@/app/images/certificate.png";
+import sidraLogoImg from "@/app/images/sidraImage2.jpeg";
 
 type ProductDetailViewProps = {
   product: RingProduct;
@@ -65,7 +76,9 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
   const [openAccordions, setOpenAccordions] = useState({
     description: false,
     details: false,
+    certificate: false,
     shipping: false,
+    warranty: false,
     reviews: false,
     brandStory: false,
   });
@@ -641,126 +654,800 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
                 <ChevronRightIcon width={16} height={16} className="text-muted" />
               </div>
 
-              {/* Accordions (All start closed per request) */}
-              <div className="mt-6 divide-y divide-line border-b border-line">
-                {/* Description */}
-                <div>
+              {/* Accordions (All start closed per request, styled matching design screenshots with icons & +/- buttons) */}
+              <div className="mt-6 space-y-2">
+                {/* 1. Description */}
+                <div className="rounded-xl border border-line/70 bg-white transition-all shadow-xs">
                   <button
                     type="button"
                     onClick={() => toggleAccordion("description")}
-                    className="flex w-full cursor-pointer items-center justify-between py-4 text-left text-[14px] font-semibold text-ink"
+                    className={`flex w-full cursor-pointer items-center justify-between rounded-xl px-4 py-3.5 text-left text-[14px] font-semibold text-ink transition-colors ${
+                      openAccordions.description ? "bg-[#f9f5f0]" : "hover:bg-[#fbf9f6]"
+                    }`}
                   >
-                    <span>Description</span>
-                    <ChevronDownIcon
-                      width={16}
-                      height={16}
-                      className={`text-ink transition-transform duration-200 ${
-                        openAccordions.description ? "rotate-180" : ""
-                      }`}
-                    />
+                    <div className="flex items-center gap-3">
+                      <FileTextIcon width={18} height={18} className="text-ink" />
+                      <span>Description</span>
+                    </div>
+                    <span className="text-base font-bold text-ink">
+                      {openAccordions.description ? "−" : "+"}
+                    </span>
                   </button>
                   {openAccordions.description && (
-                    <div className="pb-4 text-[13px] leading-relaxed text-ink-soft">
+                    <div className="border-t border-line/60 p-4 text-[13px] leading-relaxed text-ink-soft">
                       {product.description ??
                         `Crafted with precision, the ${product.name} embodies contemporary refinement with eternal beauty. Designed with meticulous attention to stone setting and comfort fit, making it perfect for both everyday luxury and momentous milestones.`}
                     </div>
                   )}
                 </div>
 
-                {/* Details */}
-                <div>
+                {/* 2. Product Details */}
+                <div className="rounded-xl border border-line/70 bg-white transition-all shadow-xs">
                   <button
                     type="button"
                     onClick={() => toggleAccordion("details")}
-                    className="flex w-full cursor-pointer items-center justify-between py-4 text-left text-[14px] font-semibold text-ink"
+                    className={`flex w-full cursor-pointer items-center justify-between rounded-xl px-4 py-3.5 text-left text-[14px] font-semibold text-ink transition-colors ${
+                      openAccordions.details ? "bg-[#f9f5f0]" : "hover:bg-[#fbf9f6]"
+                    }`}
                   >
-                    <span>Details</span>
-                    <ChevronDownIcon
-                      width={16}
-                      height={16}
-                      className={`text-ink transition-transform duration-200 ${
-                        openAccordions.details ? "rotate-180" : ""
-                      }`}
-                    />
+                    <div className="flex items-center gap-3">
+                      <SettingsIcon width={18} height={18} className="text-ink" />
+                      <span>Product Details</span>
+                    </div>
+                    <span className="text-base font-bold text-ink">
+                      {openAccordions.details ? "−" : "+"}
+                    </span>
                   </button>
                   {openAccordions.details && (
-                    <div className="pb-4 text-[13px] leading-relaxed text-ink-soft">
-                      <ul className="list-inside list-disc space-y-1.5">
-                        <li>Metal: {selectedMaterial}</li>
-                        <li>Style: {product.style}</li>
-                        <li>Gemstone: {product.gemstone}</li>
-                        <li>Band Width: 1.8mm comfort profile</li>
-                        <li>Origin: Ethically hand-finished in Europe</li>
-                      </ul>
+                    <div className="border-t border-line/60 p-4 text-[12.5px] text-ink-soft">
+                      <div className="grid grid-cols-1 gap-x-6 gap-y-2.5 sm:grid-cols-2">
+                        {/* Left column */}
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between border-b border-line/40 pb-1.5">
+                            <span className="text-muted">Product ID</span>
+                            <span className="font-medium text-ink">SID-RNG-01842</span>
+                          </div>
+                          <div className="flex items-center justify-between border-b border-line/40 pb-1.5">
+                            <span className="text-muted">Metal</span>
+                            <span className="font-medium text-ink">{selectedMaterial}</span>
+                          </div>
+                          <div className="flex items-center justify-between border-b border-line/40 pb-1.5">
+                            <span className="text-muted">Metal Color</span>
+                            <span className="font-medium text-ink">Rose Gold</span>
+                          </div>
+                          <div className="flex items-center justify-between border-b border-line/40 pb-1.5">
+                            <span className="text-muted">Approx. Weight</span>
+                            <span className="font-medium text-ink">3.8 g</span>
+                          </div>
+                          <div className="flex items-center justify-between border-b border-line/40 pb-1.5">
+                            <span className="text-muted">Band Width</span>
+                            <span className="font-medium text-ink">2.1 mm</span>
+                          </div>
+                          <div className="flex items-center justify-between border-b border-line/40 pb-1.5">
+                            <span className="text-muted">Stone</span>
+                            <span className="font-medium text-ink">{product.gemstone}</span>
+                          </div>
+                          <div className="flex items-center justify-between border-b border-line/40 pb-1.5">
+                            <span className="text-muted">Origin</span>
+                            <span className="font-medium text-ink">Natural</span>
+                          </div>
+                          <div className="flex items-center justify-between pb-1.5">
+                            <span className="text-muted">Total Carat Weight</span>
+                            <span className="font-medium text-ink">{selectedDiamondSize}</span>
+                          </div>
+                        </div>
+
+                        {/* Right column */}
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between border-b border-line/40 pb-1.5">
+                            <span className="text-muted">Cut</span>
+                            <span className="font-medium text-ink">Round Brilliant</span>
+                          </div>
+                          <div className="flex items-center justify-between border-b border-line/40 pb-1.5">
+                            <span className="text-muted">Color</span>
+                            <span className="font-medium text-ink">G</span>
+                          </div>
+                          <div className="flex items-center justify-between border-b border-line/40 pb-1.5">
+                            <span className="text-muted">Clarity</span>
+                            <span className="font-medium text-ink">VS1</span>
+                          </div>
+                          <div className="flex items-center justify-between border-b border-line/40 pb-1.5">
+                            <span className="text-muted">Setting Type</span>
+                            <span className="font-medium text-ink">6-Prong Solitaire</span>
+                          </div>
+                          <div className="flex items-center justify-between border-b border-line/40 pb-1.5">
+                            <span className="text-muted">Selected Size</span>
+                            <span className="font-medium text-ink">{selectedRingSize}</span>
+                          </div>
+                          <div className="flex items-center justify-between border-b border-line/40 pb-1.5">
+                            <span className="text-muted">Resizing</span>
+                            <span className="font-medium text-ink">Available</span>
+                          </div>
+                          <div className="flex items-center justify-between border-b border-line/40 pb-1.5">
+                            <span className="text-muted">Engraving</span>
+                            <span className="font-medium text-ink">Available</span>
+                          </div>
+                          <div className="flex items-center justify-between pb-1.5">
+                            <span className="text-muted">Collection</span>
+                            <span className="font-medium text-ink">Classic</span>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   )}
                 </div>
 
-                {/* Shipping & Returns */}
-                <div>
+                {/* 3. Certificate & Authenticity */}
+                <div className="rounded-xl border border-line/70 bg-white transition-all shadow-xs">
+                  <button
+                    type="button"
+                    onClick={() => toggleAccordion("certificate")}
+                    className={`flex w-full cursor-pointer items-center justify-between rounded-xl px-4 py-3.5 text-left text-[14px] font-semibold text-ink transition-colors ${
+                      openAccordions.certificate ? "bg-[#f9f5f0]" : "hover:bg-[#fbf9f6]"
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <BadgeCheckIcon width={18} height={18} className="text-ink" />
+                      <span>Certificate & Authenticity</span>
+                    </div>
+                    <span className="text-base font-bold text-ink">
+                      {openAccordions.certificate ? "−" : "+"}
+                    </span>
+                  </button>
+                  {openAccordions.certificate && (
+                    <div className="border-t border-line/60 p-4 space-y-5">
+                      {/* GIA Header */}
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="text-xl font-serif font-black tracking-wider text-ink">
+                            GIA
+                          </div>
+                          <div>
+                            <p className="text-[12px] font-semibold text-ink">Certified by GIA</p>
+                            <p className="text-[10.5px] text-muted">Independent grading for natural diamonds.</p>
+                          </div>
+                        </div>
+                        <span className="inline-flex items-center gap-1 rounded-md bg-[#eaf4eb] px-2.5 py-1 text-[11px] font-semibold text-[#2f6f36]">
+                          <CheckIcon width={12} height={12} />
+                          Verified
+                        </span>
+                      </div>
+
+                      {/* Specs + Certificate Image Side-by-side */}
+                      <div className="grid grid-cols-1 gap-4 sm:grid-cols-12">
+                        {/* Specs Table */}
+                        <div className="space-y-2 text-[12px] sm:col-span-7">
+                          <div className="flex items-center justify-between border-b border-line/50 pb-1">
+                            <span className="text-muted">Report Number</span>
+                            <span className="font-medium text-ink">7452183942</span>
+                          </div>
+                          <div className="flex items-center justify-between border-b border-line/50 pb-1">
+                            <span className="text-muted">Stone Type</span>
+                            <span className="font-medium text-ink">Natural Diamond</span>
+                          </div>
+                          <div className="flex items-center justify-between border-b border-line/50 pb-1">
+                            <span className="text-muted">Cut</span>
+                            <span className="font-medium text-ink">Round Brilliant</span>
+                          </div>
+                          <div className="flex items-center justify-between border-b border-line/50 pb-1">
+                            <span className="text-muted">Carat Weight</span>
+                            <span className="font-medium text-ink">0.70 ct</span>
+                          </div>
+                          <div className="flex items-center justify-between border-b border-line/50 pb-1">
+                            <span className="text-muted">Color</span>
+                            <span className="font-medium text-ink">G</span>
+                          </div>
+                          <div className="flex items-center justify-between border-b border-line/50 pb-1">
+                            <span className="text-muted">Clarity</span>
+                            <span className="font-medium text-ink">VS1</span>
+                          </div>
+                          <div className="flex items-center justify-between border-b border-line/50 pb-1">
+                            <span className="text-muted">Metal Verification</span>
+                            <span className="font-medium text-ink">18K Rose Gold</span>
+                          </div>
+                          <div className="flex items-center justify-between border-b border-line/50 pb-1">
+                            <span className="text-muted">Hallmark</span>
+                            <span className="font-medium text-ink">750</span>
+                          </div>
+                          <div className="flex items-center justify-between pb-1">
+                            <span className="text-muted">Origin</span>
+                            <span className="text-right text-[11px] text-muted">
+                              Source information available when verified ⓘ
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Certificate Image Card */}
+                        <div className="flex flex-col items-center justify-center rounded-xl border border-line/80 bg-[#fbf9f6] p-2.5 sm:col-span-5">
+                          <div className="relative aspect-3/4 w-full rounded-lg border border-line/60 bg-white shadow-2xs">
+                            <Image
+                              src={certificateImg}
+                              alt="GIA Certificate Report"
+                              fill
+                              sizes="200px"
+                              className="object-contain"
+                            />
+                          </div>
+                          <button
+                            type="button"
+                            className="mt-2 text-[11px] font-semibold text-ink transition-colors hover:text-rose-gold-dark"
+                          >
+                            👁 View Full Report
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* CTA Buttons */}
+                      <div className="grid grid-cols-2 gap-3 pt-1">
+                        <button
+                          type="button"
+                          className="flex cursor-pointer items-center justify-center gap-1.5 rounded-xl bg-ink py-2.5 text-[12.5px] font-semibold text-white shadow-xs transition-colors hover:bg-ink-soft"
+                        >
+                          <FileTextIcon width={14} height={14} />
+                          <span>View Certificate</span>
+                        </button>
+                        <button
+                          type="button"
+                          className="flex cursor-pointer items-center justify-center gap-1.5 rounded-xl border border-line bg-white py-2.5 text-[12.5px] font-semibold text-ink shadow-2xs transition-colors hover:bg-[#fbf9f6]"
+                        >
+                          <ExternalLinkIcon width={14} height={14} />
+                          <span>Verify Report</span>
+                        </button>
+                      </div>
+
+                      <p className="text-[11px] text-muted">
+                        ⓘ This certificate is provided by the brand or seller. Please verify the report number on the official GIA website.
+                      </p>
+                    </div>
+                  )}
+                </div>
+
+                {/* 4. Shipping & Returns */}
+                <div className="rounded-xl border border-line/70 bg-white transition-all shadow-xs">
                   <button
                     type="button"
                     onClick={() => toggleAccordion("shipping")}
-                    className="flex w-full cursor-pointer items-center justify-between py-4 text-left text-[14px] font-semibold text-ink"
+                    className={`flex w-full cursor-pointer items-center justify-between rounded-xl px-4 py-3.5 text-left text-[14px] font-semibold text-ink transition-colors ${
+                      openAccordions.shipping ? "bg-[#f9f5f0]" : "hover:bg-[#fbf9f6]"
+                    }`}
                   >
-                    <span>Shipping & Returns</span>
-                    <ChevronDownIcon
-                      width={16}
-                      height={16}
-                      className={`text-ink transition-transform duration-200 ${
-                        openAccordions.shipping ? "rotate-180" : ""
-                      }`}
-                    />
+                    <div className="flex items-center gap-3">
+                      <TruckIcon width={18} height={18} className="text-ink" />
+                      <span>Shipping & Returns</span>
+                    </div>
+                    <span className="text-base font-bold text-ink">
+                      {openAccordions.shipping ? "−" : "+"}
+                    </span>
                   </button>
                   {openAccordions.shipping && (
-                    <div className="pb-4 text-[13px] leading-relaxed text-ink-soft">
-                      Enjoy complimentary insured worldwide shipping on all fine jewellery orders. Returns and exchanges are accepted within 30 days of delivery with original packaging and certificate intact.
+                    <div className="border-t border-line/60 p-4 space-y-4 text-[12.5px] text-ink-soft">
+                      {/* Shipping Block */}
+                      <div>
+                        <h4 className="font-semibold text-ink text-[13px]">Shipping</h4>
+                        <div className="mt-2.5 rounded-xl border border-line/80 bg-[#fbf9f6] p-3 flex items-center gap-3">
+                          <TruckIcon width={20} height={20} className="text-ink shrink-0" />
+                          <div className="text-[12px]">
+                            <span className="font-semibold text-[#2f6f36] flex items-center gap-1">
+                              ● Ready to ship
+                            </span>
+                            <p className="text-muted mt-0.5">Estimated delivery: 2 – 5 business days ⓘ</p>
+                          </div>
+                        </div>
+
+                        <div className="mt-3 space-y-2.5 text-[12px]">
+                          <div className="flex items-start gap-2.5">
+                            <span className="text-base leading-none">📦</span>
+                            <div>
+                              <p className="font-medium text-ink">Free insured delivery</p>
+                              <p className="text-muted">No additional shipping fee on this item.</p>
+                            </div>
+                          </div>
+                          <div className="flex items-start gap-2.5">
+                            <ShieldCheckIcon width={16} height={16} className="text-ink shrink-0 mt-0.5" />
+                            <div>
+                              <p className="font-medium text-ink">Secure & fully insured delivery</p>
+                              <p className="text-muted">Your order is protected from dispatch to delivery.</p>
+                            </div>
+                          </div>
+                          <div className="flex items-start gap-2.5">
+                            <span className="text-base leading-none">📍</span>
+                            <div>
+                              <p className="font-medium text-ink">Tracking included</p>
+                              <p className="text-muted">Track your order at every step.</p>
+                            </div>
+                          </div>
+                          <div className="flex items-start gap-2.5">
+                            <span className="text-base leading-none">✍️</span>
+                            <div>
+                              <p className="font-medium text-ink">Signature required</p>
+                              <p className="text-muted">A signature is required upon delivery.</p>
+                            </div>
+                          </div>
+                          <div className="flex items-start gap-2.5">
+                            <span className="text-base leading-none">🎁</span>
+                            <div>
+                              <p className="font-medium text-ink">Discreet packaging</p>
+                              <p className="text-muted">Your jewellery will arrive in a secure and elegant package.</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Deliver to Country Selector */}
+                        <div className="mt-3.5 flex items-center justify-between rounded-xl border border-line bg-white p-3">
+                          <span className="text-muted text-[12px]">Deliver to</span>
+                          <span className="font-semibold text-ink text-[12px] flex items-center gap-1.5">
+                            🇦🇿 Azerbaijan ▾
+                          </span>
+                        </div>
+
+                        <p className="mt-2 text-[11px] text-muted">
+                          ⓘ International orders may be subject to customs duties and taxes, which are the responsibility of the recipient.
+                        </p>
+                      </div>
+
+                      {/* Returns Block */}
+                      <div className="border-t border-line/60 pt-4">
+                        <h4 className="font-semibold text-ink text-[13px]">Returns</h4>
+                        <div className="mt-2 flex items-start gap-2.5">
+                          <RotateCcwIcon width={18} height={18} className="text-ink shrink-0 mt-0.5" />
+                          <div>
+                            <p className="font-medium text-ink">30-day returns</p>
+                            <p className="text-muted">Not completely in love? You can return this item within 30 days of delivery.</p>
+                          </div>
+                        </div>
+
+                        <div className="mt-3 space-y-2 border-t border-line/40 pt-2 text-[12px]">
+                          <div className="flex justify-between">
+                            <span className="text-muted">Eligible items</span>
+                            <span className="text-right text-ink max-w-[220px]">Items must be unworn, in original condition, with all packaging and certificates.</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-muted">Exceptions</span>
+                            <span className="text-right text-ink max-w-[220px]">Engraved, customized or resized items are final sale and cannot be returned.</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-muted">Refund process</span>
+                            <span className="text-right text-ink max-w-[220px]">Refunds are issued to your original payment method within 5–7 business days after we receive the item.</span>
+                          </div>
+                        </div>
+
+                        <button
+                          type="button"
+                          className="mt-4 w-full rounded-xl border border-line bg-white py-2.5 text-[12.5px] font-semibold text-ink transition-colors hover:bg-[#fbf9f6]"
+                        >
+                          View full shipping & returns policy →
+                        </button>
+                      </div>
                     </div>
                   )}
                 </div>
 
-                {/* Reviews */}
-                <div>
+                {/* 5. Warranty, Care & Services */}
+                <div className="rounded-xl border border-line/70 bg-white transition-all shadow-xs">
+                  <button
+                    type="button"
+                    onClick={() => toggleAccordion("warranty")}
+                    className={`flex w-full cursor-pointer items-center justify-between rounded-xl px-4 py-3.5 text-left text-[14px] font-semibold text-ink transition-colors ${
+                      openAccordions.warranty ? "bg-[#f9f5f0]" : "hover:bg-[#fbf9f6]"
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <ShieldCheckIcon width={18} height={18} className="text-ink" />
+                      <span>Warranty, Care & Services</span>
+                    </div>
+                    <span className="text-base font-bold text-ink">
+                      {openAccordions.warranty ? "−" : "+"}
+                    </span>
+                  </button>
+                  {openAccordions.warranty && (
+                    <div className="border-t border-line/60 p-4 space-y-4 text-[12px] text-ink-soft">
+                      <div className="space-y-3.5">
+                        <div className="flex items-start gap-3">
+                          <ShieldCheckIcon width={18} height={18} className="text-ink shrink-0 mt-0.5" />
+                          <div>
+                            <p className="font-semibold text-ink">Manufacturing Warranty</p>
+                            <p className="text-muted text-[11.5px]">Lifetime coverage for manufacturing defects. Coverage may vary by brand or seller.</p>
+                          </div>
+                        </div>
+
+                        <div className="flex items-start gap-3">
+                          <span className="text-base leading-none">💍</span>
+                          <div>
+                            <p className="font-semibold text-ink">Ring Resizing</p>
+                            <p className="text-muted text-[11.5px]">Complimentary first resize (where eligible). Additional resizing may be available for a fee.</p>
+                          </div>
+                        </div>
+
+                        <div className="flex items-start gap-3">
+                          <span className="text-base leading-none">✨</span>
+                          <div>
+                            <p className="font-semibold text-ink">Professional Cleaning & Polishing</p>
+                            <p className="text-muted text-[11.5px]">Keep your jewellery looking its best with professional cleaning and polishing services.</p>
+                          </div>
+                        </div>
+
+                        <div className="flex items-start gap-3">
+                          <SettingsIcon width={18} height={18} className="text-ink shrink-0 mt-0.5" />
+                          <div>
+                            <p className="font-semibold text-ink">Repair & Prong/Stone Check</p>
+                            <p className="text-muted text-[11.5px]">Repair services and prong/stone tightening available to maintain long-term beauty and security.</p>
+                          </div>
+                        </div>
+
+                        <div className="flex items-start gap-3">
+                          <span className="text-base leading-none">✋</span>
+                          <div>
+                            <p className="font-semibold text-ink">Care Guidance</p>
+                            <ul className="mt-1 list-disc list-inside text-muted space-y-0.5 text-[11.5px]">
+                              <li>Avoid harsh chemicals and household cleaners.</li>
+                              <li>Remove jewellery during sports, swimming or heavy work.</li>
+                              <li>Store separately in a soft pouch or box.</li>
+                              <li>Schedule periodic professional inspection.</li>
+                            </ul>
+                          </div>
+                        </div>
+
+                        <div className="flex items-start gap-3 border-t border-line/40 pt-3">
+                          <span className="text-base leading-none text-amber-600">ⓘ</span>
+                          <div>
+                            <p className="font-semibold text-ink">What&apos;s Not Covered</p>
+                            <ul className="mt-1 list-disc list-inside text-muted space-y-0.5 text-[11.5px]">
+                              <li>Normal wear and tear (scratches, minor dents).</li>
+                              <li>Accidental damage, loss or theft.</li>
+                              <li>Damage caused by improper care or chemicals.</li>
+                              <li>Repair or modifications by unauthorized third parties.</li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="pt-2 flex flex-col sm:flex-row gap-2.5">
+                        <button
+                          type="button"
+                          className="flex-1 rounded-xl bg-ink py-2.5 text-center text-[12.5px] font-semibold text-white transition-colors hover:bg-ink-soft"
+                        >
+                          Request Service
+                        </button>
+                        <button
+                          type="button"
+                          className="flex-1 rounded-xl border border-line bg-white py-2.5 text-center text-[12.5px] font-semibold text-ink transition-colors hover:bg-[#fbf9f6]"
+                        >
+                          View Full Care & Warranty Policy →
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* 6. Reviews (124) */}
+                <div className="rounded-xl border border-line/70 bg-white transition-all shadow-xs">
                   <button
                     type="button"
                     onClick={() => toggleAccordion("reviews")}
-                    className="flex w-full cursor-pointer items-center justify-between py-4 text-left text-[14px] font-semibold text-ink"
+                    className={`flex w-full cursor-pointer items-center justify-between rounded-xl px-4 py-3.5 text-left text-[14px] font-semibold text-ink transition-colors ${
+                      openAccordions.reviews ? "bg-[#f9f5f0]" : "hover:bg-[#fbf9f6]"
+                    }`}
                   >
-                    <span>Reviews ({reviewsCount})</span>
-                    <ChevronDownIcon
-                      width={16}
-                      height={16}
-                      className={`text-ink transition-transform duration-200 ${
-                        openAccordions.reviews ? "rotate-180" : ""
-                      }`}
-                    />
+                    <div className="flex items-center gap-3">
+                      <StarIcon width={18} height={18} className="text-ink" />
+                      <span>Reviews ({reviewsCount})</span>
+                    </div>
+                    <span className="text-base font-bold text-ink">
+                      {openAccordions.reviews ? "−" : "+"}
+                    </span>
                   </button>
                   {openAccordions.reviews && (
-                    <div className="pb-4 text-[13px] leading-relaxed text-ink-soft">
-                      Rated {rating}/5 by verified purchasers. Customers praise the ring&apos;s brilliant sparkle, exceptional craftsmanship, and comfortable daily wear.
+                    <div className="border-t border-line/60 p-4 space-y-5 text-[12.5px]">
+                      {/* Rating summary */}
+                      <div className="flex items-center gap-6">
+                        <div className="text-center shrink-0">
+                          <p className="font-serif text-4xl font-normal text-ink">4.8</p>
+                          <div className="mt-1 flex items-center justify-center text-amber-500">
+                            {[...Array(5)].map((_, i) => (
+                              <StarIcon key={i} width={13} height={13} className="fill-amber-400 text-amber-400" />
+                            ))}
+                          </div>
+                          <p className="mt-1 text-[10.5px] text-muted">Based on 124 reviews</p>
+                        </div>
+
+                        {/* Breakdown Bars */}
+                        <div className="flex-1 space-y-1 text-[11px] text-muted">
+                          {[
+                            { star: 5, pct: "82%" },
+                            { star: 4, pct: "12%" },
+                            { star: 3, pct: "4%" },
+                            { star: 2, pct: "1%" },
+                            { star: 1, pct: "1%" },
+                          ].map((b) => (
+                            <div key={b.star} className="flex items-center gap-2">
+                              <span className="w-4 text-right">{b.star}★</span>
+                              <div className="h-1.5 flex-1 rounded-full bg-cream-200">
+                                <div className="h-full rounded-full bg-sand-400" style={{ width: b.pct }} />
+                              </div>
+                              <span className="w-7 text-right">{b.pct}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Filter Tags */}
+                      <div className="flex flex-wrap gap-2 pt-2 border-t border-line/40 text-[11.5px]">
+                        <button type="button" className="rounded-lg bg-ink px-3 py-1 font-medium text-white">Most Helpful</button>
+                        <button type="button" className="rounded-lg border border-line bg-white px-3 py-1 font-medium text-ink hover:bg-[#fbf9f6]">Newest</button>
+                        <button type="button" className="rounded-lg border border-line bg-white px-3 py-1 font-medium text-ink hover:bg-[#fbf9f6]">Highest Rating</button>
+                        <button type="button" className="rounded-lg border border-line bg-white px-3 py-1 font-medium text-ink hover:bg-[#fbf9f6]">Lowest Rating</button>
+                      </div>
+
+                      {/* Review Items */}
+                      <div className="space-y-4 pt-2 border-t border-line/40">
+                        {/* Review 1 */}
+                        <div className="space-y-1.5">
+                          <div className="flex items-center justify-between text-[11.5px]">
+                            <div className="flex items-center gap-2">
+                              <span className="grid size-6 place-items-center rounded-full bg-sand-200 font-bold text-[10px] text-ink">A</span>
+                              <span className="font-semibold text-ink">Aylin K.</span>
+                              <span className="text-[#2f6f36] font-medium text-[10.5px]">✓ Verified Purchase</span>
+                            </div>
+                            <span className="text-muted text-[10.5px]">12 Apr 2024</span>
+                          </div>
+                          <div className="flex items-center text-amber-500">
+                            {[...Array(5)].map((_, i) => (
+                              <StarIcon key={i} width={11} height={11} className="fill-amber-400 text-amber-400" />
+                            ))}
+                          </div>
+                          <p className="text-[11px] text-muted">18K Rose Gold · 0.70 ct · Size 7</p>
+                          <p className="font-semibold text-ink text-[12.5px]">Even more beautiful in person</p>
+                          <p className="text-[12px] leading-relaxed text-ink-soft">
+                            The ring is absolutely stunning. The diamond sparkles beautifully and the rose gold looks so elegant. It arrived earlier than expected and the packaging was perfect.
+                          </p>
+                        </div>
+
+                        {/* Review 2 */}
+                        <div className="space-y-1.5 border-t border-line/30 pt-3">
+                          <div className="flex items-center justify-between text-[11.5px]">
+                            <div className="flex items-center gap-2">
+                              <span className="grid size-6 place-items-center rounded-full bg-sand-200 font-bold text-[10px] text-ink">M</span>
+                              <span className="font-semibold text-ink">Mehmet T.</span>
+                              <span className="text-[#2f6f36] font-medium text-[10.5px]">✓ Verified Purchase</span>
+                            </div>
+                            <span className="text-muted text-[10.5px]">28 Mar 2024</span>
+                          </div>
+                          <div className="flex items-center text-amber-500">
+                            {[...Array(5)].map((_, i) => (
+                              <StarIcon key={i} width={11} height={11} className="fill-amber-400 text-amber-400" />
+                            ))}
+                          </div>
+                          <p className="text-[11px] text-muted">18K Gold · 0.70 ct · Size 7</p>
+                          <p className="font-semibold text-ink text-[12.5px]">Perfect for our engagement</p>
+                          <p className="text-[12px] leading-relaxed text-ink-soft">
+                            My fiancé loves it! The quality, the shine and the craftsmanship are excellent. Highly recommended.
+                          </p>
+                          {/* Seller reply */}
+                          <div className="mt-2 rounded-lg bg-[#f9f5f0] p-2.5 text-[11.5px] border-l-2 border-sand-400">
+                            <p className="font-semibold text-ink">SIDRA</p>
+                            <p className="text-muted text-[11px] mt-0.5">Thank you for your kind words! We&apos;re so happy to be part of your special moment. ♡</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Action buttons */}
+                      <div className="grid grid-cols-2 gap-3 pt-3 border-t border-line/40">
+                        <button type="button" className="rounded-xl bg-ink py-2.5 text-[12px] font-semibold text-white hover:bg-ink-soft">
+                          ✎ Write a Review
+                        </button>
+                        <button type="button" className="rounded-xl border border-line bg-white py-2.5 text-[12px] font-semibold text-ink hover:bg-[#fbf9f6]">
+                          View All Reviews →
+                        </button>
+                      </div>
                     </div>
                   )}
                 </div>
 
-                {/* Brand Story */}
-                <div>
+                {/* 7. Brand & Seller */}
+                <div className="rounded-xl border border-line/70 bg-white transition-all shadow-xs">
                   <button
                     type="button"
                     onClick={() => toggleAccordion("brandStory")}
-                    className="flex w-full cursor-pointer items-center justify-between py-4 text-left text-[14px] font-semibold text-ink"
+                    className={`flex w-full cursor-pointer items-center justify-between rounded-xl px-4 py-3.5 text-left text-[14px] font-semibold text-ink transition-colors ${
+                      openAccordions.brandStory ? "bg-[#f9f5f0]" : "hover:bg-[#fbf9f6]"
+                    }`}
                   >
-                    <span>Brand Story</span>
-                    <ChevronDownIcon
-                      width={16}
-                      height={16}
-                      className={`text-ink transition-transform duration-200 ${
-                        openAccordions.brandStory ? "rotate-180" : ""
-                      }`}
-                    />
+                    <div className="flex items-center gap-3">
+                      <StoreIcon width={18} height={18} className="text-ink" />
+                      <span>Brand & Seller</span>
+                    </div>
+                    <span className="text-base font-bold text-ink">
+                      {openAccordions.brandStory ? "−" : "+"}
+                    </span>
                   </button>
                   {openAccordions.brandStory && (
-                    <div className="pb-4 text-[13px] leading-relaxed text-ink-soft">
-                      SIDRA partners with responsible family-owned ateliers and certified diamond cutters, bringing you timeless heirlooms with transparent provenance and modern silhouettes.
+                    <div className="border-t border-line/60 p-4 sm:p-5 space-y-4">
+                      {/* Brand Profile Row */}
+                      <div className="flex flex-col sm:flex-row items-start gap-4">
+                        <div className="relative size-20 sm:size-24 shrink-0 rounded-xl border border-line/70 bg-[#fcfaf7] p-2 flex items-center justify-center shadow-2xs">
+                          <Image
+                            src={sidraLogoImg}
+                            alt="Lumière Fine Jewellery"
+                            width={88}
+                            height={88}
+                            className="object-contain max-h-full max-w-full rounded-lg"
+                          />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <h3 className="font-serif text-lg sm:text-xl font-medium text-ink">
+                              Lumière Fine Jewellery
+                            </h3>
+                            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 border border-emerald-200/80 px-2 py-0.5 text-[11px] font-medium text-emerald-700">
+                              <CheckIcon width={11} height={11} className="stroke-[2.5]" />
+                              <span>Verified Seller</span>
+                            </span>
+                          </div>
+                          <div className="mt-1 flex flex-wrap items-center gap-3 text-[12px] text-ink-soft">
+                            <span className="inline-flex items-center gap-1">
+                              <MapPinIcon width={13} height={13} className="text-ink-soft" />
+                              <span>Istanbul, Türkiye</span>
+                            </span>
+                            <span className="inline-flex items-center gap-1">
+                              <StarIcon width={13} height={13} className="text-ink-soft" />
+                              <span>On Sidra since 2022</span>
+                            </span>
+                          </div>
+                          <p className="mt-2 text-[12px] sm:text-[12.5px] leading-relaxed text-ink-soft">
+                            Lumière creates timeless jewellery inspired by modern elegance and true craftsmanship. Each piece is made with ethically sourced diamonds and the finest materials, designed to celebrate life&apos;s most meaningful moments.
+                          </p>
+                          <button
+                            type="button"
+                            className="mt-1 text-[12px] font-semibold text-ink underline hover:text-rose-gold-dark cursor-pointer"
+                          >
+                            Read More
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* 4 Stats Metrics */}
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 py-3 border-y border-line/60">
+                        <div className="flex flex-col">
+                          <div className="flex items-center gap-1 text-[13.5px] font-bold text-ink">
+                            <StarIcon width={14} height={14} className="fill-amber-500 text-amber-500" />
+                            <span>4.9</span>
+                          </div>
+                          <span className="text-[11px] text-ink-soft leading-tight mt-0.5">
+                            Seller Rating <span className="text-ink-muted">(532 reviews)</span>
+                          </span>
+                        </div>
+                        <div className="flex flex-col">
+                          <div className="flex items-center gap-1 text-[13.5px] font-bold text-ink">
+                            <BagIcon width={14} height={14} className="text-ink" />
+                            <span>2.5K+</span>
+                          </div>
+                          <span className="text-[11px] text-ink-soft leading-tight mt-0.5">
+                            Total Sales
+                          </span>
+                        </div>
+                        <div className="flex flex-col">
+                          <div className="flex items-center gap-1 text-[13.5px] font-bold text-ink">
+                            <ClockIcon width={14} height={14} className="text-ink" />
+                            <span>98%</span>
+                          </div>
+                          <span className="text-[11px] text-ink-soft leading-tight mt-0.5">
+                            On-time Shipping
+                          </span>
+                        </div>
+                        <div className="flex flex-col">
+                          <div className="flex items-center gap-1 text-[13.5px] font-bold text-ink">
+                            <MessageCircleIcon width={14} height={14} className="text-ink" />
+                            <span>&lt; 2 hours</span>
+                          </div>
+                          <span className="text-[11px] text-ink-soft leading-tight mt-0.5">
+                            Response Time
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* 3 Trust Badges */}
+                      <div className="flex flex-wrap items-center gap-2">
+                        <div className="inline-flex items-center gap-1.5 rounded-lg bg-[#f4f2ee] px-3 py-1.5 text-[11.5px] font-medium text-ink border border-line/40">
+                          <span className="flex size-3.5 items-center justify-center rounded-full bg-emerald-600 text-white text-[9px]">✓</span>
+                          <span>Identity Verified</span>
+                        </div>
+                        <div className="inline-flex items-center gap-1.5 rounded-lg bg-[#f4f2ee] px-3 py-1.5 text-[11.5px] font-medium text-ink border border-line/40">
+                          <span className="flex size-3.5 items-center justify-center rounded-full bg-emerald-600 text-white text-[9px]">✓</span>
+                          <span>Business Registered</span>
+                        </div>
+                        <div className="inline-flex items-center gap-1.5 rounded-lg bg-[#f4f2ee] px-3 py-1.5 text-[11.5px] font-medium text-ink border border-line/40">
+                          <span className="flex size-3.5 items-center justify-center rounded-full bg-emerald-600 text-white text-[9px]">✓</span>
+                          <span>Authentic Products</span>
+                        </div>
+                      </div>
+
+                      {/* Craftsmanship & Origin */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        <div className="flex items-center gap-3 rounded-xl border border-line/60 bg-[#fbf9f6] p-3">
+                          <div className="flex size-9 shrink-0 items-center justify-center rounded-full border border-line/80 bg-white text-ink">
+                            <DiamondIcon width={16} height={16} />
+                          </div>
+                          <div>
+                            <h4 className="text-[12.5px] font-semibold text-ink">Craftsmanship</h4>
+                            <p className="text-[11px] text-ink-soft">Handcrafted by skilled artisans</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-3 rounded-xl border border-line/60 bg-[#fbf9f6] p-3">
+                          <div className="flex size-9 shrink-0 items-center justify-center rounded-full border border-line/80 bg-white text-ink">
+                            <MapPinIcon width={16} height={16} />
+                          </div>
+                          <div>
+                            <h4 className="text-[12.5px] font-semibold text-ink">Origin</h4>
+                            <p className="text-[11px] text-ink-soft">Istanbul, Türkiye</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Action Buttons */}
+                      <div className="grid grid-cols-2 gap-2.5">
+                        <button
+                          type="button"
+                          className="rounded-xl border border-line bg-white py-2.5 text-[12.5px] font-semibold text-ink transition-colors hover:bg-[#fbf9f6]"
+                        >
+                          Contact Seller
+                        </button>
+                        <button
+                          type="button"
+                          className="rounded-xl bg-ink py-2.5 text-[12.5px] font-semibold text-white transition-colors hover:bg-ink-soft"
+                        >
+                          Visit Store →
+                        </button>
+                      </div>
+
+                      {/* More from Lumière */}
+                      <div className="pt-2">
+                        <div className="mb-2.5 flex items-center justify-between">
+                          <h4 className="text-[13px] font-semibold text-ink">More from Lumière</h4>
+                          <button
+                            type="button"
+                            className="text-[11.5px] font-medium text-ink-soft hover:text-ink transition-colors flex items-center gap-0.5 cursor-pointer"
+                          >
+                            <span>View Store</span>
+                            <span>→</span>
+                          </button>
+                        </div>
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                          {[
+                            { title: "Classic Solitaire Ring", price: "$1,280", img: ring1 },
+                            { title: "Emerald Cut Ring", price: "$1,520", img: ring2 },
+                            { title: "Pear Halo Ring", price: "$1,690", img: ring3 },
+                            { title: "Three Stone Ring", price: "$1,480", img: ring4 },
+                          ].map((item, idx) => (
+                            <div
+                              key={idx}
+                              className="group relative rounded-xl border border-line/60 bg-[#fbf9f6] p-2 transition-all hover:border-sand-400 hover:shadow-xs"
+                            >
+                              <div className="relative aspect-square w-full rounded-lg bg-white p-1">
+                                <Image
+                                  src={item.img}
+                                  alt={item.title}
+                                  fill
+                                  sizes="120px"
+                                  className="object-contain transition-transform duration-300 group-hover:scale-105"
+                                />
+                                <button
+                                  type="button"
+                                  className="absolute top-1.5 right-1.5 flex size-5.5 items-center justify-center rounded-full bg-white/90 text-ink-soft hover:text-rose-gold-dark hover:scale-110 shadow-2xs transition-all cursor-pointer"
+                                  aria-label={`Wishlist ${item.title}`}
+                                >
+                                  <HeartIcon width={12} height={12} />
+                                </button>
+                              </div>
+                              <h5 className="mt-2 truncate text-[11px] font-medium text-ink">
+                                {item.title}
+                              </h5>
+                              <p className="text-[11.5px] font-bold text-ink">
+                                {item.price}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
                     </div>
                   )}
                 </div>
