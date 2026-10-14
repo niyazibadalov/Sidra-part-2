@@ -35,6 +35,18 @@ import {
   MessageCircleIcon,
   BagIcon,
   CheckIcon,
+  InfoIcon,
+  ThumbsUpIcon,
+  SparklesIcon,
+  RingResizeIcon,
+  HandIcon,
+  AlertCircleIcon,
+  MoreHorizontalIcon,
+  PackageIcon,
+  PencilIcon,
+  ShieldIcon,
+  CompassIcon,
+  AzerbaijanFlag,
 } from "../Icons";
 
 import ring1 from "@/app/images/ring1.png";
@@ -45,6 +57,7 @@ import ring5 from "@/app/images/ring5.png";
 import ring6 from "@/app/images/ring6.png";
 import certificateImg from "@/app/images/certificate.png";
 import sidraLogoImg from "@/app/images/sidraImage2.jpeg";
+import lumiereLogoImg from "@/app/images/lumiere.png";
 
 type ProductDetailViewProps = {
   product: RingProduct;
@@ -128,13 +141,12 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
                   {/* Badge (Rendered ONLY if product has badge in data!) */}
                   {product.badge && (
                     <span
-                      className={`absolute top-4 left-4 z-10 rounded-md px-3 py-1 text-[11.5px] font-semibold tracking-wide shadow-2xs ${
-                        product.badge === "Bestseller"
+                      className={`absolute top-4 left-4 z-10 rounded-md px-3 py-1 text-[11.5px] font-semibold tracking-wide shadow-2xs ${product.badge === "Bestseller"
                           ? "bg-[#faeed6] text-[#93661e]"
                           : product.badge === "New"
-                          ? "bg-[#e8f1e9] text-[#3e6843]"
-                          : "bg-[#fae8e2] text-[#9c4b37]"
-                      }`}
+                            ? "bg-[#e8f1e9] text-[#3e6843]"
+                            : "bg-[#fae8e2] text-[#9c4b37]"
+                        }`}
                     >
                       {product.badge}
                     </span>
@@ -158,9 +170,8 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
                       <HeartIcon
                         width={17}
                         height={17}
-                        className={`transition-transform active:scale-125 ${
-                          isWishlisted ? "fill-[#b74134] text-[#b74134]" : "text-ink"
-                        }`}
+                        className={`transition-transform active:scale-125 ${isWishlisted ? "fill-[#b74134] text-[#b74134]" : "text-ink"
+                          }`}
                       />
                     </button>
                   </div>
@@ -296,11 +307,10 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
                         key={idx}
                         type="button"
                         onClick={() => setActiveImageIndex(idx)}
-                        className={`group relative size-16 sm:size-20 lg:size-[84px] cursor-pointer rounded-lg bg-[#f9f5f0] p-1.5 transition-all duration-200 shrink-0 ${
-                          isActive
+                        className={`group relative size-16 sm:size-20 lg:size-[84px] cursor-pointer rounded-lg bg-[#f9f5f0] p-1.5 transition-all duration-200 shrink-0 ${isActive
                             ? "border-2 border-ink shadow-xs"
                             : "border border-line/70 hover:border-sand-400"
-                        }`}
+                          }`}
                         aria-label={isVideo ? `Watch product video` : `View image ${idx + 1}`}
                       >
                         <Image
@@ -488,11 +498,10 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
                         key={mat}
                         type="button"
                         onClick={() => setSelectedMaterial(mat)}
-                        className={`cursor-pointer rounded-lg border px-3.5 py-2 text-[12.5px] font-medium transition-all ${
-                          isSelected
+                        className={`cursor-pointer rounded-lg border px-3.5 py-2 text-[12.5px] font-medium transition-all ${isSelected
                             ? "border-ink bg-white font-semibold text-ink shadow-xs ring-1 ring-ink"
                             : "border-line bg-white/70 text-ink-soft hover:border-sand-400"
-                        }`}
+                          }`}
                       >
                         {mat}
                       </button>
@@ -514,11 +523,10 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
                         key={dSize}
                         type="button"
                         onClick={() => setSelectedDiamondSize(dSize)}
-                        className={`cursor-pointer rounded-lg border px-3.5 py-2 text-[12.5px] font-medium transition-all ${
-                          isSelected
+                        className={`cursor-pointer rounded-lg border px-3.5 py-2 text-[12.5px] font-medium transition-all ${isSelected
                             ? "border-ink bg-white font-semibold text-ink shadow-xs ring-1 ring-ink"
                             : "border-line bg-white/70 text-ink-soft hover:border-sand-400"
-                        }`}
+                          }`}
                       >
                         {dSize}
                       </button>
@@ -548,11 +556,10 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
                         key={sz}
                         type="button"
                         onClick={() => setSelectedRingSize(sz)}
-                        className={`size-10 cursor-pointer rounded-full border text-[13px] font-medium transition-all ${
-                          isSelected
+                        className={`size-10 cursor-pointer rounded-full border text-[13px] font-medium transition-all ${isSelected
                             ? "border-ink bg-white font-bold text-ink shadow-xs ring-2 ring-ink"
                             : "border-line bg-white/70 text-ink hover:border-sand-400"
-                        }`}
+                          }`}
                       >
                         {sz}
                       </button>
@@ -654,16 +661,15 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
                 <ChevronRightIcon width={16} height={16} className="text-muted" />
               </div>
 
-              {/* Accordions (All start closed per request, styled matching design screenshots with icons & +/- buttons) */}
-              <div className="mt-6 space-y-2">
+              {/* Accordions (Unified seamless list with divide-y per user request) */}
+              <div className="mt-6 rounded-2xl border border-line/70 bg-white divide-y divide-line/70 shadow-xs">
                 {/* 1. Description */}
-                <div className="rounded-xl border border-line/70 bg-white transition-all shadow-xs">
+                <div>
                   <button
                     type="button"
                     onClick={() => toggleAccordion("description")}
-                    className={`flex w-full cursor-pointer items-center justify-between rounded-xl px-4 py-3.5 text-left text-[14px] font-semibold text-ink transition-colors ${
-                      openAccordions.description ? "bg-[#f9f5f0]" : "hover:bg-[#fbf9f6]"
-                    }`}
+                    className={`flex w-full cursor-pointer items-center justify-between rounded-t-2xl px-4 py-3.5 text-left text-[14px] font-semibold text-ink transition-colors ${openAccordions.description ? "bg-[#f9f5f0]" : "hover:bg-[#fbf9f6]"
+                      }`}
                   >
                     <div className="flex items-center gap-3">
                       <FileTextIcon width={18} height={18} className="text-ink" />
@@ -682,13 +688,12 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
                 </div>
 
                 {/* 2. Product Details */}
-                <div className="rounded-xl border border-line/70 bg-white transition-all shadow-xs">
+                <div>
                   <button
                     type="button"
                     onClick={() => toggleAccordion("details")}
-                    className={`flex w-full cursor-pointer items-center justify-between rounded-xl px-4 py-3.5 text-left text-[14px] font-semibold text-ink transition-colors ${
-                      openAccordions.details ? "bg-[#f9f5f0]" : "hover:bg-[#fbf9f6]"
-                    }`}
+                    className={`flex w-full cursor-pointer items-center justify-between px-4 py-3.5 text-left text-[14px] font-semibold text-ink transition-colors ${openAccordions.details ? "bg-[#f9f5f0]" : "hover:bg-[#fbf9f6]"
+                      }`}
                   >
                     <div className="flex items-center gap-3">
                       <SettingsIcon width={18} height={18} className="text-ink" />
@@ -778,13 +783,12 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
                 </div>
 
                 {/* 3. Certificate & Authenticity */}
-                <div className="rounded-xl border border-line/70 bg-white transition-all shadow-xs">
+                <div>
                   <button
                     type="button"
                     onClick={() => toggleAccordion("certificate")}
-                    className={`flex w-full cursor-pointer items-center justify-between rounded-xl px-4 py-3.5 text-left text-[14px] font-semibold text-ink transition-colors ${
-                      openAccordions.certificate ? "bg-[#f9f5f0]" : "hover:bg-[#fbf9f6]"
-                    }`}
+                    className={`flex w-full cursor-pointer items-center justify-between px-4 py-3.5 text-left text-[14px] font-semibold text-ink transition-colors ${openAccordions.certificate ? "bg-[#f9f5f0]" : "hover:bg-[#fbf9f6]"
+                      }`}
                   >
                     <div className="flex items-center gap-3">
                       <BadgeCheckIcon width={18} height={18} className="text-ink" />
@@ -870,9 +874,9 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
                           </div>
                           <button
                             type="button"
-                            className="mt-2 text-[11px] font-semibold text-ink transition-colors hover:text-rose-gold-dark"
+                            className="mt-2 text-[11px] font-semibold text-ink transition-colors hover:text-rose-gold-dark cursor-pointer"
                           >
-                            👁 View Full Report
+                            View Full Report
                           </button>
                         </div>
                       </div>
@@ -895,21 +899,21 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
                         </button>
                       </div>
 
-                      <p className="text-[11px] text-muted">
-                        ⓘ This certificate is provided by the brand or seller. Please verify the report number on the official GIA website.
-                      </p>
+                      <div className="flex items-start gap-1.5 text-[11px] text-muted">
+                        <InfoIcon width={13} height={13} className="shrink-0 mt-0.5 text-muted" />
+                        <p>This certificate is provided by the brand or seller. Please verify the report number on the official GIA website.</p>
+                      </div>
                     </div>
                   )}
                 </div>
 
                 {/* 4. Shipping & Returns */}
-                <div className="rounded-xl border border-line/70 bg-white transition-all shadow-xs">
+                <div>
                   <button
                     type="button"
                     onClick={() => toggleAccordion("shipping")}
-                    className={`flex w-full cursor-pointer items-center justify-between rounded-xl px-4 py-3.5 text-left text-[14px] font-semibold text-ink transition-colors ${
-                      openAccordions.shipping ? "bg-[#f9f5f0]" : "hover:bg-[#fbf9f6]"
-                    }`}
+                    className={`flex w-full cursor-pointer items-center justify-between px-4 py-3.5 text-left text-[14px] font-semibold text-ink transition-colors ${openAccordions.shipping ? "bg-[#f9f5f0]" : "hover:bg-[#fbf9f6]"
+                      }`}
                   >
                     <div className="flex items-center gap-3">
                       <TruckIcon width={18} height={18} className="text-ink" />
@@ -924,47 +928,54 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
                       {/* Shipping Block */}
                       <div>
                         <h4 className="font-semibold text-ink text-[13px]">Shipping</h4>
-                        <div className="mt-2.5 rounded-xl border border-line/80 bg-[#fbf9f6] p-3 flex items-center gap-3">
-                          <TruckIcon width={20} height={20} className="text-ink shrink-0" />
+
+                        {/* Ready to ship badge card */}
+                        <div className="mt-2.5 rounded-xl border border-line/80 bg-[#f4f7f4] p-3 flex items-center gap-3">
+                          <TruckIcon width={22} height={22} className="text-ink shrink-0" />
                           <div className="text-[12px]">
-                            <span className="font-semibold text-[#2f6f36] flex items-center gap-1">
-                              ● Ready to ship
+                            <span className="font-semibold text-[#2f6f36] flex items-center gap-1.5">
+                              <span className="size-2 rounded-full bg-[#2f6f36]" />
+                              Ready to ship
                             </span>
-                            <p className="text-muted mt-0.5">Estimated delivery: 2 – 5 business days ⓘ</p>
+                            <div className="text-ink mt-0.5 flex items-center gap-1">
+                              <span>Estimated delivery: 2 – 5 business days</span>
+                              <InfoIcon width={13} height={13} className="text-ink-soft" />
+                            </div>
                           </div>
                         </div>
 
-                        <div className="mt-3 space-y-2.5 text-[12px]">
-                          <div className="flex items-start gap-2.5">
-                            <span className="text-base leading-none">📦</span>
+                        {/* Shipping features list with clean monochrome SVG stroke icons */}
+                        <div className="mt-3.5 space-y-3 text-[12px]">
+                          <div className="flex items-start gap-3">
+                            <ShieldIcon width={18} height={18} className="text-ink shrink-0 mt-0.5" />
                             <div>
                               <p className="font-medium text-ink">Free insured delivery</p>
                               <p className="text-muted">No additional shipping fee on this item.</p>
                             </div>
                           </div>
-                          <div className="flex items-start gap-2.5">
-                            <ShieldCheckIcon width={16} height={16} className="text-ink shrink-0 mt-0.5" />
+                          <div className="flex items-start gap-3">
+                            <ShieldCheckIcon width={18} height={18} className="text-ink shrink-0 mt-0.5" />
                             <div>
-                              <p className="font-medium text-ink">Secure & fully insured delivery</p>
+                              <p className="font-medium text-ink">Secure &amp; fully insured delivery</p>
                               <p className="text-muted">Your order is protected from dispatch to delivery.</p>
                             </div>
                           </div>
-                          <div className="flex items-start gap-2.5">
-                            <span className="text-base leading-none">📍</span>
+                          <div className="flex items-start gap-3">
+                            <CompassIcon width={18} height={18} className="text-ink shrink-0 mt-0.5" />
                             <div>
                               <p className="font-medium text-ink">Tracking included</p>
                               <p className="text-muted">Track your order at every step.</p>
                             </div>
                           </div>
-                          <div className="flex items-start gap-2.5">
-                            <span className="text-base leading-none">✍️</span>
+                          <div className="flex items-start gap-3">
+                            <PencilIcon width={18} height={18} className="text-ink shrink-0 mt-0.5" />
                             <div>
                               <p className="font-medium text-ink">Signature required</p>
                               <p className="text-muted">A signature is required upon delivery.</p>
                             </div>
                           </div>
-                          <div className="flex items-start gap-2.5">
-                            <span className="text-base leading-none">🎁</span>
+                          <div className="flex items-start gap-3">
+                            <PackageIcon width={18} height={18} className="text-ink shrink-0 mt-0.5" />
                             <div>
                               <p className="font-medium text-ink">Discreet packaging</p>
                               <p className="text-muted">Your jewellery will arrive in a secure and elegant package.</p>
@@ -972,17 +983,26 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
                           </div>
                         </div>
 
-                        {/* Deliver to Country Selector */}
-                        <div className="mt-3.5 flex items-center justify-between rounded-xl border border-line bg-white p-3">
-                          <span className="text-muted text-[12px]">Deliver to</span>
-                          <span className="font-semibold text-ink text-[12px] flex items-center gap-1.5">
-                            🇦🇿 Azerbaijan ▾
-                          </span>
+                        {/* Deliver to Country Selector (Matching Image 1) */}
+                        <div className="mt-4 flex items-center justify-between rounded-xl border border-line bg-white p-2.5 sm:p-3">
+                          <div className="flex items-center gap-2 text-[12.5px] font-semibold text-ink">
+                            <MapPinIcon width={16} height={16} className="text-ink" />
+                            <span>Deliver to</span>
+                          </div>
+                          <div className="flex items-center gap-2 rounded-lg border border-line/60 bg-[#fbf9f6] px-2.5 py-1 text-[12px] font-medium text-ink shadow-2xs">
+                            <AzerbaijanFlag className="w-5 h-3.5" />
+                            <span>Azerbaijan</span>
+                            <ChevronDownIcon width={13} height={13} className="text-ink-soft ml-0.5" />
+                          </div>
                         </div>
 
-                        <p className="mt-2 text-[11px] text-muted">
-                          ⓘ International orders may be subject to customs duties and taxes, which are the responsibility of the recipient.
-                        </p>
+                        {/* Customs notice callout box (Matching Image 2) */}
+                        <div className="mt-2.5 flex items-start gap-2.5 rounded-xl border border-[#d6e3f0] bg-[#f0f4f9] p-3 text-[12px] text-[#334155]">
+                          <InfoIcon width={16} height={16} className="text-[#475569] shrink-0 mt-0.5" />
+                          <p className="leading-relaxed">
+                            International orders may be subject to customs duties and taxes, which are the responsibility of the recipient.
+                          </p>
+                        </div>
                       </div>
 
                       {/* Returns Block */}
@@ -992,30 +1012,30 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
                           <RotateCcwIcon width={18} height={18} className="text-ink shrink-0 mt-0.5" />
                           <div>
                             <p className="font-medium text-ink">30-day returns</p>
-                            <p className="text-muted">Not completely in love? You can return this item within 30 days of delivery.</p>
+                            <p className="text-muted text-[12px]">Not completely in love? You can return this item within 30 days of delivery.</p>
                           </div>
                         </div>
 
                         <div className="mt-3 space-y-2 border-t border-line/40 pt-2 text-[12px]">
-                          <div className="flex justify-between">
-                            <span className="text-muted">Eligible items</span>
-                            <span className="text-right text-ink max-w-[220px]">Items must be unworn, in original condition, with all packaging and certificates.</span>
+                          <div className="flex justify-between gap-4">
+                            <span className="text-muted shrink-0">Eligible items</span>
+                            <span className="text-right text-ink max-w-[240px]">Items must be unworn, in original condition, with all packaging and certificates.</span>
                           </div>
-                          <div className="flex justify-between">
-                            <span className="text-muted">Exceptions</span>
-                            <span className="text-right text-ink max-w-[220px]">Engraved, customized or resized items are final sale and cannot be returned.</span>
+                          <div className="flex justify-between gap-4">
+                            <span className="text-muted shrink-0">Exceptions</span>
+                            <span className="text-right text-ink max-w-[240px]">Engraved, customized or resized items are final sale and cannot be returned.</span>
                           </div>
-                          <div className="flex justify-between">
-                            <span className="text-muted">Refund process</span>
-                            <span className="text-right text-ink max-w-[220px]">Refunds are issued to your original payment method within 5–7 business days after we receive the item.</span>
+                          <div className="flex justify-between gap-4">
+                            <span className="text-muted shrink-0">Refund process</span>
+                            <span className="text-right text-ink max-w-[240px]">Refunds are issued to your original payment method within 5–7 business days after we receive the item.</span>
                           </div>
                         </div>
 
                         <button
                           type="button"
-                          className="mt-4 w-full rounded-xl border border-line bg-white py-2.5 text-[12.5px] font-semibold text-ink transition-colors hover:bg-[#fbf9f6]"
+                          className="mt-4 w-full rounded-xl border border-line bg-white py-2.5 text-[12.5px] font-semibold text-ink transition-colors hover:bg-[#fbf9f6] cursor-pointer"
                         >
-                          View full shipping & returns policy →
+                          View full shipping &amp; returns policy →
                         </button>
                       </div>
                     </div>
@@ -1023,13 +1043,12 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
                 </div>
 
                 {/* 5. Warranty, Care & Services */}
-                <div className="rounded-xl border border-line/70 bg-white transition-all shadow-xs">
+                <div>
                   <button
                     type="button"
                     onClick={() => toggleAccordion("warranty")}
-                    className={`flex w-full cursor-pointer items-center justify-between rounded-xl px-4 py-3.5 text-left text-[14px] font-semibold text-ink transition-colors ${
-                      openAccordions.warranty ? "bg-[#f9f5f0]" : "hover:bg-[#fbf9f6]"
-                    }`}
+                    className={`flex w-full cursor-pointer items-center justify-between px-4 py-3.5 text-left text-[14px] font-semibold text-ink transition-colors ${openAccordions.warranty ? "bg-[#f9f5f0]" : "hover:bg-[#fbf9f6]"
+                      }`}
                   >
                     <div className="flex items-center gap-3">
                       <ShieldCheckIcon width={18} height={18} className="text-ink" />
@@ -1045,39 +1064,39 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
                         <div className="flex items-start gap-3">
                           <ShieldCheckIcon width={18} height={18} className="text-ink shrink-0 mt-0.5" />
                           <div>
-                            <p className="font-semibold text-ink">Manufacturing Warranty</p>
-                            <p className="text-muted text-[11.5px]">Lifetime coverage for manufacturing defects. Coverage may vary by brand or seller.</p>
+                            <p className="font-semibold text-ink text-[12.5px]">Manufacturing Warranty</p>
+                            <p className="text-muted text-[11.5px] mt-0.5">Lifetime coverage for manufacturing defects. Coverage may vary by brand or seller.</p>
                           </div>
                         </div>
 
                         <div className="flex items-start gap-3">
-                          <span className="text-base leading-none">💍</span>
+                          <RingResizeIcon width={18} height={18} className="text-ink shrink-0 mt-0.5" />
                           <div>
-                            <p className="font-semibold text-ink">Ring Resizing</p>
-                            <p className="text-muted text-[11.5px]">Complimentary first resize (where eligible). Additional resizing may be available for a fee.</p>
+                            <p className="font-semibold text-ink text-[12.5px]">Ring Resizing</p>
+                            <p className="text-muted text-[11.5px] mt-0.5">Complimentary first resize (where eligible). Additional resizing may be available for a fee.</p>
                           </div>
                         </div>
 
                         <div className="flex items-start gap-3">
-                          <span className="text-base leading-none">✨</span>
+                          <SparklesIcon width={18} height={18} className="text-ink shrink-0 mt-0.5" />
                           <div>
-                            <p className="font-semibold text-ink">Professional Cleaning & Polishing</p>
-                            <p className="text-muted text-[11.5px]">Keep your jewellery looking its best with professional cleaning and polishing services.</p>
+                            <p className="font-semibold text-ink text-[12.5px]">Professional Cleaning &amp; Polishing</p>
+                            <p className="text-muted text-[11.5px] mt-0.5">Keep your jewellery looking its best with professional cleaning and polishing services.</p>
                           </div>
                         </div>
 
                         <div className="flex items-start gap-3">
                           <SettingsIcon width={18} height={18} className="text-ink shrink-0 mt-0.5" />
                           <div>
-                            <p className="font-semibold text-ink">Repair & Prong/Stone Check</p>
-                            <p className="text-muted text-[11.5px]">Repair services and prong/stone tightening available to maintain long-term beauty and security.</p>
+                            <p className="font-semibold text-ink text-[12.5px]">Repair &amp; Prong/Stone Check</p>
+                            <p className="text-muted text-[11.5px] mt-0.5">Repair services and prong/stone tightening available to maintain long-term beauty and security.</p>
                           </div>
                         </div>
 
                         <div className="flex items-start gap-3">
-                          <span className="text-base leading-none">✋</span>
+                          <HandIcon width={18} height={18} className="text-ink shrink-0 mt-0.5" />
                           <div>
-                            <p className="font-semibold text-ink">Care Guidance</p>
+                            <p className="font-semibold text-ink text-[12.5px]">Care Guidance</p>
                             <ul className="mt-1 list-disc list-inside text-muted space-y-0.5 text-[11.5px]">
                               <li>Avoid harsh chemicals and household cleaners.</li>
                               <li>Remove jewellery during sports, swimming or heavy work.</li>
@@ -1088,9 +1107,9 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
                         </div>
 
                         <div className="flex items-start gap-3 border-t border-line/40 pt-3">
-                          <span className="text-base leading-none text-amber-600">ⓘ</span>
+                          <AlertCircleIcon width={18} height={18} className="text-ink shrink-0 mt-0.5" />
                           <div>
-                            <p className="font-semibold text-ink">What&apos;s Not Covered</p>
+                            <p className="font-semibold text-ink text-[12.5px]">What&apos;s Not Covered</p>
                             <ul className="mt-1 list-disc list-inside text-muted space-y-0.5 text-[11.5px]">
                               <li>Normal wear and tear (scratches, minor dents).</li>
                               <li>Accidental damage, loss or theft.</li>
@@ -1101,18 +1120,26 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
                         </div>
                       </div>
 
-                      <div className="pt-2 flex flex-col sm:flex-row gap-2.5">
+                      {/* Policy notice callout (Matching Image 4) */}
+                      <div className="flex items-start gap-2.5 rounded-xl border border-line/60 bg-[#f5f6f8] p-3 text-[12px] text-ink-soft">
+                        <InfoIcon width={16} height={16} className="text-ink shrink-0 mt-0.5" />
+                        <p className="leading-relaxed">
+                          Exact warranty and service terms may vary by brand or seller. Please refer to the full policy for this product.
+                        </p>
+                      </div>
+
+                      <div className="pt-1 flex flex-col sm:flex-row gap-2.5">
                         <button
                           type="button"
-                          className="flex-1 rounded-xl bg-ink py-2.5 text-center text-[12.5px] font-semibold text-white transition-colors hover:bg-ink-soft"
+                          className="flex-1 rounded-xl bg-ink py-2.5 text-center text-[12.5px] font-semibold text-white transition-colors hover:bg-ink-soft cursor-pointer"
                         >
                           Request Service
                         </button>
                         <button
                           type="button"
-                          className="flex-1 rounded-xl border border-line bg-white py-2.5 text-center text-[12.5px] font-semibold text-ink transition-colors hover:bg-[#fbf9f6]"
+                          className="flex-1 rounded-xl border border-line bg-white py-2.5 text-center text-[12.5px] font-semibold text-ink transition-colors hover:bg-[#fbf9f6] cursor-pointer"
                         >
-                          View Full Care & Warranty Policy →
+                          View Full Care &amp; Warranty Policy →
                         </button>
                       </div>
                     </div>
@@ -1120,13 +1147,12 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
                 </div>
 
                 {/* 6. Reviews (124) */}
-                <div className="rounded-xl border border-line/70 bg-white transition-all shadow-xs">
+                <div>
                   <button
                     type="button"
                     onClick={() => toggleAccordion("reviews")}
-                    className={`flex w-full cursor-pointer items-center justify-between rounded-xl px-4 py-3.5 text-left text-[14px] font-semibold text-ink transition-colors ${
-                      openAccordions.reviews ? "bg-[#f9f5f0]" : "hover:bg-[#fbf9f6]"
-                    }`}
+                    className={`flex w-full cursor-pointer items-center justify-between px-4 py-3.5 text-left text-[14px] font-semibold text-ink transition-colors ${openAccordions.reviews ? "bg-[#f9f5f0]" : "hover:bg-[#fbf9f6]"
+                      }`}
                   >
                     <div className="flex items-center gap-3">
                       <StarIcon width={18} height={18} className="text-ink" />
@@ -1141,17 +1167,17 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
                       {/* Rating summary */}
                       <div className="flex items-center gap-6">
                         <div className="text-center shrink-0">
-                          <p className="font-serif text-4xl font-normal text-ink">4.8</p>
+                          <p className="font-serif text-4xl sm:text-5xl font-normal text-ink">4.8</p>
                           <div className="mt-1 flex items-center justify-center text-amber-500">
                             {[...Array(5)].map((_, i) => (
                               <StarIcon key={i} width={13} height={13} className="fill-amber-400 text-amber-400" />
                             ))}
                           </div>
-                          <p className="mt-1 text-[10.5px] text-muted">Based on 124 reviews</p>
+                          <p className="mt-1 text-[11px] text-muted">Based on 124 reviews</p>
                         </div>
 
                         {/* Breakdown Bars */}
-                        <div className="flex-1 space-y-1 text-[11px] text-muted">
+                        <div className="flex-1 space-y-1.5 text-[11px] text-muted">
                           {[
                             { star: 5, pct: "82%" },
                             { star: 4, pct: "12%" },
@@ -1171,71 +1197,208 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
                       </div>
 
                       {/* Filter Tags */}
-                      <div className="flex flex-wrap gap-2 pt-2 border-t border-line/40 text-[11.5px]">
-                        <button type="button" className="rounded-lg bg-ink px-3 py-1 font-medium text-white">Most Helpful</button>
-                        <button type="button" className="rounded-lg border border-line bg-white px-3 py-1 font-medium text-ink hover:bg-[#fbf9f6]">Newest</button>
-                        <button type="button" className="rounded-lg border border-line bg-white px-3 py-1 font-medium text-ink hover:bg-[#fbf9f6]">Highest Rating</button>
-                        <button type="button" className="rounded-lg border border-line bg-white px-3 py-1 font-medium text-ink hover:bg-[#fbf9f6]">Lowest Rating</button>
+                      <div className="space-y-2.5 pt-2 border-t border-line/40">
+                        <div className="flex flex-wrap gap-2 text-[11.5px]">
+                          <button type="button" className="rounded-lg bg-ink px-3 py-1 font-medium text-white">Most Helpful</button>
+                          <button type="button" className="rounded-lg border border-line bg-white px-3 py-1 font-medium text-ink hover:bg-[#fbf9f6]">Newest</button>
+                          <button type="button" className="rounded-lg border border-line bg-white px-3 py-1 font-medium text-ink hover:bg-[#fbf9f6]">Highest Rating</button>
+                          <button type="button" className="rounded-lg border border-line bg-white px-3 py-1 font-medium text-ink hover:bg-[#fbf9f6]">Lowest Rating</button>
+                        </div>
+                        {/* Checkbox filters */}
+                        <div className="flex flex-wrap items-center gap-4 text-[12px] text-ink-soft pt-0.5">
+                          <label className="flex items-center gap-1.5 cursor-pointer select-none">
+                            <input type="checkbox" className="size-3.5 rounded border-line text-ink accent-ink" />
+                            <span>Verified Purchase (98)</span>
+                          </label>
+                          <label className="flex items-center gap-1.5 cursor-pointer select-none">
+                            <input type="checkbox" className="size-3.5 rounded border-line text-ink accent-ink" />
+                            <span>With Photos (36)</span>
+                          </label>
+                        </div>
                       </div>
 
                       {/* Review Items */}
                       <div className="space-y-4 pt-2 border-t border-line/40">
-                        {/* Review 1 */}
-                        <div className="space-y-1.5">
+                        {/* Review 1 - Aylin K. */}
+                        <div className="space-y-2">
                           <div className="flex items-center justify-between text-[11.5px]">
                             <div className="flex items-center gap-2">
-                              <span className="grid size-6 place-items-center rounded-full bg-sand-200 font-bold text-[10px] text-ink">A</span>
+                              <span className="grid size-7 place-items-center rounded-full bg-[#c2b2a3] font-semibold text-[11px] text-white">A</span>
                               <span className="font-semibold text-ink">Aylin K.</span>
-                              <span className="text-[#2f6f36] font-medium text-[10.5px]">✓ Verified Purchase</span>
+                              <span className="text-[#2f6f36] font-medium text-[11px] flex items-center gap-1">
+                                <CheckIcon width={11} height={11} className="stroke-[2.5]" />
+                                Verified Purchase
+                              </span>
                             </div>
-                            <span className="text-muted text-[10.5px]">12 Apr 2024</span>
+                            <div className="flex items-center gap-2">
+                              <span className="text-muted text-[11px]">12 Apr 2024</span>
+                              <button type="button" className="text-muted hover:text-ink cursor-pointer">
+                                <MoreHorizontalIcon width={15} height={15} />
+                              </button>
+                            </div>
                           </div>
                           <div className="flex items-center text-amber-500">
                             {[...Array(5)].map((_, i) => (
-                              <StarIcon key={i} width={11} height={11} className="fill-amber-400 text-amber-400" />
+                              <StarIcon key={i} width={12} height={12} className="fill-amber-400 text-amber-400" />
                             ))}
                           </div>
-                          <p className="text-[11px] text-muted">18K Rose Gold · 0.70 ct · Size 7</p>
-                          <p className="font-semibold text-ink text-[12.5px]">Even more beautiful in person</p>
+                          <p className="text-[11.5px] text-muted">18K Rose Gold &nbsp;|&nbsp; 0.70 ct &nbsp;|&nbsp; Size 7</p>
+                          <p className="font-semibold text-ink text-[13px]">Even more beautiful in person</p>
                           <p className="text-[12px] leading-relaxed text-ink-soft">
                             The ring is absolutely stunning. The diamond sparkles beautifully and the rose gold looks so elegant. It arrived earlier than expected and the packaging was perfect.
                           </p>
+                          {/* 3 Customer Photos */}
+                          <div className="flex items-center gap-2.5 pt-1">
+                            <div className="relative size-16 sm:size-20 shrink-0 rounded-lg border border-line/70 bg-[#faf8f5] p-1 shadow-2xs">
+                              <Image src={ring5} alt="Customer photo 1" fill sizes="80px" className="object-contain rounded-md" />
+                            </div>
+                            <div className="relative size-16 sm:size-20 shrink-0 rounded-lg border border-line/70 bg-[#faf8f5] p-1 shadow-2xs">
+                              <Image src={ring1} alt="Customer photo 2" fill sizes="80px" className="object-contain rounded-md" />
+                            </div>
+                            <div className="relative size-16 sm:size-20 shrink-0 rounded-lg border border-line/70 bg-[#faf8f5] p-1 shadow-2xs">
+                              <Image src={ring6} alt="Customer photo 3" fill sizes="80px" className="object-contain rounded-md" />
+                            </div>
+                          </div>
+                          {/* Helpful and Reply row */}
+                          <div className="flex items-center justify-between pt-1 text-[11.5px]">
+                            <button
+                              type="button"
+                              className="flex items-center gap-1.5 text-ink-soft hover:text-ink transition-colors cursor-pointer"
+                            >
+                              <ThumbsUpIcon width={13} height={13} />
+                              <span>Helpful (12)</span>
+                            </button>
+                            <button
+                              type="button"
+                              className="font-medium text-ink-soft hover:text-ink transition-colors cursor-pointer"
+                            >
+                              Reply
+                            </button>
+                          </div>
                         </div>
 
-                        {/* Review 2 */}
-                        <div className="space-y-1.5 border-t border-line/30 pt-3">
+                        {/* Review 2 - Mehmet T. */}
+                        <div className="space-y-2 border-t border-line/30 pt-3.5">
                           <div className="flex items-center justify-between text-[11.5px]">
                             <div className="flex items-center gap-2">
-                              <span className="grid size-6 place-items-center rounded-full bg-sand-200 font-bold text-[10px] text-ink">M</span>
+                              <span className="grid size-7 place-items-center rounded-full bg-[#c2b2a3] font-semibold text-[11px] text-white">M</span>
                               <span className="font-semibold text-ink">Mehmet T.</span>
-                              <span className="text-[#2f6f36] font-medium text-[10.5px]">✓ Verified Purchase</span>
+                              <span className="text-[#2f6f36] font-medium text-[11px] flex items-center gap-1">
+                                <CheckIcon width={11} height={11} className="stroke-[2.5]" />
+                                Verified Purchase
+                              </span>
                             </div>
-                            <span className="text-muted text-[10.5px]">28 Mar 2024</span>
+                            <div className="flex items-center gap-2">
+                              <span className="text-muted text-[11px]">28 Mar 2024</span>
+                              <button type="button" className="text-muted hover:text-ink cursor-pointer">
+                                <MoreHorizontalIcon width={15} height={15} />
+                              </button>
+                            </div>
                           </div>
                           <div className="flex items-center text-amber-500">
                             {[...Array(5)].map((_, i) => (
-                              <StarIcon key={i} width={11} height={11} className="fill-amber-400 text-amber-400" />
+                              <StarIcon key={i} width={12} height={12} className="fill-amber-400 text-amber-400" />
                             ))}
                           </div>
-                          <p className="text-[11px] text-muted">18K Gold · 0.70 ct · Size 7</p>
-                          <p className="font-semibold text-ink text-[12.5px]">Perfect for our engagement</p>
+                          <p className="text-[11.5px] text-muted">18K Gold &nbsp;|&nbsp; 0.70 ct &nbsp;|&nbsp; Size 7</p>
+                          <p className="font-semibold text-ink text-[13px]">Perfect for our engagement</p>
                           <p className="text-[12px] leading-relaxed text-ink-soft">
                             My fiancé loves it! The quality, the shine and the craftsmanship are excellent. Highly recommended.
                           </p>
-                          {/* Seller reply */}
-                          <div className="mt-2 rounded-lg bg-[#f9f5f0] p-2.5 text-[11.5px] border-l-2 border-sand-400">
-                            <p className="font-semibold text-ink">SIDRA</p>
-                            <p className="text-muted text-[11px] mt-0.5">Thank you for your kind words! We&apos;re so happy to be part of your special moment. ♡</p>
+                          {/* Helpful and Reply row */}
+                          <div className="flex items-center justify-between pt-0.5 text-[11.5px]">
+                            <button
+                              type="button"
+                              className="flex items-center gap-1.5 text-ink-soft hover:text-ink transition-colors cursor-pointer"
+                            >
+                              <ThumbsUpIcon width={13} height={13} />
+                              <span>Helpful (8)</span>
+                            </button>
+                            <button
+                              type="button"
+                              className="font-medium text-ink-soft hover:text-ink transition-colors cursor-pointer"
+                            >
+                              Reply
+                            </button>
+                          </div>
+                          {/* SIDRA official reply card */}
+                          <div className="mt-3 ml-2 sm:ml-5 rounded-xl border border-line/60 bg-[#faf8f5] p-3 flex items-start gap-2.5 shadow-2xs">
+                            <div className="relative size-7 shrink-0 rounded-full border border-line/60 bg-white p-0.5">
+                              <Image src={sidraLogoImg} alt="SIDRA" fill sizes="30px" className="object-contain rounded-full" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center justify-between text-[11.5px]">
+                                <span className="font-semibold text-ink">SIDRA</span>
+                                <span className="text-muted text-[10.5px]">29 Mar 2024</span>
+                              </div>
+                              <p className="mt-1 text-[12px] text-ink-soft leading-relaxed">
+                                Thank you for your kind words! We&apos;re so happy to be part of your special moment. ♡
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Review 3 - Elif S. */}
+                        <div className="space-y-2 border-t border-line/30 pt-3.5">
+                          <div className="flex items-center justify-between text-[11.5px]">
+                            <div className="flex items-center gap-2">
+                              <span className="grid size-7 place-items-center rounded-full bg-[#c2b2a3] font-semibold text-[11px] text-white">E</span>
+                              <span className="font-semibold text-ink">Elif S.</span>
+                              <span className="text-[#2f6f36] font-medium text-[11px] flex items-center gap-1">
+                                <CheckIcon width={11} height={11} className="stroke-[2.5]" />
+                                Verified Purchase
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span className="text-muted text-[11px]">15 Mar 2024</span>
+                              <button type="button" className="text-muted hover:text-ink cursor-pointer">
+                                <MoreHorizontalIcon width={15} height={15} />
+                              </button>
+                            </div>
+                          </div>
+                          <div className="flex items-center text-amber-500">
+                            {[...Array(4)].map((_, i) => (
+                              <StarIcon key={i} width={12} height={12} className="fill-amber-400 text-amber-400" />
+                            ))}
+                            <StarIcon width={12} height={12} className="text-line" />
+                          </div>
+                          <p className="text-[11.5px] text-muted">18K Gold &nbsp;|&nbsp; 1.00 ct &nbsp;|&nbsp; Size 6</p>
+                          <p className="font-semibold text-ink text-[13px]">Beautiful ring, great service</p>
+                          <p className="text-[12px] leading-relaxed text-ink-soft">
+                            The ring is gorgeous and the customer service was very helpful with sizing. Delivery was smooth and well packaged.
+                          </p>
+                          {/* Helpful and Reply row */}
+                          <div className="flex items-center justify-between pt-0.5 text-[11.5px]">
+                            <button
+                              type="button"
+                              className="flex items-center gap-1.5 text-ink-soft hover:text-ink transition-colors cursor-pointer"
+                            >
+                              <ThumbsUpIcon width={13} height={13} />
+                              <span>Helpful (5)</span>
+                            </button>
+                            <button
+                              type="button"
+                              className="font-medium text-ink-soft hover:text-ink transition-colors cursor-pointer"
+                            >
+                              Reply
+                            </button>
                           </div>
                         </div>
                       </div>
 
                       {/* Action buttons */}
                       <div className="grid grid-cols-2 gap-3 pt-3 border-t border-line/40">
-                        <button type="button" className="rounded-xl bg-ink py-2.5 text-[12px] font-semibold text-white hover:bg-ink-soft">
-                          ✎ Write a Review
+                        <button
+                          type="button"
+                          className="flex items-center justify-center gap-1.5 rounded-xl bg-ink py-2.5 text-[12.5px] font-semibold text-white transition-colors hover:bg-ink-soft cursor-pointer"
+                        >
+                          <PencilIcon width={13} height={13} />
+                          <span>Write a Review</span>
                         </button>
-                        <button type="button" className="rounded-xl border border-line bg-white py-2.5 text-[12px] font-semibold text-ink hover:bg-[#fbf9f6]">
+                        <button
+                          type="button"
+                          className="rounded-xl border border-line bg-white py-2.5 text-[12.5px] font-semibold text-ink transition-colors hover:bg-[#fbf9f6] cursor-pointer"
+                        >
                           View All Reviews →
                         </button>
                       </div>
@@ -1244,13 +1407,13 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
                 </div>
 
                 {/* 7. Brand & Seller */}
-                <div className="rounded-xl border border-line/70 bg-white transition-all shadow-xs">
+                <div className="last:rounded-b-2xl">
                   <button
                     type="button"
                     onClick={() => toggleAccordion("brandStory")}
-                    className={`flex w-full cursor-pointer items-center justify-between rounded-xl px-4 py-3.5 text-left text-[14px] font-semibold text-ink transition-colors ${
-                      openAccordions.brandStory ? "bg-[#f9f5f0]" : "hover:bg-[#fbf9f6]"
-                    }`}
+                    className={`flex w-full cursor-pointer items-center justify-between px-4 py-3.5 text-left text-[14px] font-semibold text-ink transition-colors ${!openAccordions.brandStory ? "last:rounded-b-2xl" : ""
+                      } ${openAccordions.brandStory ? "bg-[#f9f5f0]" : "hover:bg-[#fbf9f6]"
+                      }`}
                   >
                     <div className="flex items-center gap-3">
                       <StoreIcon width={18} height={18} className="text-ink" />
@@ -1264,13 +1427,13 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
                     <div className="border-t border-line/60 p-4 sm:p-5 space-y-4">
                       {/* Brand Profile Row */}
                       <div className="flex flex-col sm:flex-row items-start gap-4">
-                        <div className="relative size-20 sm:size-24 shrink-0 rounded-xl border border-line/70 bg-[#fcfaf7] p-2 flex items-center justify-center shadow-2xs">
+                        <div className="relative size-20 sm:size-24 shrink-0 rounded-xl bg-[#fcfaf7] flex items-center justify-center shadow-2xs">
                           <Image
-                            src={sidraLogoImg}
+                            src={lumiereLogoImg}
                             alt="Lumière Fine Jewellery"
-                            width={88}
-                            height={88}
-                            className="object-contain max-h-full max-w-full rounded-lg"
+                            width={96}
+                            height={96}
+                            className="object-contain max-h-full max-w-full rounded-xl"
                           />
                         </div>
                         <div className="flex-1 min-w-0">
@@ -1363,18 +1526,18 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
 
                       {/* Craftsmanship & Origin */}
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                        <div className="flex items-center gap-3 rounded-xl border border-line/60 bg-[#fbf9f6] p-3">
+                        <div className="flex items-center gap-3 rounded-xl">
                           <div className="flex size-9 shrink-0 items-center justify-center rounded-full border border-line/80 bg-white text-ink">
-                            <DiamondIcon width={16} height={16} />
+                            <DiamondIcon width={22} height={22} />
                           </div>
                           <div>
                             <h4 className="text-[12.5px] font-semibold text-ink">Craftsmanship</h4>
                             <p className="text-[11px] text-ink-soft">Handcrafted by skilled artisans</p>
                           </div>
                         </div>
-                        <div className="flex items-center gap-3 rounded-xl border border-line/60 bg-[#fbf9f6] p-3">
+                        <div className="flex items-center gap-3 rounded-xl">
                           <div className="flex size-9 shrink-0 items-center justify-center rounded-full border border-line/80 bg-white text-ink">
-                            <MapPinIcon width={16} height={16} />
+                            <MapPinIcon width={22} height={22} />
                           </div>
                           <div>
                             <h4 className="text-[12.5px] font-semibold text-ink">Origin</h4>
@@ -1420,15 +1583,15 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
                           ].map((item, idx) => (
                             <div
                               key={idx}
-                              className="group relative rounded-xl border border-line/60 bg-[#fbf9f6] p-2 transition-all hover:border-sand-400 hover:shadow-xs"
+                              className="group relative rounded-sm border border-line/60 bg-[#fbf9f6] transition-all hover:border-sand-400 hover:shadow-xs"
                             >
-                              <div className="relative aspect-square w-full rounded-lg bg-white p-1">
+                              <div className="relative aspect-square rounded-sm w-full bg-white p-1">
                                 <Image
                                   src={item.img}
                                   alt={item.title}
                                   fill
                                   sizes="120px"
-                                  className="object-contain transition-transform duration-300 group-hover:scale-105"
+                                  className="object-contain transition-transform rounded-sm duration-300"
                                 />
                                 <button
                                   type="button"
@@ -1438,12 +1601,14 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
                                   <HeartIcon width={12} height={12} />
                                 </button>
                               </div>
-                              <h5 className="mt-2 truncate text-[11px] font-medium text-ink">
-                                {item.title}
-                              </h5>
-                              <p className="text-[11.5px] font-bold text-ink">
-                                {item.price}
-                              </p>
+                              <div className="px-2 pb-2">
+                                <h5 className="mt-2 truncate text-[11px] font-medium text-ink">
+                                  {item.title}
+                                </h5>
+                                <p className="text-[11.5px] font-bold text-ink">
+                                  {item.price}
+                                </p>
+                              </div>
                             </div>
                           ))}
                         </div>

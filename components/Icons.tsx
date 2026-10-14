@@ -494,5 +494,112 @@ export const MessageCircleIcon = (p: IconProps) => (
   </Icon>
 );
 
+export const InfoIcon = (p: IconProps) => (
+  <Icon {...p}>
+    <circle cx="12" cy="12" r="10" />
+    <path d="M12 16v-4" />
+    <path d="M12 8h.01" />
+  </Icon>
+);
+
+export const ThumbsUpIcon = (p: IconProps) => (
+  <Icon {...p}>
+    <path d="M7 10v12" />
+    <path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h3" />
+  </Icon>
+);
+
+export const SparklesIcon = (p: IconProps) => (
+  <Icon {...p}>
+    <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z" />
+    <path d="M19 4v4" />
+    <path d="M21 6h-4" />
+  </Icon>
+);
+
+export const RingResizeIcon = (p: IconProps) => (
+  <Icon {...p}>
+    <circle cx="12" cy="14" r="7" />
+    <path d="M12 7V3" />
+    <path d="m9 5 3-2 3 2" />
+    <path d="M8 3h8" />
+  </Icon>
+);
+
+export const HandIcon = (p: IconProps) => (
+  <Icon {...p}>
+    <path d="M18 11V6a2 2 0 0 0-4 0v4" />
+    <path d="M14 10V4a2 2 0 0 0-4 0v7" />
+    <path d="M10 10.5V6a2 2 0 0 0-4 0v8" />
+    <path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.83L7 15" />
+  </Icon>
+);
+
+export const AlertCircleIcon = (p: IconProps) => (
+  <Icon {...p}>
+    <circle cx="12" cy="12" r="10" />
+    <line x1="12" y1="8" x2="12" y2="12" />
+    <line x1="12" y1="16" x2="12.01" y2="16" strokeWidth={2.5} />
+  </Icon>
+);
+
+export const MoreHorizontalIcon = (p: IconProps) => (
+  <Icon {...p}>
+    <circle cx="12" cy="12" r="1" fill="currentColor" stroke="none" />
+    <circle cx="19" cy="12" r="1" fill="currentColor" stroke="none" />
+    <circle cx="5" cy="12" r="1" fill="currentColor" stroke="none" />
+  </Icon>
+);
+
+export const PackageIcon = (p: IconProps) => (
+  <Icon {...p}>
+    <path d="m7.5 4.27 9 5.15" />
+    <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
+    <path d="m3.3 7 8.7 5 8.7-5" />
+    <path d="M12 22V12" />
+  </Icon>
+);
+
+export const PencilIcon = (p: IconProps) => (
+  <Icon {...p}>
+    <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
+    <path d="m15 5 4 4" />
+  </Icon>
+);
+
+export const ShieldIcon = (p: IconProps) => (
+  <Icon {...p}>
+    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+  </Icon>
+);
+
+export const CompassIcon = (p: IconProps) => (
+  <Icon {...p}>
+    <circle cx="12" cy="12" r="10" />
+    <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" />
+  </Icon>
+);
+
+export const AzerbaijanFlag = ({ className = "w-5 h-3.5" }: { className?: string }) => (
+  <svg
+    viewBox="0 0 1200 600"
+    className={`inline-block shrink-0 rounded-xs border border-line/40 shadow-2xs ${className}`}
+    aria-label="Flag of Azerbaijan"
+  >
+    <rect width="1200" height="200" fill="#00b5e2" />
+    <rect y="200" width="1200" height="200" fill="#ef3340" />
+    <rect y="400" width="1200" height="200" fill="#509e2f" />
+    {/* White Crescent */}
+    <circle cx="585" cy="300" r="95" fill="#ffffff" />
+    <circle cx="615" cy="300" r="78" fill="#ef3340" />
+    {/* White 8-pointed star */}
+    <path
+      fill="#ffffff"
+      d="M660,255 L668,280 L692,272 L679,293 L703,303 L679,313 L692,334 L668,326 L660,351 L652,326 L628,334 L641,313 L617,303 L641,293 L628,272 L652,280 Z"
+    />
+  </svg>
+);
+
+
 
 
