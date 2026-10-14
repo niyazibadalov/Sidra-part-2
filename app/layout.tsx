@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { DM_Serif_Display, Inter, Nothing_You_Could_Do } from "next/font/google";
 import "./globals.css";
+import { CartWishlistProvider } from "@/context/CartWishlistContext";
+import { Toast } from "@/components/common/Toast";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -31,7 +33,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${inter.variable} ${display.variable} ${hand.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col font-sans">{children}</body>
+      <body className="flex min-h-full flex-col font-sans">
+        <CartWishlistProvider>
+          {children}
+          <Toast />
+        </CartWishlistProvider>
+      </body>
     </html>
   );
 }
+

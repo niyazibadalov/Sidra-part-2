@@ -4,11 +4,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { HeartIcon } from "../Icons";
 import { RingProduct } from "./data";
+import { useCartWishlist } from "@/context/CartWishlistContext";
 
 type ProductCardProps = {
   product: RingProduct;
-  isWishlisted: boolean;
-  onToggleWishlist: (id: string) => void;
+  isWishlisted?: boolean;
+  onToggleWishlist?: (id: string) => void;
 };
 
 export function CollectionsProductCard({
@@ -16,10 +17,34 @@ export function CollectionsProductCard({
   isWishlisted,
   onToggleWishlist,
 }: ProductCardProps) {
+  const { isInWishlist, toggleWishlist } = useCartWishlist();
+  const activeWishlisted = isWishlisted !== undefined ? isWishlisted : isInWishlist(product.id);
+
+  const handleToggle = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (onToggleWishlist) {
+      onToggleWishlist(product.id);
+    }
+    toggleWishlist({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+      category: "Rings",
+      metal: product.materialDetail,
+      brand: "SIDRA",
+      rating: 5,
+      reviewsCount: 124,
+      stockStatus: "in_stock",
+      stockText: "In Stock",
+    });
+  };
+
   return (
     <div className="group relative flex flex-col transition-all duration-300">
       {/* Image container frame */}
-      <div className="relative aspect-square w-full overflow-hidden rounded-xl border border-line/70 bg-[#f9f5f0] transition-all duration-300 group-hover:border-sand-400 group-hover:shadow-md">
+      <div className="relative aspect-square w-full rounded-xl border border-line/70 bg-[#f9f5f0] transition-all duration-300 group-hover:border-sand-400 group-hover:shadow-md">
         {/* Badge */}
         {product.badge && (
           <span
@@ -38,18 +63,15 @@ export function CollectionsProductCard({
         {/* Wishlist Heart */}
         <button
           type="button"
-          onClick={(e) => {
-            e.preventDefault();
-            onToggleWishlist(product.id);
-          }}
-          aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
+          onClick={handleToggle}
+          aria-label={activeWishlisted ? "Remove from wishlist" : "Add to wishlist"}
           className="absolute top-2.5 right-2.5 z-10 grid size-8 cursor-pointer place-items-center rounded-full bg-white/80 text-ink-soft backdrop-blur-xs transition-colors hover:bg-white hover:text-ink"
         >
           <HeartIcon
             width={16}
             height={16}
             className={`transition-transform active:scale-125 ${
-              isWishlisted ? "fill-[#b74134] text-[#b74134]" : ""
+              activeWishlisted ? "fill-[#b74134] text-[#b74134]" : ""
             }`}
           />
         </button>

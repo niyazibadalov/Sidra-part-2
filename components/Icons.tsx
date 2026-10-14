@@ -600,6 +600,21 @@ export const AzerbaijanFlag = ({ className = "w-5 h-3.5" }: { className?: string
   </svg>
 );
 
+export const LaptopIcon = (p: IconProps) => (
+  <Icon {...p}>
+    <rect width="18" height="12" x="3" y="4" rx="2" />
+    <line x1="2" y1="20" x2="22" y2="20" />
+  </Icon>
+);
+
+export const BellIcon = (p: IconProps) => (
+  <Icon {...p}>
+    <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+    <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+  </Icon>
+);
+
+
 
 
 

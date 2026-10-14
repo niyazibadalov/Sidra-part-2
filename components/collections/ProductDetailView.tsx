@@ -57,7 +57,7 @@ import ring5 from "@/app/images/ring5.png";
 import ring6 from "@/app/images/ring6.png";
 import certificateImg from "@/app/images/certificate.png";
 import sidraLogoImg from "@/app/images/sidraImage2.jpeg";
-import lumiereLogoImg from "@/app/images/lumiere.png";
+import { useCartWishlist } from "@/context/CartWishlistContext";
 
 type ProductDetailViewProps = {
   product: RingProduct;
@@ -82,7 +82,8 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
   const [selectedDiamondSize, setSelectedDiamondSize] = useState("0.70 ct");
   const [selectedRingSize, setSelectedRingSize] = useState<number>(7);
   const [quantity, setQuantity] = useState(1);
-  const [isWishlisted, setIsWishlisted] = useState(false);
+  const { isInWishlist, toggleWishlist, addToCart } = useCartWishlist();
+  const isWishlisted = isInWishlist(product.id);
   const [relatedWishlist, setRelatedWishlist] = useState<Record<string, boolean>>({});
 
   // Accordion open/close states (ALL START CLOSED per user requirement)
@@ -163,7 +164,22 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
                     </button>
                     <button
                       type="button"
-                      onClick={() => setIsWishlisted(!isWishlisted)}
+                      onClick={() =>
+                        toggleWishlist({
+                          id: product.id,
+                          name: product.name,
+                          price: product.price,
+                          image: product.image,
+                          category: "Rings",
+                          metal: selectedMaterial,
+                          carat: selectedDiamondSize,
+                          brand: "SIDRA",
+                          rating: 5,
+                          reviewsCount: 124,
+                          stockStatus: "in_stock",
+                          stockText: "In Stock",
+                        })
+                      }
                       aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
                       className="grid size-9 cursor-pointer place-items-center rounded-full bg-white/90 text-ink shadow-xs backdrop-blur-xs transition-colors hover:bg-white"
                     >
@@ -602,6 +618,27 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
                   {/* Add to Cart button (Full width on mobile & desktop, flex-1 on tablet) */}
                   <button
                     type="button"
+                    onClick={() =>
+                      addToCart(
+                        {
+                          id: product.id,
+                          name: product.name,
+                          price: product.price,
+                          image: product.image,
+                          category: "Rings",
+                          metal: selectedMaterial,
+                          carat: selectedDiamondSize,
+                          brand: "SIDRA",
+                          rating: 5,
+                          reviewsCount: 124,
+                          stockStatus: "in_stock",
+                          stockText: "In Stock",
+                        },
+                        quantity,
+                        String(selectedRingSize),
+                        selectedMaterial
+                      )
+                    }
                     className="w-full sm:max-lg:flex-1 cursor-pointer rounded-[100px] bg-ink py-3.5 text-center text-[14px] font-semibold text-white shadow-md transition-all hover:bg-ink-soft active:scale-[0.99]"
                   >
                     Add to Cart
@@ -611,6 +648,28 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
                 {/* Buy Now button (Full width on all screens) */}
                 <button
                   type="button"
+                  onClick={() => {
+                    addToCart(
+                      {
+                        id: product.id,
+                        name: product.name,
+                        price: product.price,
+                        image: product.image,
+                        category: "Rings",
+                        metal: selectedMaterial,
+                        carat: selectedDiamondSize,
+                        brand: "SIDRA",
+                        rating: 5,
+                        reviewsCount: 124,
+                        stockStatus: "in_stock",
+                        stockText: "In Stock",
+                      },
+                      quantity,
+                      String(selectedRingSize),
+                      selectedMaterial
+                    );
+                    window.location.href = "/bag";
+                  }}
                   className="w-full cursor-pointer rounded-[100px] border border-ink bg-white py-3.5 text-center text-[14px] font-semibold text-ink shadow-xs transition-all hover:bg-cream-100 active:scale-[0.99]"
                 >
                   Buy Now
@@ -1429,7 +1488,7 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
                       <div className="flex flex-col sm:flex-row items-start gap-4">
                         <div className="relative size-20 sm:size-24 shrink-0 rounded-xl bg-[#fcfaf7] flex items-center justify-center shadow-2xs">
                           <Image
-                            src={lumiereLogoImg}
+                            src={sidraLogoImg}
                             alt="Lumière Fine Jewellery"
                             width={96}
                             height={96}

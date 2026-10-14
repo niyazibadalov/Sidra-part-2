@@ -14,6 +14,8 @@ import {
   UserIcon,
 } from "../Icons";
 
+import { useCartWishlist } from "@/context/CartWishlistContext";
+
 const NAV_LINKS = [
   { label: "Jewellery", href: "/jewellery" },
   { label: "Category", href: "/category" },
@@ -22,19 +24,19 @@ const NAV_LINKS = [
   { label: "Stories", href: "/stories" },
 ];
 
-const BAG_COUNT = 0;
-
 function BagButton() {
+  const { cartCount } = useCartWishlist();
+
   return (
     <Link
       href="/bag"
-      aria-label={`Shopping bag, ${BAG_COUNT} items`}
+      aria-label={`Shopping bag, ${cartCount} items`}
       className="relative grid size-10 cursor-pointer place-items-center rounded-full text-ink transition-colors hover:bg-cream-200"
     >
       <BagIcon width={22} height={22} />
-      {BAG_COUNT > 0 && (
-        <span className="absolute top-1 right-1 grid size-4 place-items-center rounded-full bg-ink text-[9px] font-semibold text-white">
-          {BAG_COUNT}
+      {cartCount > 0 && (
+        <span className="absolute top-1 right-1 grid min-w-4 h-4 px-1 place-items-center rounded-full bg-ink text-[10px] font-semibold text-white">
+          {cartCount}
         </span>
       )}
     </Link>
@@ -61,6 +63,7 @@ function SearchField({ className = "" }: { className?: string }) {
 }
 
 export function Header({ hideMobileTagline = false }: { hideMobileTagline?: boolean }) {
+  const { wishlistCount } = useCartWishlist();
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -130,10 +133,15 @@ export function Header({ hideMobileTagline = false }: { hideMobileTagline?: bool
             </Link>
             <Link
               href="/wishlist"
-              className="hidden h-10 cursor-pointer items-center gap-1.5 rounded-full px-3 text-[12.5px] text-ink hover:bg-cream-200 lg:flex"
+              className="relative hidden h-10 cursor-pointer items-center gap-1.5 rounded-full px-3 text-[12.5px] text-ink hover:bg-cream-200 lg:flex"
             >
               <HeartIcon width={18} height={18} />
-              Wishlist
+              <span>Wishlist</span>
+              {wishlistCount > 0 && (
+                <span className="grid min-w-4 h-4 px-1 place-items-center rounded-full bg-ink text-[10px] font-semibold text-white">
+                  {wishlistCount}
+                </span>
+              )}
             </Link>
             <Link
               href="/sign-in"
@@ -160,6 +168,7 @@ export function Header({ hideMobileTagline = false }: { hideMobileTagline?: bool
 }
 
 function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const { wishlistCount } = useCartWishlist();
   return (
     <div
       className={`fixed inset-0 z-50 transition-[visibility] duration-300 lg:hidden ${open ? "visible" : "pointer-events-none invisible"}`}
@@ -214,8 +223,15 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
 
           <ul className="mt-6 space-y-1 text-sm text-ink-soft">
             <li>
-              <Link href="/wishlist" onClick={onClose} className="flex cursor-pointer items-center gap-3 py-2.5">
-                <HeartIcon width={18} height={18} /> Wishlist
+              <Link href="/wishlist" onClick={onClose} className="flex cursor-pointer items-center justify-between py-2.5">
+                <span className="flex items-center gap-3">
+                  <HeartIcon width={18} height={18} /> Wishlist
+                </span>
+                {wishlistCount > 0 && (
+                  <span className="grid min-w-5 h-5 px-1.5 place-items-center rounded-full bg-ink text-[10.5px] font-semibold text-white">
+                    {wishlistCount}
+                  </span>
+                )}
               </Link>
             </li>
             <li>
