@@ -3,6 +3,7 @@
 import React, { useState, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { TopBar } from "../layout/TopBar";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import {
@@ -136,6 +137,7 @@ export function WishlistPage() {
 
   return (
     <>
+      <TopBar />
       <Header />
 
       <main className="flex-1 bg-cream-50">
@@ -183,28 +185,33 @@ export function WishlistPage() {
           /* ============================================================ */
           <>
             {/* Hero Section Banner */}
-            <section className="relative w-full border-b border-line/60">
-              <div className="relative min-h-[220px] sm:min-h-[260px] w-full flex items-center px-4 sm:px-8 lg:px-14 py-8">
+            <section className="relative w-full border-b border-line/60 bg-cream-200">
+              <div className="relative min-h-[220px] sm:min-h-[260px] lg:min-h-[280px]">
                 <Image
                   src={wishlistHeroImg}
                   alt="My Wishlist"
                   fill
                   priority
+                  sizes="100vw"
                   className="object-cover object-right sm:object-center opacity-90"
                 />
-                <div className="absolute inset-0 bg-gradient-to-r from-cream-100/95 via-cream-100/80 to-transparent" />
+                {/* Gradient wash from left to protect text legibility */}
+                <div className="absolute inset-0 bg-gradient-to-r from-cream-100/20 via-cream-100/70 to-transparent" />
 
-                <div className="relative z-10 max-w-xl">
-                  <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-normal text-ink">
-                    My Wishlist
-                  </h1>
-                  <p className="mt-1.5 text-[14px] sm:text-[15px] font-semibold text-ink">
-                    {wishlist.length} saved item{wishlist.length === 1 ? "" : "s"}
-                  </p>
-                  <p className="mt-1 text-[13px] sm:text-[13.5px] text-ink-soft leading-relaxed max-w-md">
-                    Your favourite pieces, all in one place. Save, compare and
-                    add to bag when you&apos;re ready.
-                  </p>
+                {/* Hero Content Container aligned with main content */}
+                <div className="relative z-10 mx-auto flex min-h-[220px] sm:min-h-[260px] lg:min-h-[280px] max-w-[1440px] items-center px-5 py-8 sm:px-8 lg:px-10">
+                  <div className="max-w-xl">
+                    <h1 className="font-serif text-3xl sm:text-4xl lg:text-[46px] font-normal leading-tight text-ink">
+                      My Wishlist
+                    </h1>
+                    <p className="mt-2 text-[14px] sm:text-[15px] font-semibold text-ink">
+                      {wishlist.length} saved item{wishlist.length === 1 ? "" : "s"}
+                    </p>
+                    <p className="mt-1.5 text-[13px] sm:text-[13.5px] text-ink-soft leading-relaxed max-w-md">
+                      Your favourite pieces, all in one place. Save, compare and
+                      add to bag when you&apos;re ready.
+                    </p>
+                  </div>
                 </div>
               </div>
             </section>
@@ -276,17 +283,17 @@ export function WishlistPage() {
                   return (
                     <div
                       key={item.id}
-                      className="group relative flex flex-col rounded-2xl border border-line/70 bg-white p-3 transition-all duration-300 hover:border-sand-400 hover:shadow-md"
+                      className="group relative flex flex-col rounded-2xl border border-line/70 bg-white transition-all duration-300 hover:border-sand-400 hover:shadow-md"
                     >
-                      {/* Product Image Frame */}
-                      <div className="relative aspect-square w-full rounded-xl bg-[#faf7f2] p-2 flex items-center justify-center">
+                      {/* Product Image Frame: Edge-to-edge, no padding */}
+                      <div className="relative aspect-square w-full rounded-t-2xl bg-[#faf7f2] flex items-center justify-center">
                         {/* Selection Checkbox */}
                         <input
                           type="checkbox"
                           checked={isChecked}
                           onChange={() => handleToggleSelect(item.id)}
                           aria-label={`Select ${item.name}`}
-                          className="absolute top-2.5 left-2.5 z-10 size-4 rounded border-line text-ink accent-ink cursor-pointer"
+                          className="absolute top-3 left-3 z-10 size-4.5 rounded border-line text-ink accent-ink cursor-pointer bg-white/90"
                         />
 
                         {/* Remove from Wishlist Heart Button */}
@@ -294,7 +301,7 @@ export function WishlistPage() {
                           type="button"
                           onClick={() => removeFromWishlist(item.id)}
                           aria-label={`Remove ${item.name} from wishlist`}
-                          className="absolute top-2 right-2 z-10 grid size-8 cursor-pointer place-items-center rounded-full bg-white/90 text-[#b74134] shadow-2xs backdrop-blur-xs transition-transform hover:scale-110 active:scale-95"
+                          className="absolute top-3 right-3 z-10 grid size-8 cursor-pointer place-items-center rounded-full bg-white/95 text-[#b74134] shadow-2xs backdrop-blur-xs transition-transform hover:scale-110 active:scale-95"
                         >
                           <HeartIcon
                             width={16}
@@ -303,27 +310,18 @@ export function WishlistPage() {
                           />
                         </button>
 
-                        {/* Image */}
+                        {/* Image: Edge-to-edge */}
                         <Image
                           src={item.image}
                           alt={item.name}
-                          width={240}
-                          height={240}
-                          className="max-h-full max-w-full object-contain transition-transform duration-500 group-hover:scale-105"
+                          fill
+                          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                          className="object-cover rounded-t-2xl"
                         />
-
-                        {/* Three Dots Menu Button */}
-                        <button
-                          type="button"
-                          aria-label="More options"
-                          className="absolute bottom-2 right-2 text-ink-soft hover:text-ink transition-colors cursor-pointer"
-                        >
-                          <MoreHorizontalIcon width={16} height={16} />
-                        </button>
                       </div>
 
-                      {/* Card Content */}
-                      <div className="mt-3 flex flex-1 flex-col justify-between">
+                      {/* Card Content with internal padding */}
+                      <div className="p-3.5 sm:p-4 flex flex-1 flex-col justify-between">
                         <div>
                           <h3 className="truncate text-[13.5px] font-medium text-ink group-hover:text-rose-gold-dark transition-colors">
                             {item.name}
@@ -453,7 +451,7 @@ export function WishlistPage() {
                 </div>
               </div>
 
-              {/* You May Also Like Carousel (Screenshot 3) */}
+              {/* You May Also Like Carousel (Screenshot 2 / Image 2) */}
               <div className="mt-12 pt-6 border-t border-line/60">
                 <div className="mb-6 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-3">
                   <div>
@@ -462,17 +460,17 @@ export function WishlistPage() {
                     </h2>
                   </div>
 
-                  <div className="flex flex-wrap items-center gap-2 text-[12px]">
+                  <div className="flex flex-wrap items-center gap-3 sm:gap-5 text-[12.5px]">
                     {["All", "Rings", "Necklaces", "Earrings", "Bracelets"].map(
                       (cat) => (
                         <button
                           key={cat}
                           type="button"
                           onClick={() => setCarouselCategory(cat)}
-                          className={`rounded-full px-3 py-1 font-medium transition-colors cursor-pointer ${
+                          className={`font-medium transition-colors cursor-pointer ${
                             carouselCategory === cat
-                              ? "bg-ink text-white"
-                              : "border border-line bg-white text-ink hover:bg-cream-200"
+                              ? "text-ink font-semibold border-b border-ink pb-0.5"
+                              : "text-ink-soft hover:text-ink"
                           }`}
                         >
                           {cat}
@@ -489,7 +487,7 @@ export function WishlistPage() {
                   </div>
                 </div>
 
-                {/* Carousel Grid */}
+                {/* Carousel Grid: Edge-to-edge rounded images with no card padding */}
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
                   {filteredCarouselItems.map((rec) => {
                     const isWish = isInWishlist(rec.id);
@@ -497,32 +495,35 @@ export function WishlistPage() {
                     return (
                       <div
                         key={rec.id}
-                        className="group relative flex flex-col rounded-xl border border-line/70 bg-white p-2.5 transition-all hover:border-sand-400 hover:shadow-sm"
+                        className="group relative flex flex-col transition-all"
                       >
-                        <div className="relative aspect-square w-full rounded-lg bg-[#faf7f2] p-2 flex items-center justify-center">
+                        {/* Image Container: Edge-to-edge without padding */}
+                        <div className="relative aspect-square w-full rounded-xl sm:rounded-2xl bg-[#faf7f2] flex items-center justify-center">
                           <button
                             type="button"
                             onClick={() => toggleWishlist(rec)}
                             aria-label={`Wishlist ${rec.name}`}
-                            className="absolute top-1.5 right-1.5 z-10 grid size-7 place-items-center rounded-full bg-white/90 text-ink-soft shadow-2xs hover:scale-110 transition-transform cursor-pointer"
+                            className="absolute top-2.5 right-2.5 z-10 grid size-7 place-items-center rounded-full bg-white/90 text-ink-soft shadow-2xs hover:scale-110 transition-transform cursor-pointer"
                           >
                             <HeartIcon
                               width={14}
                               height={14}
                               className={
-                                isWish ? "fill-[#b74134] text-[#b74134]" : ""
+                                isWish ? "fill-[#b74134] text-[#b74134]" : "text-ink"
                               }
                             />
                           </button>
                           <Image
                             src={rec.image}
                             alt={rec.name}
-                            width={160}
-                            height={160}
-                            className="max-h-full max-w-full object-contain transition-transform group-hover:scale-105"
+                            fill
+                            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
+                            className="object-cover rounded-xl sm:rounded-2xl"
                           />
                         </div>
-                        <h4 className="mt-2 truncate text-[12px] font-medium text-ink">
+
+                        {/* Title & Price below image */}
+                        <h4 className="mt-2.5 truncate text-[12.5px] font-medium text-ink group-hover:text-rose-gold-dark transition-colors">
                           {rec.name}
                         </h4>
                         <p className="mt-0.5 text-[12.5px] font-semibold text-ink">

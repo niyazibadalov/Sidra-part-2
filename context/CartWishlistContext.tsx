@@ -17,6 +17,7 @@ export type ProductItem = {
   oldPrice?: number;
   image: any;
   category?: "Rings" | "Necklaces" | "Earrings" | "Bracelets" | string;
+  specs?: string;
   metal?: string;
   carat?: string;
   brand?: string;
@@ -53,6 +54,7 @@ type CartWishlistContextType = {
   updateCartQty: (id: string, qty: number) => void;
   clearCart: () => void;
   moveAllWishlistToBag: () => void;
+  moveToWishlist: (item: CartItem) => void;
   cartCount: number;
   wishlistCount: number;
   toast: ToastInfo | null;
@@ -170,11 +172,51 @@ const INITIAL_WISHLIST_ITEMS: ProductItem[] = [
   },
 ];
 
+const INITIAL_CART_ITEMS: CartItem[] = [
+  {
+    id: "cart-1",
+    name: "Solitaire Diamond Ring",
+    brand: "Maison Éclat",
+    price: 1250,
+    image: ring1,
+    specs: "18K Gold • Diamond",
+    category: "Rings",
+    quantity: 1,
+    selectedSize: "7",
+    stockText: "Ready to ship",
+    stockStatus: "in_stock",
+  },
+  {
+    id: "cart-2",
+    name: "Éclat Hoop Earrings",
+    brand: "Maison Éclat",
+    price: 1240,
+    image: ring4,
+    specs: "18K Gold",
+    category: "Earrings",
+    quantity: 1,
+    selectedSize: "One size",
+    stockStatus: "in_stock",
+  },
+  {
+    id: "cart-3",
+    name: "Clover Necklace",
+    brand: "Veluna",
+    price: 1420,
+    image: gemstonesImg,
+    specs: "18K Gold • Malachite",
+    category: "Necklaces",
+    quantity: 1,
+    selectedSize: "42 cm",
+    stockStatus: "in_stock",
+  },
+];
+
 const CartWishlistContext = createContext<CartWishlistContextType | undefined>(undefined);
 
 export function CartWishlistProvider({ children }: { children: React.ReactNode }) {
   const [wishlist, setWishlist] = useState<ProductItem[]>(INITIAL_WISHLIST_ITEMS);
-  const [cart, setCart] = useState<CartItem[]>([]);
+  const [cart, setCart] = useState<CartItem[]>(INITIAL_CART_ITEMS);
   const [toast, setToast] = useState<ToastInfo | null>(null);
 
   // Auto-dismiss toast
@@ -271,6 +313,14 @@ export function CartWishlistProvider({ children }: { children: React.ReactNode }
     showToast("All Items", `Moved ${wishlist.length} items to Shopping Bag`, "bag");
   };
 
+  const moveToWishlist = (cartItem: CartItem) => {
+    removeFromCart(cartItem.id);
+    addToWishlist({
+      ...cartItem,
+      id: cartItem.id.startsWith("cart-") ? `wl-${cartItem.id}` : cartItem.id,
+    });
+  };
+
   const cartCount = useMemo(() => {
     return cart.reduce((total, item) => total + item.quantity, 0);
   }, [cart]);
@@ -292,6 +342,7 @@ export function CartWishlistProvider({ children }: { children: React.ReactNode }
         updateCartQty,
         clearCart,
         moveAllWishlistToBag,
+        moveToWishlist,
         cartCount,
         wishlistCount,
         toast,
