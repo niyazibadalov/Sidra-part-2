@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useRef, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { TopBar } from "../layout/TopBar";
@@ -73,6 +73,34 @@ const YOU_MAY_ALSO_LIKE_ITEMS: ProductItem[] = [
     image: ring5,
     category: "Bracelets",
   },
+  {
+    id: "rec-7",
+    name: "Solitaire Diamond Ring",
+    price: 1250,
+    image: ring1,
+    category: "Rings",
+  },
+  {
+    id: "rec-8",
+    name: "Aurélia Hoop Earrings",
+    price: 980,
+    image: ring3,
+    category: "Earrings",
+  },
+  {
+    id: "rec-9",
+    name: "Three Stone Diamond Ring",
+    price: 2450,
+    image: ring6,
+    category: "Rings",
+  },
+  {
+    id: "rec-10",
+    name: "Tennis Diamond Bracelet",
+    price: 2900,
+    image: ring4,
+    category: "Bracelets",
+  },
 ];
 
 export function WishlistPage() {
@@ -89,6 +117,73 @@ export function WishlistPage() {
   const [sortBy, setSortBy] = useState<"recent" | "low_high" | "high_low">("recent");
   const [filterCategory, setFilterCategory] = useState<string>("All Categories");
   const [carouselCategory, setCarouselCategory] = useState<string>("All");
+
+  // Ultra-smooth native mouse drag & inertia scroll for the carousel
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const hasDraggedRef = useRef(false);
+
+  useEffect(() => {
+    const el = carouselRef.current;
+    if (!el) return;
+
+    let isDown = false;
+    let startX = 0;
+    let scrollLeft = 0;
+    let velX = 0;
+    let lastX = 0;
+    let momentumID: number;
+
+    const onMouseDown = (e: MouseEvent) => {
+      if ((e.target as HTMLElement).closest("button, a")) return;
+      isDown = true;
+      hasDraggedRef.current = false;
+      cancelAnimationFrame(momentumID);
+      startX = e.pageX - el.offsetLeft;
+      scrollLeft = el.scrollLeft;
+      lastX = e.pageX;
+      velX = 0;
+      el.style.cursor = "grabbing";
+    };
+
+    const onMouseMove = (e: MouseEvent) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - el.offsetLeft;
+      const walk = x - startX;
+      if (Math.abs(walk) > 4) {
+        hasDraggedRef.current = true;
+      }
+      el.scrollLeft = scrollLeft - walk;
+      velX = e.pageX - lastX;
+      lastX = e.pageX;
+    };
+
+    const onMouseUp = () => {
+      if (!isDown) return;
+      isDown = false;
+      el.style.cursor = "grab";
+
+      const momentumLoop = () => {
+        if (Math.abs(velX) > 0.5) {
+          el.scrollLeft -= velX * 1.2;
+          velX *= 0.94;
+          momentumID = requestAnimationFrame(momentumLoop);
+        }
+      };
+      momentumID = requestAnimationFrame(momentumLoop);
+    };
+
+    el.addEventListener("mousedown", onMouseDown);
+    window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("mouseup", onMouseUp);
+
+    return () => {
+      el.removeEventListener("mousedown", onMouseDown);
+      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("mouseup", onMouseUp);
+      cancelAnimationFrame(momentumID);
+    };
+  }, []);
 
   const isAllSelected =
     wishlist.length > 0 && wishlist.every((item) => selectedIds[item.id]);
@@ -398,61 +493,69 @@ export function WishlistPage() {
                 })}
               </div>
 
-              {/* Promo & Value Propositions Box (Screenshot 3) */}
-              <div className="mt-12 rounded-2xl border border-line/70 bg-[#faf7f2] p-6 lg:p-8 flex flex-col lg:flex-row items-center justify-between gap-6 shadow-2xs">
-                {/* Left: Icon & Action */}
-                <div className="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
-                  <div className="grid size-14 shrink-0 place-items-center rounded-2xl border border-line/80 bg-white text-[#9c4b37] shadow-xs">
-                    <HeartIcon width={28} height={28} className="stroke-[1.5]" />
-                  </div>
+              {/* Promo & Value Propositions Box */}
+              <div className="mt-12 rounded-2xl border border-line/70 bg-[#faf7f2] p-6 sm:p-7 lg:p-8 flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-8 shadow-2xs">
+                {/* Left: Clean Heart Icon (no white box/border) + Text */}
+                <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-5 text-center sm:text-left">
+                  <HeartIcon
+                    width={50}
+                    height={50}
+                    className="text-[#9c4b37] shrink-0 stroke-[1.25]"
+                  />
                   <div>
-                    <h3 className="font-serif text-lg sm:text-xl font-medium text-ink">
+                    <h3 className="font-serif text-lg sm:text-xl font-normal text-ink">
                       Your wishlist is empty?
                     </h3>
-                    <p className="mt-1 text-[12.5px] text-ink-soft max-w-sm">
+                    <p className="mt-1 text-[12px] sm:text-[12.5px] text-ink-soft max-w-xs sm:max-w-sm">
                       Save your favourite jewellery pieces and find them whenever
                       you&apos;re ready.
                     </p>
                   </div>
                 </div>
 
-                <div className="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto">
+                {/* Center: Explore Jewellery Button */}
+                <div className="flex justify-center items-center shrink-0">
                   <Link
                     href="/jewellery"
-                    className="w-full sm:w-auto inline-flex items-center justify-center rounded-full bg-ink px-6 py-2.5 text-[12.5px] font-semibold text-white hover:bg-ink-soft transition-colors cursor-pointer"
+                    className="inline-flex items-center justify-center rounded-full bg-ink px-7 py-3 text-[13px] font-semibold text-white hover:bg-ink-soft transition-colors cursor-pointer shadow-xs whitespace-nowrap"
                   >
                     Explore Jewellery
                   </Link>
+                </div>
 
-                  {/* Divider line for desktop */}
-                  <div className="hidden lg:block h-12 w-px bg-line/70 mx-2" />
+                {/* Right: Vertical Divider + 3 Perks */}
+                <div className="flex items-center gap-6 lg:gap-8 shrink-0">
+                  <div className="hidden lg:block h-14 w-px bg-line/70 shrink-0" />
+                  <div className="space-y-2.5 text-[12px] text-ink-soft">
+                    <div className="flex items-start gap-2.5">
+                      <LaptopIcon width={20} height={20} className="text-[#9c4b37] shrink-0 mt-0.5" />
+                      <div className="leading-snug">
+                        <p className="font-semibold text-ink text-[12px]">Saved across devices</p>
+                        <p className="text-ink-soft text-[11px] mt-0.5">Access your wishlist on any device.</p>
+                      </div>
+                    </div>
 
-                  {/* 3 Perks Column */}
-                  <div className="space-y-2 text-[12px] text-ink-soft w-full sm:w-auto">
-                    <div className="flex items-center gap-2">
-                      <LaptopIcon width={15} height={15} className="text-ink shrink-0" />
-                      <span>
-                        <strong className="font-semibold text-ink">Saved across devices</strong> — Access your wishlist on any device.
-                      </span>
+                    <div className="flex items-start gap-2.5">
+                      <BellIcon width={20} height={20} className="text-[#9c4b37] shrink-0 mt-0.5" />
+                      <div className="leading-snug">
+                        <p className="font-semibold text-ink text-[12px]">Price drop alerts</p>
+                        <p className="text-ink-soft text-[11px] mt-0.5">Get notified when the price drops.</p>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <BellIcon width={15} height={15} className="text-ink shrink-0" />
-                      <span>
-                        <strong className="font-semibold text-ink">Price drop alerts</strong> — Get notified when the price drops.
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <ShieldIcon width={15} height={15} className="text-ink shrink-0" />
-                      <span>
-                        <strong className="font-semibold text-ink">Keep your favourites private</strong> — Your wishlist is only visible to you.
-                      </span>
+
+                    <div className="flex items-start gap-2.5">
+                      <ShieldIcon width={20} height={20} className="text-[#9c4b37] shrink-0 mt-0.5" />
+                      <div className="leading-snug">
+                        <p className="font-semibold text-ink text-[12px]">Keep your favourites private</p>
+                        <p className="text-ink-soft text-[11px] mt-0.5">Your wishlist is only visible to you.</p>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* You May Also Like Carousel (Screenshot 2 / Image 2) */}
-              <div className="mt-12 pt-6 border-t border-line/60">
+              {/* You May Also Like Carousel with Mouse Drag (Screenshot 3) */}
+              <div className="mt-14 pt-8 border-t border-line/60">
                 <div className="mb-6 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-3">
                   <div>
                     <h2 className="font-serif text-2xl sm:text-3xl text-ink font-normal">
@@ -487,21 +590,28 @@ export function WishlistPage() {
                   </div>
                 </div>
 
-                {/* Carousel Grid: Edge-to-edge rounded images with no card padding */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
+                {/* Mouse draggable & scrollable Carousel */}
+                <div
+                  ref={carouselRef}
+                  className="flex items-start gap-4 sm:gap-5 overflow-x-auto pb-4 select-none cursor-grab active:cursor-grabbing [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+                >
                   {filteredCarouselItems.map((rec) => {
                     const isWish = isInWishlist(rec.id);
 
                     return (
                       <div
                         key={rec.id}
-                        className="group relative flex flex-col transition-all"
+                        className="shrink-0 w-[170px] sm:w-[200px] md:w-[220px] group relative flex flex-col transition-all"
                       >
                         {/* Image Container: Edge-to-edge without padding */}
                         <div className="relative aspect-square w-full rounded-xl sm:rounded-2xl bg-[#faf7f2] flex items-center justify-center">
                           <button
                             type="button"
-                            onClick={() => toggleWishlist(rec)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (hasDraggedRef.current) return;
+                              toggleWishlist(rec);
+                            }}
                             aria-label={`Wishlist ${rec.name}`}
                             className="absolute top-2.5 right-2.5 z-10 grid size-7 place-items-center rounded-full bg-white/90 text-ink-soft shadow-2xs hover:scale-110 transition-transform cursor-pointer"
                           >
@@ -517,8 +627,9 @@ export function WishlistPage() {
                             src={rec.image}
                             alt={rec.name}
                             fill
-                            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
-                            className="object-cover rounded-xl sm:rounded-2xl"
+                            sizes="240px"
+                            draggable={false}
+                            className="object-cover rounded-xl sm:rounded-2xl pointer-events-none"
                           />
                         </div>
 

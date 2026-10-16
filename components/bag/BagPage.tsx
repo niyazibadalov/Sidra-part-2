@@ -627,35 +627,35 @@ export function BagPage() {
                     return (
                       <div
                         key={product.id}
-                        className="group relative flex flex-col justify-between rounded-xl border border-line/70 bg-white p-3.5 transition-all hover:border-sand-400 hover:shadow-xs"
+                        className="group relative flex flex-col justify-between rounded-2xl border border-line/70 bg-white transition-all hover:border-sand-400 hover:shadow-xs"
                       >
-                        {/* Wishlist Heart Toggle */}
-                        <button
-                          type="button"
-                          onClick={() => toggleWishlist(product)}
-                          className="absolute top-5 right-5 z-10 flex size-7 items-center justify-center rounded-full bg-white/90 text-ink shadow-2xs hover:scale-110 transition-transform cursor-pointer"
-                          aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
-                        >
-                          <HeartIcon
-                            width={14}
-                            height={14}
-                            className={wishlisted ? "fill-[#b74134] text-[#b74134]" : "text-ink"}
-                          />
-                        </button>
+                        {/* Image: Edge-to-edge with no padding, scale hover removed */}
+                        <div className="relative aspect-square w-full rounded-t-2xl bg-[#fbf9f6] flex items-center justify-center">
+                          {/* Wishlist Heart Toggle */}
+                          <button
+                            type="button"
+                            onClick={() => toggleWishlist(product)}
+                            className="absolute top-3 right-3 z-10 flex size-7 items-center justify-center rounded-full bg-white/90 text-ink shadow-2xs hover:scale-110 transition-transform cursor-pointer"
+                            aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
+                          >
+                            <HeartIcon
+                              width={14}
+                              height={14}
+                              className={wishlisted ? "fill-[#b74134] text-[#b74134]" : "text-ink"}
+                            />
+                          </button>
 
-                        {/* Image */}
-                        <div className="relative aspect-square w-full rounded-lg bg-[#fbf9f6] p-4 flex items-center justify-center">
                           <Image
                             src={product.image}
                             alt={product.name}
                             fill
-                            sizes="240px"
-                            className="object-contain p-3 transition-transform duration-300 group-hover:scale-105"
+                            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 280px"
+                            className="object-cover rounded-t-2xl"
                           />
                         </div>
 
-                        {/* Info & CTA */}
-                        <div className="mt-3 flex flex-1 flex-col justify-between">
+                        {/* Info & CTA with padding */}
+                        <div className="p-3.5 sm:p-4 flex flex-1 flex-col justify-between">
                           <div>
                             <h3 className="font-serif text-[14px] sm:text-[15px] font-medium text-ink line-clamp-1">
                               {product.name}
@@ -706,35 +706,35 @@ export function BagPage() {
                     return (
                       <div
                         key={product.id}
-                        className="group relative flex flex-col justify-between rounded-xl border border-line/70 bg-white p-3.5 transition-all hover:border-sand-400 hover:shadow-xs"
+                        className="group relative flex flex-col justify-between rounded-2xl border border-line/70 bg-white transition-all hover:border-sand-400 hover:shadow-xs"
                       >
-                        {/* Wishlist Heart Toggle */}
-                        <button
-                          type="button"
-                          onClick={() => toggleWishlist(product)}
-                          className="absolute top-5 right-5 z-10 flex size-7 items-center justify-center rounded-full bg-white/90 text-ink shadow-2xs hover:scale-110 transition-transform cursor-pointer"
-                          aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
-                        >
-                          <HeartIcon
-                            width={14}
-                            height={14}
-                            className={wishlisted ? "fill-[#b74134] text-[#b74134]" : "text-ink"}
-                          />
-                        </button>
+                        {/* Image: Edge-to-edge with no padding, scale hover removed */}
+                        <div className="relative aspect-square w-full rounded-t-2xl bg-[#fbf9f6] flex items-center justify-center">
+                          {/* Wishlist Heart Toggle */}
+                          <button
+                            type="button"
+                            onClick={() => toggleWishlist(product)}
+                            className="absolute top-3 right-3 z-10 flex size-7 items-center justify-center rounded-full bg-white/90 text-ink shadow-2xs hover:scale-110 transition-transform cursor-pointer"
+                            aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
+                          >
+                            <HeartIcon
+                              width={14}
+                              height={14}
+                              className={wishlisted ? "fill-[#b74134] text-[#b74134]" : "text-ink"}
+                            />
+                          </button>
 
-                        {/* Image */}
-                        <div className="relative aspect-square w-full rounded-lg bg-[#fbf9f6] p-4 flex items-center justify-center">
                           <Image
                             src={product.image}
                             alt={product.name}
                             fill
-                            sizes="240px"
-                            className="object-contain p-3 transition-transform duration-300 group-hover:scale-105"
+                            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 280px"
+                            className="object-cover rounded-t-2xl"
                           />
                         </div>
 
-                        {/* Info */}
-                        <div className="mt-3">
+                        {/* Info with padding */}
+                        <div className="p-3.5 sm:p-4">
                           <h3 className="font-serif text-[14px] sm:text-[15px] font-medium text-ink line-clamp-1">
                             {product.name}
                           </h3>
