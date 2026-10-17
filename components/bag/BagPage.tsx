@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { TopBar } from "../layout/TopBar";
@@ -139,18 +139,94 @@ const TRUST_PERKS = [
   },
 ];
 
+function setupSmoothDrag(el: HTMLDivElement, hasDraggedRef: React.MutableRefObject<boolean>) {
+  let isDown = false;
+  let startX = 0;
+  let scrollLeft = 0;
+  let velX = 0;
+  let lastX = 0;
+  let momentumID: number;
+
+  const onMouseDown = (e: MouseEvent) => {
+    if ((e.target as HTMLElement).closest("button, a")) return;
+    isDown = true;
+    hasDraggedRef.current = false;
+    cancelAnimationFrame(momentumID);
+    startX = e.pageX - el.offsetLeft;
+    scrollLeft = el.scrollLeft;
+    lastX = e.pageX;
+    velX = 0;
+    el.style.cursor = "grabbing";
+  };
+
+  const onMouseMove = (e: MouseEvent) => {
+    if (!isDown) return;
+    const x = e.pageX - el.offsetLeft;
+    const walk = x - startX;
+    if (Math.abs(walk) > 4) {
+      hasDraggedRef.current = true;
+    }
+    el.scrollLeft = scrollLeft - walk;
+    velX = e.pageX - lastX;
+    lastX = e.pageX;
+  };
+
+  const onMouseUp = () => {
+    if (!isDown) return;
+    isDown = false;
+    el.style.cursor = "grab";
+
+    const momentumLoop = () => {
+      if (Math.abs(velX) > 0.5) {
+        el.scrollLeft -= velX * 1.2;
+        velX *= 0.94;
+        momentumID = requestAnimationFrame(momentumLoop);
+      }
+    };
+    momentumID = requestAnimationFrame(momentumLoop);
+  };
+
+  el.addEventListener("mousedown", onMouseDown);
+  window.addEventListener("mousemove", onMouseMove);
+  window.addEventListener("mouseup", onMouseUp);
+
+  return () => {
+    cancelAnimationFrame(momentumID);
+    el.removeEventListener("mousedown", onMouseDown);
+    window.removeEventListener("mousemove", onMouseMove);
+    window.removeEventListener("mouseup", onMouseUp);
+  };
+}
+
 export function BagPage() {
   const {
     cart,
     removeFromCart,
     updateCartQty,
-    clearCart,
     cartCount,
     moveToWishlist,
     addToCart,
     toggleWishlist,
     isInWishlist,
   } = useCartWishlist();
+
+  const youMayAlsoLikeRef = useRef<HTMLDivElement>(null);
+  const recentlyViewedRef = useRef<HTMLDivElement>(null);
+  const hasDraggedLikeRef = useRef(false);
+  const hasDraggedRecentRef = useRef(false);
+
+  useEffect(() => {
+    const cleanups: (() => void)[] = [];
+    if (youMayAlsoLikeRef.current) {
+      cleanups.push(setupSmoothDrag(youMayAlsoLikeRef.current, hasDraggedLikeRef));
+    }
+    if (recentlyViewedRef.current) {
+      cleanups.push(setupSmoothDrag(recentlyViewedRef.current, hasDraggedRecentRef));
+    }
+    return () => {
+      cleanups.forEach((cleanup) => cleanup());
+    };
+  }, []);
 
   const [promoCode, setPromoCode] = useState("");
   const [promoDiscount, setPromoDiscount] = useState(0);
@@ -214,7 +290,7 @@ export function BagPage() {
                   bag.
                 </p>
                 <Link
-                  href="/jewellery"
+                  href="/category"
                   className="mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-ink px-8 py-3.5 text-[13.5px] font-semibold text-white shadow-md transition-all hover:bg-ink-soft active:scale-[0.99] cursor-pointer"
                 >
                   <span>Continue Shopping</span>
@@ -247,8 +323,8 @@ export function BagPage() {
                   sizes="100vw"
                   className="object-cover object-right sm:object-center opacity-95"
                 />
-                {/* Gradient wash from left to protect text legibility */}
-                <div className="absolute inset-0 bg-gradient-to-r from-cream-100/20 to-transparent" />
+                {/* Gradient wash from left to protect text legibility, plus enhanced soft overlay on <= 500px */}
+                <div className="absolute inset-0 bg-gradient-to-r from-cream-100/20 to-transparent max-[500px]:bg-cream-50/25 max-[500px]:backdrop-blur-[1px]" />
 
                 {/* Content Container aligned with main content */}
                 <div className="relative z-10 mx-auto flex min-h-[220px] sm:min-h-[260px] lg:min-h-[280px] max-w-[1440px] items-center justify-between px-5 py-8 sm:px-8 lg:px-10">
@@ -286,14 +362,14 @@ export function BagPage() {
                       key={item.id}
                       className="relative rounded-2xl border border-line/70 bg-white p-4 sm:p-5 transition-shadow hover:shadow-2xs"
                     >
-                      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5">
-                        {/* Product Image Thumbnail */}
-                        <div className="relative size-24 sm:size-45 shrink-0 rounded-xl bg-[#fbf9f6] border border-line/40 p-2 flex items-center justify-center">
+                      <div className="flex flex-col md:flex-row items-center md:items-center gap-4 sm:gap-5 md:gap-6">
+                        {/* Product Image Thumbnail - Centered on phone and small devices, left-aligned from md (768px)+ */}
+                        <div className="relative size-32 sm:size-40 md:size-38 lg:size-40 shrink-0 self-center mx-auto md:mx-0 rounded-xl bg-[#fbf9f6] border border-line/40 p-2 flex items-center justify-center">
                           <Image
                             src={item.image}
                             alt={item.name}
                             fill
-                            sizes="120px"
+                            sizes="(max-width: 768px) 160px, 180px"
                             className="object-contain"
                           />
                           {/* "Ready to ship" badge if present */}
@@ -305,7 +381,7 @@ export function BagPage() {
                         </div>
 
                         {/* Product Info & Specifications */}
-                        <div className="flex-1 min-w-0">
+                        <div className="flex-1 min-w-0 w-full">
                           <div className="flex flex-wrap items-center justify-between gap-2">
                             <div>
                               <p className="text-[11.5px] font-medium text-ink-muted">
@@ -321,8 +397,8 @@ export function BagPage() {
                               </h3>
                             </div>
 
-                            {/* Item Total Price (Mobile / Tablet inline) */}
-                            <div className="sm:hidden text-right">
+                            {/* Item Total Price (Mobile / Small inline) */}
+                            <div className="md:hidden text-right">
                               <p className="font-serif text-lg font-bold text-ink">
                                 ${(item.price * item.quantity).toLocaleString()}
                               </p>
@@ -384,10 +460,10 @@ export function BagPage() {
                           </div>
                         </div>
 
-                        {/* Right: Quantity Counter & Desktop Price */}
-                        <div className="hidden sm:flex flex-col items-end justify-between self-stretch shrink-0 min-w-[130px]">
+                        {/* Right: Quantity Counter & Desktop Price (Shown from md (768px)+) */}
+                        <div className="hidden md:flex flex-col items-end justify-between self-stretch shrink-0 min-w-[130px]">
                           {/* Item Total Price */}
-                          <p className="font-serif text-lg sm:text-xl font-bold text-ink">
+                          <p className="font-serif text-lg sm:text-xl text-ink">
                             ${(item.price * item.quantity).toLocaleString()}
                           </p>
 
@@ -416,8 +492,8 @@ export function BagPage() {
                           </div>
                         </div>
 
-                        {/* Mobile Quantity Counter */}
-                        <div className="sm:hidden flex items-center justify-between w-full pt-2">
+                        {/* Mobile & Small Quantity Counter */}
+                        <div className="md:hidden flex items-center justify-between w-full pt-2">
                           <div className="flex items-center rounded-lg border border-line bg-white shadow-2xs">
                             <button
                               type="button"
@@ -444,23 +520,6 @@ export function BagPage() {
                       </div>
                     </div>
                   ))}
-
-                  {/* Clear Cart / Continue shopping helper */}
-                  <div className="flex items-center justify-between pt-2 px-1 text-[12.5px]">
-                    <Link
-                      href="/jewellery"
-                      className="inline-flex items-center gap-1.5 text-ink-soft hover:text-ink font-medium transition-colors"
-                    >
-                      <span>← Continue shopping</span>
-                    </Link>
-                    <button
-                      type="button"
-                      onClick={clearCart}
-                      className="text-ink-muted hover:text-[#b74134] transition-colors cursor-pointer font-medium"
-                    >
-                      Clear bag
-                    </button>
-                  </div>
                 </div>
 
                 {/* ====================================================== */}
@@ -552,7 +611,7 @@ export function BagPage() {
                     {/* Proceed to Checkout CTA Button */}
                     <button
                       type="button"
-                      className="w-full flex items-center justify-center gap-2 rounded-full bg-ink py-3.5 text-[13.5px] font-semibold text-white shadow-md transition-all hover:bg-ink-soft active:scale-[0.99] cursor-pointer"
+                      className="w-full flex items-center justify-center gap-2 rounded-lg bg-ink py-3.5 text-[13.5px] font-semibold text-white shadow-md transition-all hover:bg-ink-soft active:scale-[0.99] cursor-pointer"
                     >
                       <span>Proceed to Checkout</span>
                       <ArrowRightIcon width={14} height={14} />
@@ -562,7 +621,7 @@ export function BagPage() {
                     <div className="space-y-3.5 pt-4 border-t border-line/40">
                       <div className="flex items-start gap-3">
                         <div className="grid size-8 shrink-0 place-items-center rounded-full bg-[#fbf9f6] text-ink border border-line/40">
-                          <CreditCardIcon width={16} height={16} />
+                          <CreditCardIcon width={22} height={22} />
                         </div>
                         <div>
                           <p className="text-[12.5px] font-semibold text-ink">Secure Payments</p>
@@ -572,7 +631,7 @@ export function BagPage() {
 
                       <div className="flex items-start gap-3">
                         <div className="grid size-8 shrink-0 place-items-center rounded-full bg-[#fbf9f6] text-ink border border-line/40">
-                          <TruckIcon width={16} height={16} />
+                          <TruckIcon width={22} height={22} />
                         </div>
                         <div>
                           <p className="text-[12.5px] font-semibold text-ink">Insured Global Delivery</p>
@@ -582,7 +641,7 @@ export function BagPage() {
 
                       <div className="flex items-start gap-3">
                         <div className="grid size-8 shrink-0 place-items-center rounded-full bg-[#fbf9f6] text-ink border border-line/40">
-                          <RefreshArrowsIcon width={16} height={16} />
+                          <RefreshArrowsIcon width={22} height={22} />
                         </div>
                         <div>
                           <p className="text-[12.5px] font-semibold text-ink">Easy Returns</p>
@@ -592,7 +651,7 @@ export function BagPage() {
 
                       <div className="flex items-start gap-3">
                         <div className="grid size-8 shrink-0 place-items-center rounded-full bg-[#fbf9f6] text-ink border border-line/40">
-                          <ShieldCheckIcon width={16} height={16} />
+                          <ShieldCheckIcon width={22} height={22} />
                         </div>
                         <div>
                           <p className="text-[12.5px] font-semibold text-ink">Authenticity Guaranteed</p>
@@ -603,17 +662,22 @@ export function BagPage() {
                   </div>
                 </div>
               </div>
+            </div>
+          </>
+        )}
 
-              {/* ====================================================== */}
-              {/* SECTION: You May Also Like (Screenshot 1)              */}
-              {/* ====================================================== */}
-              <section className="mt-16 pt-10 border-t border-line/60">
+        {/* Recommended Products & Trust Perks: Shown both when filled and when empty */}
+        <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-10 pb-10">
+          {/* ====================================================== */}
+          {/* SECTION: You May Also Like (Screenshot 1)              */}
+          {/* ====================================================== */}
+          <section className="mt-14 pt-10 border-t border-line/60">
                 <div className="mb-6 flex items-baseline justify-between">
                   <h2 className="font-serif text-2xl sm:text-3xl font-normal text-ink">
                     You May Also Like
                   </h2>
                   <Link
-                    href="/jewellery"
+                    href="/category"
                     className="inline-flex items-center gap-1 text-[13px] font-medium text-ink-soft hover:text-ink transition-colors"
                   >
                     <span>View all</span>
@@ -621,21 +685,28 @@ export function BagPage() {
                   </Link>
                 </div>
 
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+                <div
+                  ref={youMayAlsoLikeRef}
+                  className="flex lg:grid lg:grid-cols-4 items-stretch gap-4 sm:gap-5 overflow-x-auto lg:overflow-visible pb-4 lg:pb-0 select-none cursor-grab active:cursor-grabbing lg:cursor-default [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+                >
                   {YOU_MAY_ALSO_LIKE_PRODUCTS.map((product) => {
                     const wishlisted = isInWishlist(product.id);
                     return (
                       <div
                         key={product.id}
-                        className="group relative flex flex-col justify-between rounded-2xl border border-line/70 bg-white transition-all hover:border-sand-400 hover:shadow-xs"
+                        className="w-[210px] sm:w-[250px] md:w-[270px] lg:w-auto shrink-0 lg:shrink group relative flex flex-col justify-between rounded-2xl border border-line/70 bg-white transition-all hover:border-sand-400 hover:shadow-xs"
                       >
-                        {/* Image: Edge-to-edge with no padding, scale hover removed */}
-                        <div className="relative aspect-square w-full rounded-t-2xl bg-[#fbf9f6] flex items-center justify-center">
+                        {/* Image: Edge-to-edge with aspect-[4/3] to reduce card height */}
+                        <div className="relative aspect-[4/3] w-full rounded-t-2xl bg-[#fbf9f6] flex items-center justify-center">
                           {/* Wishlist Heart Toggle */}
                           <button
                             type="button"
-                            onClick={() => toggleWishlist(product)}
-                            className="absolute top-3 right-3 z-10 flex size-7 items-center justify-center rounded-full bg-white/90 text-ink shadow-2xs hover:scale-110 transition-transform cursor-pointer"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (hasDraggedLikeRef.current) return;
+                              toggleWishlist(product);
+                            }}
+                            className="absolute top-2.5 right-2.5 z-10 flex size-7 items-center justify-center rounded-full bg-white/90 text-ink shadow-2xs hover:scale-110 transition-transform cursor-pointer"
                             aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
                           >
                             <HeartIcon
@@ -649,31 +720,36 @@ export function BagPage() {
                             src={product.image}
                             alt={product.name}
                             fill
-                            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 280px"
-                            className="object-cover rounded-t-2xl"
+                            sizes="(max-width: 640px) 210px, (max-width: 1024px) 270px, 280px"
+                            draggable={false}
+                            className="object-cover rounded-t-2xl pointer-events-none"
                           />
                         </div>
 
-                        {/* Info & CTA with padding */}
-                        <div className="p-3.5 sm:p-4 flex flex-1 flex-col justify-between">
+                        {/* Info & CTA with compact padding */}
+                        <div className="p-3 sm:p-3.5 flex flex-1 flex-col justify-between">
                           <div>
-                            <h3 className="font-serif text-[14px] sm:text-[15px] font-medium text-ink line-clamp-1">
+                            <h3 className="font-serif text-[13.5px] sm:text-[14.5px] font-medium text-ink line-clamp-1">
                               {product.name}
                             </h3>
-                            <p className="mt-0.5 text-[11.5px] text-ink-soft">
+                            <p className="mt-0.5 text-[11px] sm:text-[11.5px] text-ink-soft">
                               {product.specs}
                             </p>
-                            <p className="mt-1 font-serif text-[15px] sm:text-[16px] font-bold text-ink">
+                            <p className="mt-1 font-semibold text-[14.5px] sm:text-[15.5px] text-ink">
                               ${product.price.toLocaleString()}
                             </p>
                           </div>
 
                           <button
                             type="button"
-                            onClick={() => addToCart(product, 1)}
-                            className="mt-3.5 w-full inline-flex items-center justify-center gap-1.5 rounded-full border border-line bg-white py-2 text-[12px] font-semibold text-ink shadow-2xs hover:bg-ink hover:text-white transition-colors cursor-pointer"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (hasDraggedLikeRef.current) return;
+                              addToCart(product, 1);
+                            }}
+                            className="mt-2.5 w-full inline-flex items-center justify-center gap-1.5 rounded-lg border border-line bg-white py-1.5 sm:py-2 text-[11.5px] sm:text-[12px] font-semibold text-ink shadow-2xs hover:bg-ink hover:text-white transition-colors cursor-pointer"
                           >
-                            <BagIcon width={13} height={13} />
+                            <BagIcon width={18} height={18} />
                             <span>Add to Bag</span>
                           </button>
                         </div>
@@ -700,21 +776,28 @@ export function BagPage() {
                   </Link>
                 </div>
 
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+                <div
+                  ref={recentlyViewedRef}
+                  className="flex lg:grid lg:grid-cols-4 items-stretch gap-4 sm:gap-5 overflow-x-auto lg:overflow-visible pb-4 lg:pb-0 select-none cursor-grab active:cursor-grabbing lg:cursor-default [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+                >
                   {RECENTLY_VIEWED_PRODUCTS.map((product) => {
                     const wishlisted = isInWishlist(product.id);
                     return (
                       <div
                         key={product.id}
-                        className="group relative flex flex-col justify-between rounded-2xl border border-line/70 bg-white transition-all hover:border-sand-400 hover:shadow-xs"
+                        className="w-[210px] sm:w-[250px] md:w-[270px] lg:w-auto shrink-0 lg:shrink group relative flex flex-col justify-between rounded-2xl border border-line/70 bg-white transition-all hover:border-sand-400 hover:shadow-xs"
                       >
-                        {/* Image: Edge-to-edge with no padding, scale hover removed */}
-                        <div className="relative aspect-square w-full rounded-t-2xl bg-[#fbf9f6] flex items-center justify-center">
+                        {/* Image: Edge-to-edge with aspect-[4/3] to reduce card height */}
+                        <div className="relative aspect-[4/3] w-full rounded-t-2xl bg-[#fbf9f6] flex items-center justify-center">
                           {/* Wishlist Heart Toggle */}
                           <button
                             type="button"
-                            onClick={() => toggleWishlist(product)}
-                            className="absolute top-3 right-3 z-10 flex size-7 items-center justify-center rounded-full bg-white/90 text-ink shadow-2xs hover:scale-110 transition-transform cursor-pointer"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (hasDraggedRecentRef.current) return;
+                              toggleWishlist(product);
+                            }}
+                            className="absolute top-2.5 right-2.5 z-10 flex size-7 items-center justify-center rounded-full bg-white/90 text-ink shadow-2xs hover:scale-110 transition-transform cursor-pointer"
                             aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
                           >
                             <HeartIcon
@@ -728,17 +811,18 @@ export function BagPage() {
                             src={product.image}
                             alt={product.name}
                             fill
-                            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 280px"
-                            className="object-cover rounded-t-2xl"
+                            sizes="(max-width: 640px) 210px, (max-width: 1024px) 270px, 280px"
+                            draggable={false}
+                            className="object-cover rounded-t-2xl pointer-events-none"
                           />
                         </div>
 
-                        {/* Info with padding */}
-                        <div className="p-3.5 sm:p-4">
-                          <h3 className="font-serif text-[14px] sm:text-[15px] font-medium text-ink line-clamp-1">
+                        {/* Info with compact padding */}
+                        <div className="p-3 sm:p-3.5">
+                          <h3 className="font-serif text-[13.5px] sm:text-[14.5px] font-medium text-ink line-clamp-1">
                             {product.name}
                           </h3>
-                          <p className="mt-1 font-serif text-[15px] sm:text-[16px] font-bold text-ink">
+                          <p className="mt-1 font-semibold text-[14.5px] sm:text-[15.5px] text-ink">
                             ${product.price.toLocaleString()}
                           </p>
                         </div>
@@ -763,7 +847,7 @@ export function BagPage() {
                         className="flex items-center gap-3 transition-transform hover:-translate-y-0.5"
                       >
                         <div className="grid size-10 shrink-0 place-items-center rounded-full border border-line/70 bg-white text-ink shadow-2xs">
-                          <Icon width={18} height={18} />
+                          <Icon width={25} height={25} />
                         </div>
                         <div className="min-w-0 leading-tight">
                           <p className="text-[12px] sm:text-[12.5px] font-semibold text-ink truncate">
@@ -779,8 +863,6 @@ export function BagPage() {
                 </div>
               </div>
             </section>
-          </>
-        )}
       </main>
 
       <Footer />

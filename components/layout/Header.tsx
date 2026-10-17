@@ -133,15 +133,17 @@ export function Header({ hideMobileTagline = false }: { hideMobileTagline?: bool
             </Link>
             <Link
               href="/wishlist"
-              className="relative hidden h-10 cursor-pointer items-center gap-1.5 rounded-full px-3 text-[12.5px] text-ink hover:bg-cream-200 lg:flex"
+              className="relative hidden h-10 cursor-pointer items-center gap-2 rounded-full px-3 text-[12.5px] text-ink hover:bg-cream-200 lg:flex"
             >
-              <HeartIcon width={18} height={18} />
+              <span className="relative inline-flex items-center justify-center">
+                <HeartIcon width={18} height={18} />
+                {wishlistCount > 0 && (
+                  <span className="absolute -top-1.5 -right-2.5 grid min-w-4 h-4 px-1 place-items-center rounded-full bg-ink text-[10px] font-semibold text-white">
+                    {wishlistCount}
+                  </span>
+                )}
+              </span>
               <span>Wishlist</span>
-              {wishlistCount > 0 && (
-                <span className="grid min-w-4 h-4 px-1 place-items-center rounded-full bg-ink text-[10px] font-semibold text-white">
-                  {wishlistCount}
-                </span>
-              )}
             </Link>
             <Link
               href="/sign-in"

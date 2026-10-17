@@ -195,7 +195,7 @@ export function FeaturedProducts() {
           </div>
 
           <Link
-            href="/featured"
+            href="/category"
             className="group flex cursor-pointer items-center gap-1 self-start text-[12.5px] font-medium text-ink-soft transition-colors hover:text-ink sm:self-auto"
           >
             <span>View All</span>
@@ -252,7 +252,7 @@ export function FeaturedProducts() {
                     />
                   </button>
 
-                  <Link href={`/product/${product.id}`} className="absolute inset-0 block cursor-pointer">
+                  <Link href="/category" className="absolute inset-0 block cursor-pointer">
                     <Image
                       src={product.image}
                       alt={product.name}
@@ -265,7 +265,7 @@ export function FeaturedProducts() {
 
                 {/* Product Info below the image */}
                 <div className="mt-3.5 flex flex-1 flex-col">
-                  <Link href={`/product/${product.id}`} className="cursor-pointer">
+                  <Link href="/category" className="cursor-pointer">
                     <h3 className="line-clamp-1 text-[13.5px] font-medium text-ink transition-colors group-hover:text-rose-gold-dark sm:text-[14.5px]">
                       {product.name}
                     </h3>

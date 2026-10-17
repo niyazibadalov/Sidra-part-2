@@ -381,7 +381,7 @@ export function WishlistPage() {
                       className="group relative flex flex-col rounded-2xl border border-line/70 bg-white transition-all duration-300 hover:border-sand-400 hover:shadow-md"
                     >
                       {/* Product Image Frame: Edge-to-edge, no padding */}
-                      <div className="relative aspect-square w-full rounded-t-2xl bg-[#faf7f2] flex items-center justify-center">
+                      <div className="relative aspect-[4/3] w-full rounded-t-2xl bg-[#faf7f2] flex items-center justify-center">
                         {/* Selection Checkbox */}
                         <input
                           type="checkbox"
@@ -492,32 +492,37 @@ export function WishlistPage() {
                   );
                 })}
               </div>
+            </div>
+          </>
+        )}
 
-              {/* Promo & Value Propositions Box */}
-              <div className="mt-12 rounded-2xl border border-line/70 bg-[#faf7f2] p-6 sm:p-7 lg:p-8 flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-8 shadow-2xs">
-                {/* Left: Clean Heart Icon (no white box/border) + Text */}
-                <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-5 text-center sm:text-left">
-                  <HeartIcon
-                    width={50}
-                    height={50}
-                    className="text-[#9c4b37] shrink-0 stroke-[1.25]"
-                  />
-                  <div>
-                    <h3 className="font-serif text-lg sm:text-xl font-normal text-ink">
-                      Your wishlist is empty?
-                    </h3>
-                    <p className="mt-1 text-[12px] sm:text-[12.5px] text-ink-soft max-w-xs sm:max-w-sm">
-                      Save your favourite jewellery pieces and find them whenever
-                      you&apos;re ready.
-                    </p>
+        {/* Promo & Value Propositions Box and You May Also Like Carousel: Shown both when filled and when empty */}
+        <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10 pb-16">
+          {/* Promo & Value Propositions Box */}
+          <div className="mt-12 rounded-2xl border border-line/70 bg-[#faf7f2] py-6 sm:py-7 lg:py-8 px-6 sm:px-10 lg:px-12 xl:px-20 flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-8 shadow-2xs">
+                {/* Left Group: Clean Heart Icon (no white box/border) + Text + Explore Button close to text */}
+                <div className="flex flex-col lg:flex-row items-center gap-5 sm:gap-6 lg:gap-8 text-center sm:text-left">
+                  <div className="flex flex-col lg:flex-row items-center gap-4 sm:gap-5">
+                    <HeartIcon
+                      width={50}
+                      height={50}
+                      className="text-[#9c4b37] shrink-0 stroke-[1.25] xl:me-16"
+                    />
+                    <div>
+                      <h3 className="font-serif text-lg sm:text-xl text-center lg:text-left font-normal text-ink">
+                        Your wishlist is empty?
+                      </h3>
+                      <p className="mt-1 text-[12px] sm:text-[12.5px] text-center lg:text-left text-ink-soft max-w-xs sm:max-w-sm">
+                        Save your favourite jewellery pieces and find them whenever
+                        you&apos;re ready.
+                      </p>
+                    </div>
                   </div>
-                </div>
 
-                {/* Center: Explore Jewellery Button */}
-                <div className="flex justify-center items-center shrink-0">
+                  {/* Explore Jewellery Button close to the text */}
                   <Link
                     href="/jewellery"
-                    className="inline-flex items-center justify-center rounded-full bg-ink px-7 py-3 text-[13px] font-semibold text-white hover:bg-ink-soft transition-colors cursor-pointer shadow-xs whitespace-nowrap"
+                    className="inline-flex items-center justify-center rounded-full bg-ink px-6 sm:px-7 py-2.5 sm:py-3 text-[12.5px] sm:text-[13px] font-semibold text-white hover:bg-ink-soft transition-colors cursor-pointer shadow-xs whitespace-nowrap shrink-0"
                   >
                     Explore Jewellery
                   </Link>
@@ -526,9 +531,9 @@ export function WishlistPage() {
                 {/* Right: Vertical Divider + 3 Perks */}
                 <div className="flex items-center gap-6 lg:gap-8 shrink-0">
                   <div className="hidden lg:block h-14 w-px bg-line/70 shrink-0" />
-                  <div className="space-y-2.5 text-[12px] text-ink-soft">
+                  <div className="space-y-2.5 text-[12px] text-ink-soft pe-10">
                     <div className="flex items-start gap-2.5">
-                      <LaptopIcon width={20} height={20} className="text-[#9c4b37] shrink-0 mt-0.5" />
+                      <LaptopIcon width={25} height={25} className="text-[#9c4b37] shrink-0 mt-0.5" />
                       <div className="leading-snug">
                         <p className="font-semibold text-ink text-[12px]">Saved across devices</p>
                         <p className="text-ink-soft text-[11px] mt-0.5">Access your wishlist on any device.</p>
@@ -536,7 +541,7 @@ export function WishlistPage() {
                     </div>
 
                     <div className="flex items-start gap-2.5">
-                      <BellIcon width={20} height={20} className="text-[#9c4b37] shrink-0 mt-0.5" />
+                      <BellIcon width={25} height={25} className="text-[#9c4b37] shrink-0 mt-0.5" />
                       <div className="leading-snug">
                         <p className="font-semibold text-ink text-[12px]">Price drop alerts</p>
                         <p className="text-ink-soft text-[11px] mt-0.5">Get notified when the price drops.</p>
@@ -544,7 +549,7 @@ export function WishlistPage() {
                     </div>
 
                     <div className="flex items-start gap-2.5">
-                      <ShieldIcon width={20} height={20} className="text-[#9c4b37] shrink-0 mt-0.5" />
+                      <ShieldIcon width={25} height={25} className="text-[#9c4b37] shrink-0 mt-0.5" />
                       <div className="leading-snug">
                         <p className="font-semibold text-ink text-[12px]">Keep your favourites private</p>
                         <p className="text-ink-soft text-[11px] mt-0.5">Your wishlist is only visible to you.</p>
@@ -555,10 +560,10 @@ export function WishlistPage() {
               </div>
 
               {/* You May Also Like Carousel with Mouse Drag (Screenshot 3) */}
-              <div className="mt-14 pt-8 border-t border-line/60">
+              <div className="mt-10 pt-8 border-t border-line/60">
                 <div className="mb-6 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-3">
                   <div>
-                    <h2 className="font-serif text-2xl sm:text-3xl text-ink font-normal">
+                    <h2 className="font-serif text-2xl text-ink font-normal">
                       You May Also Like
                     </h2>
                   </div>
@@ -582,7 +587,7 @@ export function WishlistPage() {
                     )}
                     <Link
                       href="/jewellery"
-                      className="ml-2 flex items-center gap-1 font-semibold text-ink hover:text-rose-gold-dark transition-colors"
+                      className="ml-0 lg:ml-2 flex items-center gap-1 font-semibold text-ink hover:text-rose-gold-dark transition-colors"
                     >
                       <span>View All</span>
                       <ArrowRightIcon width={13} height={13} />
@@ -646,8 +651,6 @@ export function WishlistPage() {
                 </div>
               </div>
             </div>
-          </>
-        )}
       </main>
 
       <Footer />

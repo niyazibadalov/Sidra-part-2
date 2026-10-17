@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState, useMemo } from "react";
+import React, { createContext, useContext, useEffect, useState, useMemo, useRef } from "react";
 import ring1 from "@/app/images/ring1.png";
 import ring2 from "@/app/images/ring2.png";
 import ring3 from "@/app/images/ring3.png";
@@ -44,6 +44,7 @@ export type ToastInfo = {
 type CartWishlistContextType = {
   wishlist: ProductItem[];
   cart: CartItem[];
+  isLoaded: boolean;
   addToWishlist: (item: ProductItem) => void;
   removeFromWishlist: (id: string) => void;
   toggleWishlist: (item: ProductItem) => void;
@@ -215,9 +216,63 @@ const INITIAL_CART_ITEMS: CartItem[] = [
 const CartWishlistContext = createContext<CartWishlistContextType | undefined>(undefined);
 
 export function CartWishlistProvider({ children }: { children: React.ReactNode }) {
-  const [wishlist, setWishlist] = useState<ProductItem[]>(INITIAL_WISHLIST_ITEMS);
-  const [cart, setCart] = useState<CartItem[]>(INITIAL_CART_ITEMS);
+  const [wishlist, setWishlist] = useState<ProductItem[]>([]);
+  const [cart, setCart] = useState<CartItem[]>([]);
   const [toast, setToast] = useState<ToastInfo | null>(null);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  // Load from localStorage on client mount
+  useEffect(() => {
+    try {
+      const savedCart = localStorage.getItem("sidra_cart");
+      if (savedCart) {
+        try {
+          setCart(JSON.parse(savedCart));
+        } catch {
+          setCart([]);
+        }
+      } else {
+        setCart([]);
+      }
+
+      const savedWishlist = localStorage.getItem("sidra_wishlist");
+      if (savedWishlist) {
+        try {
+          setWishlist(JSON.parse(savedWishlist));
+        } catch {
+          setWishlist([]);
+        }
+      } else {
+        setWishlist([]);
+      }
+    } catch (e) {
+      console.error("Failed to load cart/wishlist from localStorage", e);
+      setCart([]);
+      setWishlist([]);
+    } finally {
+      setIsLoaded(true);
+    }
+  }, []);
+
+  // Persist cart to localStorage whenever it changes after initial load
+  useEffect(() => {
+    if (!isLoaded) return;
+    try {
+      localStorage.setItem("sidra_cart", JSON.stringify(cart));
+    } catch (e) {
+      console.error("Failed to save cart to localStorage", e);
+    }
+  }, [cart, isLoaded]);
+
+  // Persist wishlist to localStorage whenever it changes after initial load
+  useEffect(() => {
+    if (!isLoaded) return;
+    try {
+      localStorage.setItem("sidra_wishlist", JSON.stringify(wishlist));
+    } catch (e) {
+      console.error("Failed to save wishlist to localStorage", e);
+    }
+  }, [wishlist, isLoaded]);
 
   // Auto-dismiss toast
   useEffect(() => {
@@ -332,6 +387,7 @@ export function CartWishlistProvider({ children }: { children: React.ReactNode }
       value={{
         wishlist,
         cart,
+        isLoaded,
         addToWishlist,
         removeFromWishlist,
         toggleWishlist,
