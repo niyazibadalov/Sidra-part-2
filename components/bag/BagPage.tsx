@@ -23,6 +23,7 @@ import {
   LeafIcon,
   CheckIcon,
   InfoIcon,
+  CloseIcon,
 } from "@/components/Icons";
 import { useCartWishlist, ProductItem } from "@/context/CartWishlistContext";
 
@@ -231,6 +232,8 @@ export function BagPage() {
   const [promoCode, setPromoCode] = useState("");
   const [promoDiscount, setPromoDiscount] = useState(0);
   const [promoMessage, setPromoMessage] = useState<string | null>(null);
+  const [isPromoOpen, setIsPromoOpen] = useState(false);
+  const [isSummaryOpen, setIsSummaryOpen] = useState(true);
 
   // Subtotal calculation
   const subtotal = cart.reduce(
@@ -360,69 +363,72 @@ export function BagPage() {
                   {cart.map((item) => (
                     <div
                       key={item.id}
-                      className="relative rounded-2xl border border-line/70 bg-white p-4 sm:p-5 transition-shadow hover:shadow-2xs"
+                      className="relative rounded-2xl border border-line/70 bg-white p-3.5 sm:p-5 transition-shadow hover:shadow-2xs"
                     >
-                      <div className="flex flex-col md:flex-row items-center md:items-center gap-4 sm:gap-5 md:gap-6">
-                        {/* Product Image Thumbnail - Centered on phone and small devices, left-aligned from md (768px)+ */}
-                        <div className="relative size-32 sm:size-40 md:size-38 lg:size-40 shrink-0 self-center mx-auto md:mx-0 rounded-xl bg-[#fbf9f6] border border-line/40 p-2 flex items-center justify-center">
+                      {/* Main Item Row: Left Image, Right Details */}
+                      <div className="flex items-start gap-3.5 sm:gap-4 md:gap-6">
+                        {/* Product Image Thumbnail */}
+                        <div className="relative size-28 min-[380px]:size-32 sm:size-36 md:size-38 lg:size-40 shrink-0 self-start rounded-xl bg-[#fbf9f6] border border-line/40 p-2 flex items-center justify-center">
                           <Image
                             src={item.image}
                             alt={item.name}
                             fill
-                            sizes="(max-width: 768px) 160px, 180px"
+                            sizes="(max-width: 768px) 140px, 180px"
                             className="object-contain"
                           />
                           {/* "Ready to ship" badge if present */}
                           {(item.stockText === "Ready to ship" || item.id === "cart-1") && (
-                            <span className="absolute -top-2 -left-2 sm:top-1.5 sm:left-1.5 inline-flex items-center rounded-full bg-emerald-50 border border-emerald-200/80 px-2 py-0.5 text-[10px] font-medium text-emerald-800 shadow-2xs">
+                            <span className="absolute bottom-1.5 left-1.5 inline-flex items-center rounded-full bg-emerald-50 border border-emerald-200/80 px-2 py-0.5 text-[9.5px] sm:text-[10px] font-medium text-emerald-800 shadow-2xs">
                               Ready to ship
                             </span>
                           )}
                         </div>
 
                         {/* Product Info & Specifications */}
-                        <div className="flex-1 min-w-0 w-full">
-                          <div className="flex flex-wrap items-center justify-between gap-2">
-                            <div>
-                              <p className="text-[11.5px] font-medium text-ink-muted">
-                                {item.brand || "Maison Éclat"}
-                              </p>
-                              <h3 className="font-serif text-[17px] sm:text-[18px] font-medium text-ink mt-0.5">
-                                <Link
-                                  href={`/category/${item.id}`}
-                                  className="hover:text-rose-gold-dark transition-colors"
-                                >
-                                  {item.name}
-                                </Link>
-                              </h3>
-                            </div>
+                        <div className="flex-1 min-w-0">
+                          {/* Top Header Row: Brand and Mobile Close/Remove 'x' button */}
+                          <div className="flex items-start justify-between gap-2">
+                            <p className="text-[11px] sm:text-[11.5px] font-medium text-ink-muted">
+                              {item.brand || "Maison Éclat"}
+                            </p>
 
-                            {/* Item Total Price (Mobile / Small inline) */}
-                            <div className="md:hidden text-right">
-                              <p className="font-serif text-lg font-bold text-ink">
-                                ${(item.price * item.quantity).toLocaleString()}
-                              </p>
-                            </div>
+                            {/* Top-Right 'x' Quick Remove Button (Mobile only) */}
+                            <button
+                              type="button"
+                              onClick={() => removeFromCart(item.id)}
+                              aria-label="Remove item"
+                              className="md:hidden text-ink-soft hover:text-ink transition-colors p-0.5 cursor-pointer -mt-0.5 -mr-0.5"
+                            >
+                              <CloseIcon width={14} height={14} className="stroke-[1.75]" />
+                            </button>
                           </div>
 
+                          {/* Product Name */}
+                          <h3 className="font-serif text-[15px] sm:text-[17px] md:text-[18px] font-normal sm:font-medium text-ink mt-0.5 leading-snug">
+                            <Link
+                              href={`/category/${item.id}`}
+                              className="hover:text-rose-gold-dark transition-colors line-clamp-2"
+                            >
+                              {item.name}
+                            </Link>
+                          </h3>
+
                           {/* Metal / Stone specs */}
-                          <p className="text-[12px] sm:text-[12.5px] text-ink-soft mt-1">
+                          <p className="text-[11.5px] sm:text-[12.5px] text-ink-soft mt-0.5 sm:mt-1">
                             {item.specs || item.metal || "18K Gold • Diamond"}
                           </p>
 
                           {/* Size / Length selector */}
-                          <div className="mt-2 flex items-center gap-2">
-                            <span className="text-[12px] text-ink-soft">
-                              {item.category === "Necklaces" ? "Length:" : "Size:"}
-                            </span>
-                            <div className="relative inline-flex items-center gap-1 rounded-md border border-line bg-[#fbf9f6] px-2.5 py-1 text-[11.5px] font-medium text-ink cursor-pointer hover:bg-white transition-colors">
+                          <div className="mt-1.5 sm:mt-2 flex items-center gap-1.5 text-[11.5px] sm:text-[12px] text-ink-soft">
+                            <span>{item.category === "Necklaces" ? "Length:" : "Size:"}</span>
+                            <div className="inline-flex items-center gap-1 text-[11.5px] sm:text-[12px] font-medium text-ink cursor-pointer hover:text-rose-gold-dark transition-colors">
                               <span>{item.selectedSize || (item.category === "Necklaces" ? "42 cm" : "7")}</span>
-                              <ChevronDownIcon width={12} height={12} className="text-ink-soft" />
+                              <ChevronDownIcon width={11} height={11} className="text-ink-soft" />
                             </div>
                           </div>
 
-                          {/* Delivery info row */}
-                          <div className="mt-3 flex items-center gap-2 text-[11.5px] sm:text-[12px] text-ink-soft">
+                          {/* Delivery info row (hidden on phone, visible from sm+) */}
+                          <div className="hidden sm:flex mt-2.5 items-center gap-2 text-[11.5px] sm:text-[12px] text-ink-soft">
                             <TruckIcon width={14} height={14} className="text-ink-soft shrink-0" />
                             <span>
                               Get it between <strong className="font-semibold text-ink">25 - 28 Apr</strong>
@@ -430,8 +436,8 @@ export function BagPage() {
                             </span>
                           </div>
 
-                          {/* Action Links: Edit, Move to Wishlist, Remove */}
-                          <div className="mt-4 flex flex-wrap items-center gap-4 text-[12px] font-medium text-ink-soft border-t border-line/40 pt-3">
+                          {/* Action Links: Edit, Move to Wishlist, Remove (Shown on md+ tablet & desktop) */}
+                          <div className="hidden md:flex mt-4 items-center gap-4 text-[12px] font-medium text-ink-soft border-t border-line/40 pt-3">
                             <button
                               type="button"
                               className="inline-flex items-center gap-1.5 text-ink-soft hover:text-ink transition-colors cursor-pointer"
@@ -458,9 +464,41 @@ export function BagPage() {
                               <span>Remove</span>
                             </button>
                           </div>
+
+                          {/* Mobile Quantity Counter & Price Row (in right column beneath size, exactly matching screenshot) */}
+                          <div className="md:hidden mt-2.5 space-y-2">
+                            <div className="flex items-center rounded-lg border border-line bg-white shadow-2xs w-fit">
+                              <button
+                                type="button"
+                                onClick={() => updateCartQty(item.id, item.quantity - 1)}
+                                disabled={item.quantity <= 1}
+                                aria-label="Decrease quantity"
+                                className="flex size-7 items-center justify-center text-ink-soft hover:text-ink disabled:opacity-30 transition-colors cursor-pointer"
+                              >
+                                <MinusIcon width={11} height={11} />
+                              </button>
+                              <span className="w-7 text-center text-[12px] font-semibold text-ink select-none">
+                                {item.quantity}
+                              </span>
+                              <button
+                                type="button"
+                                onClick={() => updateCartQty(item.id, item.quantity + 1)}
+                                aria-label="Increase quantity"
+                                className="flex size-7 items-center justify-center text-ink-soft hover:text-ink transition-colors cursor-pointer"
+                              >
+                                <PlusIcon width={11} height={11} />
+                              </button>
+                            </div>
+
+                            <div>
+                              <p className="font-serif text-[17px] font-bold text-ink">
+                                ${(item.price * item.quantity).toLocaleString()}
+                              </p>
+                            </div>
+                          </div>
                         </div>
 
-                        {/* Right: Quantity Counter & Desktop Price (Shown from md (768px)+) */}
+                        {/* Desktop Only: Right column for Quantity Counter & Price (hidden on mobile, flex on md+) */}
                         <div className="hidden md:flex flex-col items-end justify-between self-stretch shrink-0 min-w-[130px]">
                           {/* Item Total Price */}
                           <p className="font-serif text-lg sm:text-xl text-ink">
@@ -491,41 +529,149 @@ export function BagPage() {
                             </button>
                           </div>
                         </div>
+                      </div>
 
-                        {/* Mobile & Small Quantity Counter */}
-                        <div className="md:hidden flex items-center justify-between w-full pt-2">
-                          <div className="flex items-center rounded-lg border border-line bg-white shadow-2xs">
-                            <button
-                              type="button"
-                              onClick={() => updateCartQty(item.id, item.quantity - 1)}
-                              disabled={item.quantity <= 1}
-                              aria-label="Decrease quantity"
-                              className="flex size-7 items-center justify-center text-ink-soft hover:text-ink disabled:opacity-30 transition-colors"
-                            >
-                              <MinusIcon width={12} height={12} />
-                            </button>
-                            <span className="w-8 text-center text-[12px] font-semibold text-ink">
-                              {item.quantity}
-                            </span>
-                            <button
-                              type="button"
-                              onClick={() => updateCartQty(item.id, item.quantity + 1)}
-                              aria-label="Increase quantity"
-                              className="flex size-7 items-center justify-center text-ink-soft hover:text-ink transition-colors"
-                            >
-                              <PlusIcon width={12} height={12} />
-                            </button>
-                          </div>
-                        </div>
+                      {/* Bottom Action Row: Move to Wishlist & Remove (Mobile only) */}
+                      <div className="md:hidden mt-3.5 pt-3 border-t border-line/40 flex items-center justify-between text-[12px] font-medium text-ink-soft">
+                        <button
+                          type="button"
+                          onClick={() => moveToWishlist(item)}
+                          className="inline-flex items-center gap-1.5 text-ink-soft hover:text-rose-gold-dark transition-colors cursor-pointer"
+                        >
+                          <HeartIcon width={13} height={13} />
+                          <span>Move to Wishlist</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => removeFromCart(item.id)}
+                          className="inline-flex items-center gap-1.5 text-ink-soft hover:text-[#b74134] transition-colors cursor-pointer"
+                        >
+                          <TrashIcon width={13} height={13} />
+                          <span>Remove</span>
+                        </button>
                       </div>
                     </div>
                   ))}
+
+                  {/* ====================================================== */}
+                  {/* MOBILE PROMO & ORDER SUMMARY ACCORDIONS (< md only)    */}
+                  {/* ====================================================== */}
+                  <div className="md:hidden space-y-3.5 pt-2">
+                    {/* 1. Promo or Gift code Accordion */}
+                    <div className="rounded-2xl border border-line/80 bg-white shadow-2xs overflow-hidden">
+                      <button
+                        type="button"
+                        onClick={() => setIsPromoOpen((prev) => !prev)}
+                        className="w-full flex items-center justify-between px-5 py-4 text-left font-serif text-[17px] font-normal text-ink hover:bg-cream-50/50 transition-colors cursor-pointer"
+                      >
+                        <span>Promo or Gift code</span>
+                        <ChevronDownIcon
+                          width={16}
+                          height={16}
+                          className={`text-ink transition-transform duration-200 ${isPromoOpen ? "rotate-180" : ""}`}
+                        />
+                      </button>
+
+                      {isPromoOpen && (
+                        <div className="px-5 pb-5 pt-1 border-t border-line/40">
+                          <form onSubmit={handleApplyPromo} className="flex gap-2 mt-2">
+                            <input
+                              type="text"
+                              value={promoCode}
+                              onChange={(e) => setPromoCode(e.target.value)}
+                              placeholder="Enter code"
+                              className="flex-1 rounded-lg border border-line bg-[#fbf9f6] px-3.5 py-2.5 text-[12.5px] text-ink placeholder:text-ink-muted focus:border-ink focus:bg-white focus:outline-none transition-colors"
+                            />
+                            <button
+                              type="submit"
+                              className="rounded-lg border border-line bg-white px-4 py-2.5 text-[12.5px] font-semibold text-ink shadow-2xs hover:bg-[#fbf9f6] transition-colors cursor-pointer"
+                            >
+                              Apply
+                            </button>
+                          </form>
+                          {promoMessage && (
+                            <p className={`mt-2 text-[11.5px] ${promoDiscount > 0 ? "text-emerald-700" : "text-amber-700"}`}>
+                              {promoMessage}
+                            </p>
+                          )}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* 2. Order Summary Accordion */}
+                    <div className="rounded-2xl border border-line/80 bg-white shadow-2xs overflow-hidden">
+                      <button
+                        type="button"
+                        onClick={() => setIsSummaryOpen((prev) => !prev)}
+                        className="w-full flex items-center justify-between px-5 py-4 text-left font-serif text-[19px] font-normal text-ink hover:bg-cream-50/50 transition-colors cursor-pointer"
+                      >
+                        <span>Order Summary</span>
+                        <ChevronDownIcon
+                          width={16}
+                          height={16}
+                          className={`text-ink transition-transform duration-200 ${isSummaryOpen ? "rotate-180" : ""}`}
+                        />
+                      </button>
+
+                      {isSummaryOpen && (
+                        <div className="px-5 pb-6 pt-2 border-t border-line/40 space-y-4">
+                          {/* Cost Breakdown */}
+                          <div className="space-y-2.5 text-[13.5px]">
+                            <div className="flex items-center justify-between text-ink-soft">
+                              <span>Subtotal ({cartCount} items)</span>
+                              <span className="font-semibold text-ink">${subtotal.toLocaleString()}</span>
+                            </div>
+
+                            <div className="flex items-center justify-between text-ink-soft">
+                              <span>Delivery</span>
+                              <span className="font-semibold text-ink">Free</span>
+                            </div>
+
+                            <div className="flex items-center justify-between text-ink-soft">
+                              <span className="inline-flex items-center gap-1">
+                                <span>Estimated taxes</span>
+                                <span title="Tax calculated based on destination">
+                                  <InfoIcon width={13} height={13} className="text-ink-muted cursor-pointer" />
+                                </span>
+                              </span>
+                              <span className="font-semibold text-ink">${estimatedTax.toLocaleString()}</span>
+                            </div>
+
+                            {promoDiscount > 0 && (
+                              <div className="flex items-center justify-between text-emerald-700 font-medium">
+                                <span>Promo discount</span>
+                                <span>-${promoDiscount.toLocaleString()}</span>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Total (USD) */}
+                          <div className="flex items-baseline justify-between border-t border-line/60 pt-3.5">
+                            <span className="text-[15px] font-medium text-ink">Total (USD)</span>
+                            <span className="font-serif text-2xl font-bold text-ink">
+                              ${total.toLocaleString()}
+                            </span>
+                          </div>
+
+                          {/* Proceed to Checkout CTA Button */}
+                          <button
+                            type="button"
+                            className="w-full flex items-center justify-center gap-2 rounded-xl bg-ink py-3.5 text-[14px] font-semibold text-white shadow-md transition-all hover:bg-ink-soft active:scale-[0.99] cursor-pointer"
+                          >
+                            <span>Proceed to Checkout</span>
+                            <ArrowRightIcon width={14} height={14} />
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </div>
 
                 {/* ====================================================== */}
-                {/* RIGHT COLUMN: Order Summary (col-span-4)                */}
+                {/* TABLET & DESKTOP: Order Summary Card (md:+)             */}
                 {/* ====================================================== */}
-                <div className="lg:col-span-4">
+                <div className="hidden md:block lg:col-span-4 lg:sticky lg:top-28">
                   <div className="rounded-2xl border border-line/80 bg-white p-6 shadow-2xs space-y-5">
                     <h2 className="font-serif text-2xl font-normal text-ink">
                       Order Summary
