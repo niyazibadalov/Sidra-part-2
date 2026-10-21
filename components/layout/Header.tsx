@@ -15,6 +15,7 @@ import {
 } from "../Icons";
 
 import { useCartWishlist } from "@/context/CartWishlistContext";
+import { useAuth } from "@/context/AuthContext";
 
 const NAV_LINKS = [
   { label: "Jewellery", href: "/jewellery" },
@@ -64,6 +65,7 @@ function SearchField({ className = "" }: { className?: string }) {
 
 export function Header({ hideMobileTagline = false }: { hideMobileTagline?: boolean }) {
   const { wishlistCount } = useCartWishlist();
+  const { currentUser, logout } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -145,19 +147,36 @@ export function Header({ hideMobileTagline = false }: { hideMobileTagline?: bool
               </span>
               <span>Wishlist</span>
             </Link>
-            <Link
-              href="/sign-in"
-              className="hidden h-10 cursor-pointer items-center gap-1.5 rounded-full px-3 text-[12.5px] text-ink hover:bg-cream-200 lg:flex"
-            >
-              <UserIcon width={18} height={18} />
-              Sign in
-            </Link>
-            <Link
-              href="/join"
-              className="mx-1 hidden h-10 cursor-pointer items-center rounded-full bg-ink px-5 text-[12.5px] font-medium text-white transition-colors hover:bg-ink-soft lg:flex"
-            >
-              Join Sidra
-            </Link>
+
+            {/* Desktop Auth Section */}
+            {currentUser ? (
+              <div
+                title={currentUser.firstName}
+                className="hidden h-10 items-center gap-2 rounded-full px-3.5 text-[12.5px] font-medium text-ink bg-cream-100/80 border border-line/60 lg:flex"
+              >
+                <UserIcon width={18} height={18} className="shrink-0 text-ink" />
+                <span className="max-w-[100px] xl:max-w-[140px] truncate">
+                  {currentUser.firstName}
+                </span>
+              </div>
+            ) : (
+              <>
+                <Link
+                  href="/sign-in"
+                  className="hidden h-10 cursor-pointer items-center gap-1.5 rounded-full px-3 text-[12.5px] text-ink hover:bg-cream-200 lg:flex"
+                >
+                  <UserIcon width={18} height={18} />
+                  Sign in
+                </Link>
+                <Link
+                  href="/create-account"
+                  className="mx-1 hidden h-10 cursor-pointer items-center rounded-full bg-ink px-5 text-[12.5px] font-medium text-white transition-colors hover:bg-ink-soft lg:flex"
+                >
+                  Join Sidra
+                </Link>
+              </>
+            )}
+
             <BagButton />
           </div>
         </div>
@@ -171,6 +190,8 @@ export function Header({ hideMobileTagline = false }: { hideMobileTagline?: bool
 
 function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { wishlistCount } = useCartWishlist();
+  const { currentUser, logout } = useAuth();
+
   return (
     <div
       className={`fixed inset-0 z-50 transition-[visibility] duration-300 lg:hidden ${open ? "visible" : "pointer-events-none invisible"}`}
@@ -178,7 +199,7 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
     >
       <div
         onClick={onClose}
-          className={`absolute inset-0 cursor-pointer bg-ink/40 transition-opacity duration-300 ${
+        className={`absolute inset-0 cursor-pointer bg-ink/40 transition-opacity duration-300 ${
           open ? "opacity-100" : "opacity-0"
         }`}
       />
@@ -249,21 +270,51 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
           </ul>
         </div>
 
+        {/* Mobile / Tablet Bottom Auth Buttons */}
         <div className="grid grid-cols-2 gap-3 border-t border-line p-4">
-          <Link
-            href="/sign-in"
-            onClick={onClose}
-            className="flex h-11 cursor-pointer items-center justify-center rounded-full border border-ink text-sm text-ink"
-          >
-            Sign in
-          </Link>
-          <Link
-            href="/join"
-            onClick={onClose}
-            className="flex h-11 cursor-pointer items-center justify-center rounded-full bg-ink text-sm text-white"
-          >
-            Join Sidra
-          </Link>
+          {currentUser ? (
+            <>
+              {/* User Icon + Firstname with ellipsis if long */}
+              <div className="flex h-11 items-center justify-center gap-2 rounded-full border border-line bg-white px-3 text-sm font-medium text-ink shadow-2xs">
+                <UserIcon width={18} height={18} className="shrink-0 text-ink" />
+                <span
+                  className="max-w-[85px] sm:max-w-[110px] truncate"
+                  title={currentUser.firstName}
+                >
+                  {currentUser.firstName}
+                </span>
+              </div>
+
+              {/* Logout Button in place of Join Sidra */}
+              <button
+                type="button"
+                onClick={() => {
+                  logout();
+                  onClose();
+                }}
+                className="flex h-11 cursor-pointer items-center justify-center rounded-full bg-ink text-sm font-medium text-white transition-colors hover:bg-ink-soft active:scale-[0.99]"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <Link
+                href="/sign-in"
+                onClick={onClose}
+                className="flex h-11 cursor-pointer items-center justify-center rounded-full border border-ink text-sm text-ink"
+              >
+                Sign in
+              </Link>
+              <Link
+                href="/create-account"
+                onClick={onClose}
+                className="flex h-11 cursor-pointer items-center justify-center rounded-full bg-ink text-sm text-white"
+              >
+                Join Sidra
+              </Link>
+            </>
+          )}
         </div>
       </aside>
     </div>

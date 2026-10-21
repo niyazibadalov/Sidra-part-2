@@ -3,6 +3,8 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 import { TopBar } from "../layout/TopBar";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -22,6 +24,7 @@ import {
   ArrowLeftIcon,
 } from "@/components/Icons";
 import signInHeroImg from "@/app/images/signInHero.png";
+import heroSecImg from "@/app/images/heroSecImg.jpeg";
 
 const TRUST_BADGES = [
   {
@@ -47,21 +50,40 @@ const TRUST_BADGES = [
 ];
 
 export function SignInPage() {
+  const router = useRouter();
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [submittedMessage, setSubmittedMessage] = useState<string | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!email.trim() || !password) {
+      setError("Please enter your email and password.");
+      return;
+    }
+
+    setError(null);
     setIsLoading(true);
-    // Simulated sign in experience
+
     setTimeout(() => {
+      const result = login(email, password);
       setIsLoading(false);
-      setSubmittedMessage("Welcome back! Redirecting to your account...");
-    }, 800);
+
+      if (!result.success) {
+        setError(result.error || "Invalid credentials.");
+        return;
+      }
+
+      setSubmittedMessage(`Welcome back, ${result.user?.firstName}! Redirecting...`);
+      setTimeout(() => {
+        router.push("/");
+      }, 700);
+    }, 500);
   };
 
   return (
@@ -70,7 +92,48 @@ export function SignInPage() {
       <Header />
 
       <main className="flex-1 bg-[#fcfaf7]">
-        {/* Main 2-Column 50/50 Split Section within standard max-w-[1440px] layout */}
+        {/* ====================================================== */}
+        {/* MOBILE & TABLET TOP HERO BANNER STRIP (lg:hidden)      */}
+        {/* ====================================================== */}
+        <div className="relative w-full overflow-hidden border-b border-line/70 bg-cream-100 min-h-[115px] sm:min-h-[155px] md:min-h-[175px] lg:hidden">
+          <Image
+            src={heroSecImg}
+            alt="Sidra Fine Jewellery"
+            fill
+            priority
+            className="object-cover object-right sm:object-center"
+          />
+          {/* Soft gradient wash from left for crisp typography contrast */}
+          <div className="absolute inset-0 bg-gradient-to-r from-cream-50/95 via-cream-50/75 to-transparent sm:from-cream-50/90 sm:via-cream-50/50 pointer-events-none" />
+
+          {/* Banner Content Container aligned with site container */}
+          <div className="relative z-10 mx-auto max-w-[1440px] px-5 sm:px-8 py-4 sm:py-6 flex items-center h-full min-h-[115px] sm:min-h-[155px] md:min-h-[175px]">
+            {/* Mobile Text (visible on < sm / < 640px) */}
+            <div className="sm:hidden max-w-[210px]">
+              <h2 className="font-serif text-[19px] font-normal text-ink leading-tight">
+                Welcome Back
+              </h2>
+              <p className="mt-1 text-[11px] text-ink-soft leading-snug">
+                Your next favourite piece is waiting.
+              </p>
+            </div>
+
+            {/* Tablet Text (visible on sm: & md: / 640px to 1023px) */}
+            <div className="hidden sm:block max-w-sm">
+              <p className="font-script text-2xl md:text-3xl text-ink font-medium leading-tight -rotate-1 select-none">
+                A More<br />Beautiful Tomorrow
+              </p>
+              <p className="mt-2 text-[12px] md:text-[12.5px] text-ink-soft flex items-center gap-1.5 font-medium">
+                <span className="inline-block w-4 h-px bg-ink/40" />
+                <span>Sign in and continue your jewellery journey.</span>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* ====================================================== */}
+        {/* MAIN SIGN IN SECTION (Desktop 50/50 Split & Mobile Form)*/}
+        {/* ====================================================== */}
         <section className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 xl:gap-14 items-stretch">
             {/* ====================================================== */}
@@ -181,8 +244,8 @@ export function SignInPage() {
 
                 {/* Wishlist Notice Box */}
                 <div className="my-5 flex items-start gap-3 rounded-xl border border-[#ebdccb] bg-[#fbf5ee] p-3.5 sm:p-4 text-ink shadow-2xs">
-                  <div className="grid size-9 shrink-0 place-items-center rounded-lg bg-white/90 border border-[#e5d6c5] text-ink shadow-2xs">
-                    <BagIcon width={18} height={18} className="stroke-[1.4]" />
+                  <div className="grid size-9 shrink-0 place-items-center text-ink shadow-2xs">
+                    <BagIcon width={25} height={25} className="stroke-[1.4]" />
                   </div>
                   <div className="text-[12.5px] sm:text-[13px] leading-snug">
                     <p className="font-semibold text-ink">
@@ -193,6 +256,12 @@ export function SignInPage() {
                     </p>
                   </div>
                 </div>
+
+                {error && (
+                  <div className="mb-4 rounded-lg bg-red-50 border border-red-200/80 p-3 text-[13px] font-medium text-red-700">
+                    {error}
+                  </div>
+                )}
 
                 {submittedMessage && (
                   <div className="mb-4 rounded-lg bg-emerald-50 border border-emerald-200/80 p-3 text-[13px] font-medium text-emerald-800">
@@ -325,7 +394,7 @@ export function SignInPage() {
                 <div className="mt-7 text-center">
                   <p className="text-[12.5px] text-muted mb-2">New to Sidra?</p>
                   <Link
-                    href="/join"
+                    href="/create-account"
                     className="inline-flex w-full items-center justify-center rounded-lg border border-line bg-white py-2.5 px-4 text-[13px] font-semibold text-ink shadow-2xs hover:bg-cream-50 hover:border-ink/40 transition-all cursor-pointer"
                   >
                     Create Account
@@ -335,7 +404,7 @@ export function SignInPage() {
                 {/* Security Note Card */}
                 <div className="mt-7 flex items-start gap-3 rounded-xl border border-[#ebdccb] bg-[#fbf5ee] p-3.5 sm:p-4 text-ink shadow-2xs">
                   <div className="text-ink mt-0.5 shrink-0">
-                    <ShieldCheckIcon width={20} height={20} className="stroke-[1.5]" />
+                    <ShieldCheckIcon width={25} height={25} className="stroke-[1.5]" />
                   </div>
                   <div className="text-[12px] leading-relaxed">
                     <p className="font-semibold text-ink">Your security matters</p>
@@ -350,30 +419,34 @@ export function SignInPage() {
           </div>
         </section>
 
-        {/* 4 Trust Badges Directly Above Footer with clean top divider */}
+        {/* ====================================================== */}
+        {/* 4 TRUST BADGES DIRECTLY ABOVE FOOTER                   */}
+        {/* Visible on Tablet (md:) & Desktop (lg:) in 1 row (4-col)*/}
+        {/* Hidden on Phone (< md / < 768px)                       */}
+        {/* ====================================================== */}
         <section
           aria-label="Buyer protection and guarantees"
-          className="mx-auto max-w-[1440px] px-4 py-8 sm:px-6 lg:px-10 lg:py-10 border-t border-line/60"
+          className="hidden md:block mx-auto max-w-[1440px] px-4 py-8 sm:px-6 lg:px-10 lg:py-10 border-t border-line/60"
         >
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
+          <div className="grid grid-cols-4 gap-3 sm:gap-4 lg:gap-8">
             {TRUST_BADGES.map((badge) => {
               const Icon = badge.icon;
               return (
                 <div
                   key={badge.title}
-                  className="flex items-center justify-start gap-3.5 sm:justify-center"
+                  className="flex items-center justify-start gap-2.5 sm:gap-3 lg:justify-center"
                 >
                   <Icon
-                    width={26}
-                    height={26}
+                    width={24}
+                    height={24}
                     strokeWidth={1.4}
-                    className="shrink-0 text-ink sm:size-6"
+                    className="shrink-0 text-ink sm:size-6 lg:size-6"
                   />
-                  <div>
-                    <p className="text-[14px] font-semibold text-ink sm:text-[14.5px]">
+                  <div className="min-w-0">
+                    <p className="text-[12px] sm:text-[13px] lg:text-[14px] font-semibold text-ink truncate md:whitespace-normal">
                       {badge.title}
                     </p>
-                    <p className="mt-0.5 text-[12px] text-muted sm:text-[12.5px]">
+                    <p className="mt-0.5 text-[10.5px] sm:text-[11.5px] lg:text-[12px] text-muted truncate md:whitespace-normal">
                       {badge.subtitle}
                     </p>
                   </div>

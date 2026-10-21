@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { DM_Serif_Display, Inter, Nothing_You_Could_Do } from "next/font/google";
 import "./globals.css";
 import { CartWishlistProvider } from "@/context/CartWishlistContext";
+import { AuthProvider } from "@/context/AuthContext";
 import { Toast } from "@/components/common/Toast";
 
 const inter = Inter({
@@ -34,10 +35,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${inter.variable} ${display.variable} ${hand.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col font-sans">
-        <CartWishlistProvider>
-          {children}
-          <Toast />
-        </CartWishlistProvider>
+        <AuthProvider>
+          <CartWishlistProvider>
+            {children}
+            <Toast />
+          </CartWishlistProvider>
+        </AuthProvider>
       </body>
     </html>
   );
