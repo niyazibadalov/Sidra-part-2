@@ -201,7 +201,7 @@ export function CreateAccountPage() {
         {/* ====================================================== */}
         {/* MAIN 50/50 SPLIT SECTION                               */}
         {/* ====================================================== */}
-        <section className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10 py-6 sm:py-8 lg:py-12">
+        <section className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10 py-6 sm:py-8 lg:pt-0 lg:pb-12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 xl:gap-14 items-stretch">
             {/* ====================================================== */}
             {/* LEFT COLUMN: Hero Banner with Image (Exact 50% split)  */}
@@ -235,7 +235,7 @@ export function CreateAccountPage() {
                 <div className="mt-10 space-y-5">
                   {/* 1. Wishlist */}
                   <div className="flex items-center gap-3.5">
-                    <div className="grid size-11 shrink-0 place-items-center rounded-full border border-[#ebdccb] bg-white/80 backdrop-blur-xs text-ink shadow-2xs">
+                    <div className="grid size-11 shrink-0 place-items-center rounded-full border border-white/90 bg-[#dfd2c2]/85 backdrop-blur-xs text-ink shadow-2xs">
                       <HeartIcon width={19} height={19} className="stroke-[1.5]" />
                     </div>
                     <div className="text-[12.5px] xl:text-[13px] leading-snug">
@@ -246,7 +246,7 @@ export function CreateAccountPage() {
 
                   {/* 2. Orders */}
                   <div className="flex items-center gap-3.5">
-                    <div className="grid size-11 shrink-0 place-items-center rounded-full border border-[#ebdccb] bg-white/80 backdrop-blur-xs text-ink shadow-2xs">
+                    <div className="grid size-11 shrink-0 place-items-center rounded-full border border-white/90 bg-[#dfd2c2]/85 backdrop-blur-xs text-ink shadow-2xs">
                       <LockIcon width={19} height={19} className="stroke-[1.5]" />
                     </div>
                     <div className="text-[12.5px] xl:text-[13px] leading-snug">
@@ -257,7 +257,7 @@ export function CreateAccountPage() {
 
                   {/* 3. Checkout */}
                   <div className="flex items-center gap-3.5">
-                    <div className="grid size-11 shrink-0 place-items-center rounded-full border border-[#ebdccb] bg-white/80 backdrop-blur-xs text-ink shadow-2xs">
+                    <div className="grid size-11 shrink-0 place-items-center rounded-full border border-white/90 bg-[#dfd2c2]/85 backdrop-blur-xs text-ink shadow-2xs">
                       <UserIcon width={19} height={19} className="stroke-[1.5]" />
                     </div>
                     <div className="text-[12.5px] xl:text-[13px] leading-snug">
@@ -268,7 +268,7 @@ export function CreateAccountPage() {
 
                   {/* 4. Returns */}
                   <div className="flex items-center gap-3.5">
-                    <div className="grid size-11 shrink-0 place-items-center rounded-full border border-[#ebdccb] bg-white/80 backdrop-blur-xs text-ink shadow-2xs">
+                    <div className="grid size-11 shrink-0 place-items-center rounded-full border border-white/90 bg-[#dfd2c2]/85 backdrop-blur-xs text-ink shadow-2xs">
                       <RefreshArrowsIcon width={19} height={19} className="stroke-[1.5]" />
                     </div>
                     <div className="text-[12.5px] xl:text-[13px] leading-snug">
@@ -353,7 +353,7 @@ export function CreateAccountPage() {
                             setFirstName(e.target.value);
                             if (error) setError(null);
                           }}
-                          placeholder="Huseyn"
+                          placeholder="Farid"
                           className="w-full rounded-lg border border-line bg-white px-3.5 py-2.5 text-[13.5px] text-ink placeholder:text-muted focus:border-ink focus:outline-none transition-colors shadow-2xs"
                         />
                       </div>
@@ -373,7 +373,7 @@ export function CreateAccountPage() {
                             setLastName(e.target.value);
                             if (error) setError(null);
                           }}
-                          placeholder="Ahmadov"
+                          placeholder="Aliyev"
                           className="w-full rounded-lg border border-line bg-white px-3.5 py-2.5 text-[13.5px] text-ink placeholder:text-muted focus:border-ink focus:outline-none transition-colors shadow-2xs"
                         />
                       </div>

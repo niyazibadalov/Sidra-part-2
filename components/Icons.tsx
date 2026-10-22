@@ -725,3 +725,35 @@ export const AlertTriangleIcon = (p: IconProps) => (
     <line x1="12" y1="17" x2="12.01" y2="17" />
   </Icon>
 );
+
+export const PaperPlaneIcon = (p: IconProps) => (
+  <Icon {...p}>
+    <path d="m22 2-7 20-4-9-9-4Z" />
+    <path d="M22 2 11 13" />
+  </Icon>
+);
+
+export const PaperPlaneSolidIcon = (p: SVGProps<SVGSVGElement>) => (
+  <svg
+    viewBox="0 0 24 24"
+    width={28}
+    height={28}
+    aria-hidden="true"
+    {...p}
+  >
+    <path
+      fill="#435946"
+      d="M21.88 2.15a1 1 0 0 0-1.07-.22L2.4 8.7a1 1 0 0 0-.1 1.83l6.54 3.48 3.48 6.54a1 1 0 0 0 1.83-.1l6.77-18.41a1 1 0 0 0-.04-.89Z"
+    />
+    <path
+      fill="#29392b"
+      opacity="0.35"
+      d="M10.27 13.73l-1.43 5.48a.5.5 0 0 0 .86.42l3.22-3.22-2.65-2.68Z"
+    />
+    <path
+      fill="#ffffff"
+      opacity="0.2"
+      d="M21.88 2.15L8.84 14.01l-6.54-3.48a1 1 0 0 1 .1-1.83l18.41-6.77a1 1 0 0 1 1.07.22Z"
+    />
+  </svg>
+);
