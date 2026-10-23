@@ -655,13 +655,13 @@ export function BagPage() {
                           </div>
 
                           {/* Proceed to Checkout CTA Button */}
-                          <button
-                            type="button"
+                          <Link
+                            href="/checkout"
                             className="w-full flex items-center justify-center gap-2 rounded-xl bg-ink py-3.5 text-[14px] font-semibold text-white shadow-md transition-all hover:bg-ink-soft active:scale-[0.99] cursor-pointer"
                           >
                             <span>Proceed to Checkout</span>
                             <ArrowRightIcon width={14} height={14} />
-                          </button>
+                          </Link>
                         </div>
                       )}
                     </div>
@@ -755,13 +755,13 @@ export function BagPage() {
                     </div>
 
                     {/* Proceed to Checkout CTA Button */}
-                    <button
-                      type="button"
+                    <Link
+                      href="/checkout"
                       className="w-full flex items-center justify-center gap-2 rounded-lg bg-ink py-3.5 text-[13.5px] font-semibold text-white shadow-md transition-all hover:bg-ink-soft active:scale-[0.99] cursor-pointer"
                     >
                       <span>Proceed to Checkout</span>
                       <ArrowRightIcon width={14} height={14} />
-                    </button>
+                    </Link>
 
                     {/* 4 Trust Items under Checkout */}
                     <div className="space-y-3.5 pt-4 border-t border-line/40">
