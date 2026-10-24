@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { TopBar } from "../layout/TopBar";
@@ -20,8 +20,10 @@ import {
   InfoIcon,
   PackageIcon,
 } from "@/components/Icons";
+import { useCartWishlist, ProductItem } from "@/context/CartWishlistContext";
 
 import ring1 from "@/app/images/ring1.png";
+import ring2 from "@/app/images/ring2.png";
 import ring3 from "@/app/images/ring3.png";
 import pearis from "@/app/images/pearis.png";
 
@@ -47,7 +49,7 @@ function CalendarIcon({ className = "w-4 h-4", ...props }: React.SVGProps<SVGSVG
   );
 }
 
-// Shipping method definitions
+// Shipping method definition
 type ShippingOption = {
   id: string;
   name: string;
@@ -58,100 +60,361 @@ type ShippingOption = {
   statusText: string;
 };
 
-const SELLER_1_SHIPPING: ShippingOption[] = [
+// Seller Profiles pool
+const SELLER_TEMPLATES = [
   {
-    id: "s1-yurtici",
-    name: "Yurtiçi Kargo – Standart",
-    duration: "3 – 5 business days",
-    price: 25,
-    tracking: true,
-    status: "pending",
-    statusText: "Coverage verification pending",
+    id: "seller-lumea",
+    name: "Lumea Jewellery",
+    avatarInitial: "L",
+    rating: 4.8,
+    reviewsCount: "1.2K",
+    location: "Istanbul, Türkiye",
+    shippingOptions: [
+      {
+        id: "opt-yurtici",
+        name: "Yurtiçi Kargo – Standart",
+        duration: "3 – 5 business days",
+        price: 25,
+        tracking: true,
+        status: "pending" as const,
+        statusText: "Coverage verification pending",
+      },
+      {
+        id: "opt-aras",
+        name: "Aras Kargo – Hızlı",
+        duration: "1 – 2 business days",
+        price: 45,
+        tracking: true,
+        status: "confirmed" as const,
+        statusText: "Insurance confirmed",
+      },
+      {
+        id: "opt-ups",
+        name: "UPS Türkiye – Ekspres",
+        duration: "1 – 2 business days",
+        price: 70,
+        tracking: true,
+        status: "confirmed" as const,
+        statusText: "Insurance confirmed",
+      },
+    ],
   },
   {
-    id: "s1-aras",
-    name: "Aras Kargo – Hızlı",
-    duration: "1 – 2 business days",
-    price: 45,
-    tracking: true,
-    status: "confirmed",
-    statusText: "Insurance confirmed",
+    id: "seller-aurora",
+    name: "Aurora Jewellery",
+    avatarInitial: "A",
+    rating: 4.7,
+    reviewsCount: "860",
+    location: "Ankara, Türkiye",
+    shippingOptions: [
+      {
+        id: "opt-mng",
+        name: "MNG Kargo – Standart",
+        duration: "3 – 5 business days",
+        price: 20,
+        tracking: true,
+        status: "pending" as const,
+        statusText: "Coverage verification pending",
+      },
+      {
+        id: "opt-aras",
+        name: "Aras Kargo – Hızlı",
+        duration: "1 – 3 business days",
+        price: 40,
+        tracking: true,
+        status: "confirmed" as const,
+        statusText: "Insurance confirmed",
+      },
+      {
+        id: "opt-ups",
+        name: "UPS Türkiye – Ekspres",
+        duration: "1 – 2 business days",
+        price: 65,
+        tracking: true,
+        status: "confirmed" as const,
+        statusText: "Insurance confirmed",
+      },
+    ],
   },
   {
-    id: "s1-ups",
-    name: "UPS Türkiye – Ekspres",
-    duration: "1 – 2 business days",
-    price: 70,
-    tracking: true,
-    status: "confirmed",
-    statusText: "Insurance confirmed",
+    id: "seller-eclat",
+    name: "Éclat Atelier",
+    avatarInitial: "E",
+    rating: 4.9,
+    reviewsCount: "2.1K",
+    location: "Izmir, Türkiye",
+    shippingOptions: [
+      {
+        id: "opt-yurtici",
+        name: "Yurtiçi Kargo – Standart",
+        duration: "3 – 5 business days",
+        price: 25,
+        tracking: true,
+        status: "pending" as const,
+        statusText: "Coverage verification pending",
+      },
+      {
+        id: "opt-aras",
+        name: "Aras Kargo – Hızlı",
+        duration: "1 – 2 business days",
+        price: 45,
+        tracking: true,
+        status: "confirmed" as const,
+        statusText: "Insurance confirmed",
+      },
+      {
+        id: "opt-ups",
+        name: "UPS Türkiye – Ekspres",
+        duration: "1 – 2 business days",
+        price: 75,
+        tracking: true,
+        status: "confirmed" as const,
+        statusText: "Insurance confirmed",
+      },
+    ],
+  },
+  {
+    id: "seller-volana",
+    name: "Volana Fine Studio",
+    avatarInitial: "V",
+    rating: 4.8,
+    reviewsCount: "940",
+    location: "Bursa, Türkiye",
+    shippingOptions: [
+      {
+        id: "opt-mng",
+        name: "MNG Kargo – Standart",
+        duration: "3 – 5 business days",
+        price: 20,
+        tracking: true,
+        status: "pending" as const,
+        statusText: "Coverage verification pending",
+      },
+      {
+        id: "opt-aras",
+        name: "Aras Kargo – Hızlı",
+        duration: "1 – 2 business days",
+        price: 40,
+        tracking: true,
+        status: "confirmed" as const,
+        statusText: "Insurance confirmed",
+      },
+      {
+        id: "opt-ups",
+        name: "UPS Türkiye – Ekspres",
+        duration: "1 – 2 business days",
+        price: 65,
+        tracking: true,
+        status: "confirmed" as const,
+        statusText: "Insurance confirmed",
+      },
+    ],
   },
 ];
 
-const SELLER_2_SHIPPING: ShippingOption[] = [
+type DeliveryItem = {
+  id: string;
+  name: string;
+  brand?: string;
+  price: number;
+  specs?: string;
+  image: any;
+  quantity?: number;
+};
+
+// Default items if cart is empty
+const DEFAULT_DELIVERY_ITEMS: DeliveryItem[] = [
   {
-    id: "s2-mng",
-    name: "MNG Kargo – Standart",
-    duration: "3 – 5 business days",
-    price: 20,
-    tracking: true,
-    status: "pending",
-    statusText: "Coverage verification pending",
+    id: "deliv-item-1",
+    name: "Solitaire Diamond Ring",
+    brand: "Lumea Jewellery",
+    price: 1250,
+    specs: "18K Gold • Size: 52",
+    image: ring1,
+    quantity: 1,
   },
   {
-    id: "s2-aras",
-    name: "Aras Kargo – Hızlı",
-    duration: "1 – 3 business days",
-    price: 40,
-    tracking: true,
-    status: "confirmed",
-    statusText: "Insurance confirmed",
+    id: "deliv-item-2",
+    name: "Malachite Clover Necklace",
+    brand: "Lumea Jewellery",
+    price: 1420,
+    specs: "18K Gold • 42 cm",
+    image: ring3,
+    quantity: 1,
   },
   {
-    id: "s2-ups",
-    name: "UPS Türkiye – Ekspres",
-    duration: "1 – 2 business days",
-    price: 65,
-    tracking: true,
-    status: "confirmed",
-    statusText: "Insurance confirmed",
+    id: "deliv-item-3",
+    name: "Pearl Drop Earrings",
+    brand: "Aurora Jewellery",
+    price: 975,
+    specs: "18K Gold • Natural Pearls",
+    image: pearis,
+    quantity: 1,
   },
 ];
 
 export function DeliveryPage() {
+  const { cart } = useCartWishlist();
+
   // Alert banner state
   const [showAlert, setShowAlert] = useState(true);
 
-  // Accordion collapse state for sellers
-  const [isSeller1Open, setIsSeller1Open] = useState(true);
-  const [isSeller2Open, setIsSeller2Open] = useState(true);
+  // Raw base items from cart (or defaults)
+  const baseItems: DeliveryItem[] = useMemo(() => {
+    if (cart && cart.length > 0) {
+      return cart.map((c) => ({
+        id: c.id,
+        name: c.name,
+        brand: c.brand,
+        price: c.price,
+        specs: c.specs || c.metal || "18K Fine Gold",
+        image: c.image || ring1,
+        quantity: c.quantity || 1,
+      }));
+    }
+    return DEFAULT_DELIVERY_ITEMS;
+  }, [cart]);
 
-  // Dynamic Quantities for products
-  const [qtyRing, setQtyRing] = useState(1);
-  const [qtyNecklace, setQtyNecklace] = useState(1);
-  const [qtyEarrings, setQtyEarrings] = useState(1);
+  // Stepper quantity state (per item id)
+  const [quantities, setQuantities] = useState<Record<string, number>>(() => {
+    const initial: Record<string, number> = {};
+    baseItems.forEach((item) => {
+      initial[item.id] = item.quantity || 1;
+    });
+    return initial;
+  });
 
-  // Selected shipping methods
-  const [seller1Method, setSeller1Method] = useState("s1-yurtici");
-  const [seller2Method, setSeller2Method] = useState("s2-mng");
+  const handleQtyChange = (id: string, qty: number) => {
+    setQuantities((prev) => ({ ...prev, [id]: qty }));
+  };
 
-  // Selected shipping fee calculations
-  const selectedS1Option = SELLER_1_SHIPPING.find((o) => o.id === seller1Method) || SELLER_1_SHIPPING[0];
-  const selectedS2Option = SELLER_2_SHIPPING.find((o) => o.id === seller2Method) || SELLER_2_SHIPPING[0];
+  // Group items into seller blocks (MAX 3 items per seller block!)
+  // If more items arrive, dynamically generate another seller block!
+  const sellerGroups = useMemo(() => {
+    const chunks: Array<{
+      seller: (typeof SELLER_TEMPLATES)[0];
+      items: DeliveryItem[];
+    }> = [];
 
-  const deliveryFee1 = selectedS1Option.price;
-  const deliveryFee2 = selectedS2Option.price;
+    // If using default items, maintain the exact 2-and-1 layout from design:
+    if (baseItems === DEFAULT_DELIVERY_ITEMS) {
+      chunks.push({
+        seller: SELLER_TEMPLATES[0], // Lumea Jewellery
+        items: [DEFAULT_DELIVERY_ITEMS[0], DEFAULT_DELIVERY_ITEMS[1]],
+      });
+      chunks.push({
+        seller: SELLER_TEMPLATES[1], // Aurora Jewellery
+        items: [DEFAULT_DELIVERY_ITEMS[2]],
+      });
+      return chunks;
+    }
 
-  // Price calculations
-  const priceRing = 1250;
-  const priceNecklace = 1420;
-  const priceEarrings = 975;
+    // Dynamic chunking: max 3 items per seller block
+    const maxPerBlock = 3;
+    for (let i = 0; i < baseItems.length; i += maxPerBlock) {
+      const slice = baseItems.slice(i, i + maxPerBlock);
+      const templateIdx = Math.floor(i / maxPerBlock) % SELLER_TEMPLATES.length;
+      const baseTemplate = SELLER_TEMPLATES[templateIdx];
+      chunks.push({
+        seller: {
+          ...baseTemplate,
+          id: `${baseTemplate.id}-${Math.floor(i / maxPerBlock)}`,
+        },
+        items: slice,
+      });
+    }
 
-  const totalItemCount = qtyRing + qtyNecklace + qtyEarrings;
-  const subtotal = priceRing * qtyRing + priceNecklace * qtyNecklace + priceEarrings * qtyEarrings;
+    return chunks;
+  }, [baseItems]);
+
+  // Selected shipping options per seller
+  const [selectedShipping, setSelectedShipping] = useState<Record<string, string>>({});
+
+  // Accordion collapsed state per seller
+  const [collapsedSellers, setCollapsedSellers] = useState<Record<string, boolean>>({});
+
+  const toggleSellerCollapse = (sellerId: string) => {
+    setCollapsedSellers((prev) => ({ ...prev, [sellerId]: !prev[sellerId] }));
+  };
+
+  const handleSelectShipping = (sellerId: string, optionId: string) => {
+    setSelectedShipping((prev) => ({ ...prev, [sellerId]: optionId }));
+  };
+
+  // Calculations
+  const totalItemCount = baseItems.reduce(
+    (sum, item) => sum + (quantities[item.id] ?? item.quantity ?? 1),
+    0
+  );
+
+  const subtotal = baseItems.reduce((sum, item) => {
+    const q = quantities[item.id] ?? item.quantity ?? 1;
+    return sum + item.price * q;
+  }, 0);
+
+  // Compute shipping fee per seller
+  const sellerShippingFees = useMemo(() => {
+    const map: Record<string, { sellerName: string; fee: number }> = {};
+    sellerGroups.forEach((group) => {
+      const chosenOptId = selectedShipping[group.seller.id] || group.seller.shippingOptions[0].id;
+      const opt =
+        group.seller.shippingOptions.find((o) => o.id === chosenOptId) ||
+        group.seller.shippingOptions[0];
+      map[group.seller.id] = {
+        sellerName: group.seller.name,
+        fee: opt.price,
+      };
+    });
+    return map;
+  }, [sellerGroups, selectedShipping]);
+
+  const totalDeliveryFees = Object.values(sellerShippingFees).reduce(
+    (sum, s) => sum + s.fee,
+    0
+  );
+
   const discount = 150;
   const tax = Math.round(subtotal * 0.08); // 8% estimated tax
-  const total = Math.max(0, subtotal + deliveryFee1 + deliveryFee2 - discount + tax);
+  const total = Math.max(0, subtotal + totalDeliveryFees - discount + tax);
+
+  // Sync delivery summary to localStorage for the Payment page
+  useEffect(() => {
+    try {
+      const summaryPayload = {
+        sellers: sellerGroups.map((group) => {
+          const chosenOptId =
+            selectedShipping[group.seller.id] || group.seller.shippingOptions[0].id;
+          const opt =
+            group.seller.shippingOptions.find((o) => o.id === chosenOptId) ||
+            group.seller.shippingOptions[0];
+          const itemsSubtotal = group.items.reduce((acc, curr) => {
+            const q = quantities[curr.id] ?? curr.quantity ?? 1;
+            return acc + curr.price * q;
+          }, 0);
+          return {
+            sellerId: group.seller.id,
+            sellerName: group.seller.name,
+            avatarInitial: group.seller.avatarInitial,
+            shippingName: opt.name,
+            deliveryFee: opt.price,
+            itemsSubtotal,
+            tax: Math.round(itemsSubtotal * 0.2),
+            items: group.items.map((it) => ({
+              id: it.id,
+              name: it.name,
+              brand: group.seller.name,
+              price: it.price,
+              specs: it.specs,
+              quantity: quantities[it.id] ?? it.quantity ?? 1,
+            })),
+          };
+        }),
+      };
+      localStorage.setItem("sidra_delivery_summary", JSON.stringify(summaryPayload));
+    } catch {
+      // ignore
+    }
+  }, [sellerGroups, selectedShipping, quantities]);
 
   return (
     <>
@@ -231,7 +494,7 @@ export function DeliveryPage() {
             {/* LEFT COLUMN: Multi-seller Shipping Options (8 cols)    */}
             {/* ====================================================== */}
             <div className="lg:col-span-8 space-y-6">
-              {/* Notice Alert Banner */}
+              {/* Notice Alert Banner (Dynamic Seller Count) */}
               {showAlert && (
                 <div className="rounded-2xl border border-[#f2ded1] bg-[#fef7f2] p-4 sm:p-5 flex items-start justify-between gap-4 shadow-2xs transition-all">
                   <div className="flex items-start gap-3.5">
@@ -240,7 +503,7 @@ export function DeliveryPage() {
                     </div>
                     <div>
                       <h3 className="font-semibold text-ink text-[13.5px] sm:text-[14px]">
-                        Your order contains items from 2 different sellers.
+                        Your order contains items from {sellerGroups.length} different {sellerGroups.length === 1 ? "seller" : "sellers"}.
                       </h3>
                       <p className="text-[12px] sm:text-[12.5px] text-ink-soft mt-1 leading-relaxed">
                         Items will be shipped separately and may arrive on different dates. You can track each shipment individually.
@@ -260,435 +523,218 @@ export function DeliveryPage() {
               )}
 
               {/* ====================================================== */}
-              {/* SELLER GROUP 1: Lumea Jewellery                        */}
+              {/* DYNAMIC SELLER GROUPS (Max 3 items per seller block)    */}
               {/* ====================================================== */}
-              <div className="rounded-2xl border border-line/80 bg-white p-5 sm:p-6 shadow-2xs space-y-6">
-                {/* Seller Header */}
-                <div className="flex items-center justify-between border-b border-line/60 pb-4">
-                  <div className="flex items-center gap-3">
-                    {/* Seller Avatar */}
-                    <div className="size-10 rounded-full bg-cream-200 border border-line flex items-center justify-center font-serif font-bold text-ink text-sm">
-                      L
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <h2 className="font-semibold text-ink text-[15px]">
-                          Lumea Jewellery
-                        </h2>
-                        <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-medium text-emerald-700">
-                          <CheckIcon width={10} height={10} className="stroke-[2.5]" />
-                          <span>Verified Seller</span>
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-3 text-[11.5px] text-muted mt-0.5">
-                        <span className="flex items-center gap-1 text-amber-600 font-medium">
-                          <StarIcon width={12} height={12} className="fill-amber-500 text-amber-500" />
-                          <span>4.8</span>
-                          <span className="text-muted">(1.2K reviews)</span>
-                        </span>
-                        <span>•</span>
-                        <span className="flex items-center gap-1">
-                          <MapPinIcon width={11} height={11} />
-                          <span>Istanbul, Türkiye</span>
-                        </span>
-                      </div>
-                    </div>
-                  </div>
+              {sellerGroups.map((group) => {
+                const isCollapsed = !!collapsedSellers[group.seller.id];
+                const activeOptionId =
+                  selectedShipping[group.seller.id] || group.seller.shippingOptions[0].id;
 
-                  {/* Collapse Toggle */}
-                  <button
-                    type="button"
-                    onClick={() => setIsSeller1Open(!isSeller1Open)}
-                    className="flex items-center gap-1.5 text-[12.5px] font-medium text-ink-soft hover:text-ink transition-colors cursor-pointer"
+                return (
+                  <div
+                    key={group.seller.id}
+                    className="rounded-2xl border border-line/80 bg-white p-5 sm:p-6 shadow-2xs space-y-6"
                   >
-                    <span>2 items</span>
-                    <ChevronDownIcon
-                      width={16}
-                      height={16}
-                      className={`transition-transform duration-200 ${isSeller1Open ? "rotate-180" : ""}`}
-                    />
-                  </button>
-                </div>
-
-                {/* Seller Content Accordion */}
-                {isSeller1Open && (
-                  <div className="space-y-6">
-                    {/* 2-Column Inside Seller Card: Items Left, Delivery Right */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-                      {/* Products Left Column */}
-                      <div className="space-y-4">
-                        {/* Product 1: Solitaire Diamond Ring */}
-                        <div className="flex items-center justify-between gap-3.5 p-3.5 rounded-xl bg-[#fcfaf7] border border-line/60">
-                          <div className="flex items-center gap-3.5 min-w-0">
-                            {/* Enlarged image with NO padding */}
-                            <div className="relative size-20 sm:size-[84px] shrink-0 rounded-xl bg-[#f7f3ec] border border-line/40 overflow-hidden flex items-center justify-center">
-                              <Image
-                                src={ring1}
-                                alt="Solitaire Diamond Ring"
-                                fill
-                                sizes="90px"
-                                className="object-contain"
-                              />
-                            </div>
-
-                            <div className="min-w-0">
-                              <h4 className="text-[13.5px] font-semibold text-ink leading-snug">
-                                Solitaire Diamond Ring
-                              </h4>
-                              <p className="text-[11.5px] text-muted mt-0.5">
-                                18K Gold • Size: 52
-                              </p>
-                              <p className="font-semibold text-ink text-[14px] mt-1.5">
-                                ${priceRing.toLocaleString()}
-                              </p>
-                            </div>
-                          </div>
-
-                          {/* Stepper centered vertically */}
-                          <div className="flex items-center rounded-lg border border-line bg-white shadow-2xs shrink-0 self-center">
-                            <button
-                              type="button"
-                              onClick={() => setQtyRing((q) => Math.max(1, q - 1))}
-                              className="w-7 h-7 flex items-center justify-center text-muted hover:text-ink hover:bg-cream-100 transition-colors text-xs font-semibold cursor-pointer"
-                            >
-                              -
-                            </button>
-                            <span className="w-7 h-7 flex items-center justify-center text-xs font-semibold text-ink">
-                              {qtyRing}
-                            </span>
-                            <button
-                              type="button"
-                              onClick={() => setQtyRing((q) => q + 1)}
-                              className="w-7 h-7 flex items-center justify-center text-muted hover:text-ink hover:bg-cream-100 transition-colors text-xs font-semibold cursor-pointer"
-                            >
-                              +
-                            </button>
-                          </div>
+                    {/* Seller Header */}
+                    <div className="flex items-center justify-between border-b border-line/60 pb-4">
+                      <div className="flex items-center gap-3">
+                        {/* Seller Avatar */}
+                        <div className="size-10 rounded-full bg-cream-200 border border-line flex items-center justify-center font-serif font-bold text-ink text-sm">
+                          {group.seller.avatarInitial}
                         </div>
-
-                        {/* Product 2: Malachite Clover Necklace */}
-                        <div className="flex items-center justify-between gap-3.5 p-3.5 rounded-xl bg-[#fcfaf7] border border-line/60">
-                          <div className="flex items-center gap-3.5 min-w-0">
-                            {/* Enlarged image with NO padding */}
-                            <div className="relative size-20 sm:size-[84px] shrink-0 rounded-xl bg-[#f7f3ec] border border-line/40 overflow-hidden flex items-center justify-center">
-                              <Image
-                                src={ring3}
-                                alt="Malachite Clover Necklace"
-                                fill
-                                sizes="90px"
-                                className="object-contain"
-                              />
-                            </div>
-
-                            <div className="min-w-0">
-                              <h4 className="text-[13.5px] font-semibold text-ink leading-snug">
-                                Malachite Clover Necklace
-                              </h4>
-                              <p className="text-[11.5px] text-muted mt-0.5">
-                                18K Gold • 42 cm
-                              </p>
-                              <p className="font-semibold text-ink text-[14px] mt-1.5">
-                                ${priceNecklace.toLocaleString()}
-                              </p>
-                            </div>
-                          </div>
-
-                          {/* Stepper centered vertically */}
-                          <div className="flex items-center rounded-lg border border-line bg-white shadow-2xs shrink-0 self-center">
-                            <button
-                              type="button"
-                              onClick={() => setQtyNecklace((q) => Math.max(1, q - 1))}
-                              className="w-7 h-7 flex items-center justify-center text-muted hover:text-ink hover:bg-cream-100 transition-colors text-xs font-semibold cursor-pointer"
-                            >
-                              -
-                            </button>
-                            <span className="w-7 h-7 flex items-center justify-center text-xs font-semibold text-ink">
-                              {qtyNecklace}
+                        <div>
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <h2 className="font-semibold text-ink text-[15px]">
+                              {group.seller.name}
+                            </h2>
+                            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-medium text-emerald-700">
+                              <CheckIcon width={10} height={10} className="stroke-[2.5]" />
+                              <span>Verified Seller</span>
                             </span>
-                            <button
-                              type="button"
-                              onClick={() => setQtyNecklace((q) => q + 1)}
-                              className="w-7 h-7 flex items-center justify-center text-muted hover:text-ink hover:bg-cream-100 transition-colors text-xs font-semibold cursor-pointer"
-                            >
-                              +
-                            </button>
+                          </div>
+                          <div className="flex items-center gap-3 text-[11.5px] text-muted mt-0.5">
+                            <span className="flex items-center gap-1 text-amber-600 font-medium">
+                              <StarIcon width={12} height={12} className="fill-amber-500 text-amber-500" />
+                              <span>{group.seller.rating}</span>
+                              <span className="text-muted">({group.seller.reviewsCount} reviews)</span>
+                            </span>
+                            <span>•</span>
+                            <span className="flex items-center gap-1">
+                              <MapPinIcon width={11} height={11} />
+                              <span>{group.seller.location}</span>
+                            </span>
                           </div>
                         </div>
                       </div>
 
-                      {/* Delivery Options Right Column */}
-                      <div>
-                        <h4 className="text-[13px] font-semibold text-ink mb-2.5">
-                          Choose Delivery Method
-                        </h4>
+                      {/* Collapse Toggle */}
+                      <button
+                        type="button"
+                        onClick={() => toggleSellerCollapse(group.seller.id)}
+                        className="flex items-center gap-1.5 text-[12.5px] font-medium text-ink-soft hover:text-ink transition-colors cursor-pointer"
+                      >
+                        <span>
+                          {group.items.length} {group.items.length === 1 ? "item" : "items"}
+                        </span>
+                        <ChevronDownIcon
+                          width={16}
+                          height={16}
+                          className={`transition-transform duration-200 ${
+                            isCollapsed ? "" : "rotate-180"
+                          }`}
+                        />
+                      </button>
+                    </div>
 
-                        <div className="space-y-2.5">
-                          {SELLER_1_SHIPPING.map((opt) => {
-                            const isSelected = seller1Method === opt.id;
-                            return (
-                              <label
-                                key={opt.id}
-                                className={`flex items-start gap-3 p-3 rounded-xl border transition-all cursor-pointer ${
-                                  isSelected
-                                    ? "border-ink bg-cream-50/60 shadow-2xs"
-                                    : "border-line/70 bg-white hover:border-line hover:bg-cream-50/20"
-                                }`}
-                              >
-                                <input
-                                  type="radio"
-                                  name="seller1-shipping"
-                                  value={opt.id}
-                                  checked={isSelected}
-                                  onChange={() => setSeller1Method(opt.id)}
-                                  className="mt-1 size-4 accent-ink"
-                                />
+                    {/* Seller Content Accordion */}
+                    {!isCollapsed && (
+                      <div className="space-y-6">
+                        {/* 2-Column: Items Left, Delivery Right */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+                          {/* Products Left Column */}
+                          <div className="space-y-4">
+                            {group.items.map((item) => {
+                              const qty = quantities[item.id] ?? item.quantity ?? 1;
 
-                                <div className="flex-1 min-w-0">
-                                  <div className="flex items-center justify-between gap-2">
-                                    <span className="text-[13px] font-semibold text-ink">
-                                      {opt.name}
-                                    </span>
-                                    <span className="text-[13px] font-bold text-ink">
-                                      ${opt.price}
-                                    </span>
+                              return (
+                                <div
+                                  key={item.id}
+                                  className="flex items-center justify-between gap-3.5 p-3.5 rounded-xl bg-[#fcfaf7] border border-line/60"
+                                >
+                                  <div className="flex items-center gap-3.5 min-w-0">
+                                    {/* Enlarged image with NO padding */}
+                                    <div className="relative size-20 sm:size-[84px] shrink-0 rounded-xl bg-[#f7f3ec] border border-line/40 overflow-hidden flex items-center justify-center">
+                                      <Image
+                                        src={item.image}
+                                        alt={item.name}
+                                        fill
+                                        sizes="90px"
+                                        className="object-contain"
+                                      />
+                                    </div>
+
+                                    <div className="min-w-0">
+                                      <h4 className="text-[13.5px] font-semibold text-ink leading-snug line-clamp-1">
+                                        {item.name}
+                                      </h4>
+                                      <p className="text-[11.5px] text-muted mt-0.5">
+                                        {item.specs}
+                                      </p>
+                                      <p className="font-semibold text-ink text-[14px] mt-1.5">
+                                        ${item.price.toLocaleString()}
+                                      </p>
+                                    </div>
                                   </div>
 
-                                  <p className="text-[11.5px] text-muted mt-0.5">
-                                    {opt.duration}
-                                  </p>
-
-                                  <div className="flex items-center gap-2 mt-2 flex-wrap text-[11px]">
-                                    <span className="inline-flex items-center gap-1 rounded bg-cream-100/80 px-1.5 py-0.5 text-ink-soft">
-                                      <PackageIcon width={11} height={11} />
-                                      <span>Tracking available</span>
+                                  {/* Stepper centered vertically */}
+                                  <div className="flex items-center rounded-lg border border-line bg-white shadow-2xs shrink-0 self-center">
+                                    <button
+                                      type="button"
+                                      onClick={() => handleQtyChange(item.id, Math.max(1, qty - 1))}
+                                      className="w-7 h-7 flex items-center justify-center text-muted hover:text-ink hover:bg-cream-100 transition-colors text-xs font-semibold cursor-pointer"
+                                    >
+                                      -
+                                    </button>
+                                    <span className="w-7 h-7 flex items-center justify-center text-xs font-semibold text-ink">
+                                      {qty}
                                     </span>
-
-                                    {opt.status === "confirmed" ? (
-                                      <span className="inline-flex items-center gap-1 rounded bg-emerald-50 px-1.5 py-0.5 text-emerald-800 font-medium">
-                                        <CheckIcon width={10} height={10} className="stroke-[2.5]" />
-                                        <span>{opt.statusText}</span>
-                                      </span>
-                                    ) : (
-                                      <span className="inline-flex items-center gap-1 rounded bg-amber-50 px-1.5 py-0.5 text-amber-800 font-medium">
-                                        <ShieldCheckIcon width={11} height={11} />
-                                        <span>{opt.statusText}</span>
-                                      </span>
-                                    )}
+                                    <button
+                                      type="button"
+                                      onClick={() => handleQtyChange(item.id, qty + 1)}
+                                      className="w-7 h-7 flex items-center justify-center text-muted hover:text-ink hover:bg-cream-100 transition-colors text-xs font-semibold cursor-pointer"
+                                    >
+                                      +
+                                    </button>
                                   </div>
                                 </div>
-                              </label>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Estimated Delivery Notice Banner */}
-                    <div className="rounded-xl bg-[#fcf8f3] border border-[#ebdccb]/70 p-3.5 flex items-center gap-2.5 text-[12px] sm:text-[12.5px] text-ink-soft">
-                      <div className="text-[#a4532b] shrink-0">
-                        <CalendarIcon className="size-4" />
-                      </div>
-                      <span>
-                        Estimated delivery for this seller:{" "}
-                        <strong className="text-ink font-semibold">
-                          3 – 5 business days (Oct 15 – Oct 20, 2026)
-                        </strong>
-                      </span>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* ====================================================== */}
-              {/* SELLER GROUP 2: Aurora Jewellery                       */}
-              {/* ====================================================== */}
-              <div className="rounded-2xl border border-line/80 bg-white p-5 sm:p-6 shadow-2xs space-y-6">
-                {/* Seller Header */}
-                <div className="flex items-center justify-between border-b border-line/60 pb-4">
-                  <div className="flex items-center gap-3">
-                    {/* Seller Avatar */}
-                    <div className="size-10 rounded-full bg-cream-200 border border-line flex items-center justify-center font-serif font-bold text-ink text-sm">
-                      A
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <h2 className="font-semibold text-ink text-[15px]">
-                          Aurora Jewellery
-                        </h2>
-                        <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-medium text-emerald-700">
-                          <CheckIcon width={10} height={10} className="stroke-[2.5]" />
-                          <span>Verified Seller</span>
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-3 text-[11.5px] text-muted mt-0.5">
-                        <span className="flex items-center gap-1 text-amber-600 font-medium">
-                          <StarIcon width={12} height={12} className="fill-amber-500 text-amber-500" />
-                          <span>4.7</span>
-                          <span className="text-muted">(860 reviews)</span>
-                        </span>
-                        <span>•</span>
-                        <span className="flex items-center gap-1">
-                          <MapPinIcon width={11} height={11} />
-                          <span>Ankara, Türkiye</span>
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Collapse Toggle */}
-                  <button
-                    type="button"
-                    onClick={() => setIsSeller2Open(!isSeller2Open)}
-                    className="flex items-center gap-1.5 text-[12.5px] font-medium text-ink-soft hover:text-ink transition-colors cursor-pointer"
-                  >
-                    <span>1 item</span>
-                    <ChevronDownIcon
-                      width={16}
-                      height={16}
-                      className={`transition-transform duration-200 ${isSeller2Open ? "rotate-180" : ""}`}
-                    />
-                  </button>
-                </div>
-
-                {/* Seller Content Accordion */}
-                {isSeller2Open && (
-                  <div className="space-y-6">
-                    {/* 2-Column Inside Seller Card */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-                      {/* Products Left Column */}
-                      <div className="space-y-4">
-                        {/* Product 1: Pearl Drop Earrings */}
-                        <div className="flex items-center justify-between gap-3.5 p-3.5 rounded-xl bg-[#fcfaf7] border border-line/60">
-                          <div className="flex items-center gap-3.5 min-w-0">
-                            {/* Enlarged image with NO padding */}
-                            <div className="relative size-20 sm:size-[84px] shrink-0 rounded-xl bg-[#f7f3ec] border border-line/40 overflow-hidden flex items-center justify-center">
-                              <Image
-                                src={pearis}
-                                alt="Pearl Drop Earrings"
-                                fill
-                                sizes="90px"
-                                className="object-contain"
-                              />
-                            </div>
-
-                            <div className="min-w-0">
-                              <h4 className="text-[13.5px] font-semibold text-ink leading-snug">
-                                Pearl Drop Earrings
-                              </h4>
-                              <p className="text-[11.5px] text-muted mt-0.5">
-                                18K Gold • Natural Pearls
-                              </p>
-                              <p className="font-semibold text-ink text-[14px] mt-1.5">
-                                ${priceEarrings.toLocaleString()}
-                              </p>
-                            </div>
+                              );
+                            })}
                           </div>
 
-                          {/* Stepper centered vertically */}
-                          <div className="flex items-center rounded-lg border border-line bg-white shadow-2xs shrink-0 self-center">
-                            <button
-                              type="button"
-                              onClick={() => setQtyEarrings((q) => Math.max(1, q - 1))}
-                              className="w-7 h-7 flex items-center justify-center text-muted hover:text-ink hover:bg-cream-100 transition-colors text-xs font-semibold cursor-pointer"
-                            >
-                              -
-                            </button>
-                            <span className="w-7 h-7 flex items-center justify-center text-xs font-semibold text-ink">
-                              {qtyEarrings}
-                            </span>
-                            <button
-                              type="button"
-                              onClick={() => setQtyEarrings((q) => q + 1)}
-                              className="w-7 h-7 flex items-center justify-center text-muted hover:text-ink hover:bg-cream-100 transition-colors text-xs font-semibold cursor-pointer"
-                            >
-                              +
-                            </button>
+                          {/* Delivery Options Right Column */}
+                          <div>
+                            <h4 className="text-[13px] font-semibold text-ink mb-2.5">
+                              Choose Delivery Method
+                            </h4>
+
+                            <div className="space-y-2.5">
+                              {group.seller.shippingOptions.map((opt) => {
+                                const isSelected = activeOptionId === opt.id;
+                                return (
+                                  <label
+                                    key={opt.id}
+                                    className={`flex items-start gap-3 p-3 rounded-xl border transition-all cursor-pointer ${
+                                      isSelected
+                                        ? "border-ink bg-cream-50/60 shadow-2xs"
+                                        : "border-line/70 bg-white hover:border-line hover:bg-cream-50/20"
+                                    }`}
+                                  >
+                                    <input
+                                      type="radio"
+                                      name={`shipping-${group.seller.id}`}
+                                      value={opt.id}
+                                      checked={isSelected}
+                                      onChange={() => handleSelectShipping(group.seller.id, opt.id)}
+                                      className="mt-1 size-4 accent-ink"
+                                    />
+
+                                    <div className="flex-1 min-w-0">
+                                      <div className="flex items-center justify-between gap-2">
+                                        <span className="text-[13px] font-semibold text-ink">
+                                          {opt.name}
+                                        </span>
+                                        <span className="text-[13px] font-bold text-ink">
+                                          ${opt.price}
+                                        </span>
+                                      </div>
+
+                                      <p className="text-[11.5px] text-muted mt-0.5">
+                                        {opt.duration}
+                                      </p>
+
+                                      <div className="flex items-center gap-2 mt-2 flex-wrap text-[11px]">
+                                        <span className="inline-flex items-center gap-1 rounded bg-cream-100/80 px-1.5 py-0.5 text-ink-soft">
+                                          <PackageIcon width={11} height={11} />
+                                          <span>Tracking available</span>
+                                        </span>
+
+                                        {opt.status === "confirmed" ? (
+                                          <span className="inline-flex items-center gap-1 rounded bg-emerald-50 px-1.5 py-0.5 text-emerald-800 font-medium">
+                                            <CheckIcon width={10} height={10} className="stroke-[2.5]" />
+                                            <span>{opt.statusText}</span>
+                                          </span>
+                                        ) : (
+                                          <span className="inline-flex items-center gap-1 rounded bg-amber-50 px-1.5 py-0.5 text-amber-800 font-medium">
+                                            <ShieldCheckIcon width={11} height={11} />
+                                            <span>{opt.statusText}</span>
+                                          </span>
+                                        )}
+                                      </div>
+                                    </div>
+                                  </label>
+                                );
+                              })}
+                            </div>
                           </div>
                         </div>
-                      </div>
 
-                      {/* Delivery Options Right Column */}
-                      <div>
-                        <h4 className="text-[13px] font-semibold text-ink mb-2.5">
-                          Choose Delivery Method
-                        </h4>
-
-                        <div className="space-y-2.5">
-                          {SELLER_2_SHIPPING.map((opt) => {
-                            const isSelected = seller2Method === opt.id;
-                            return (
-                              <label
-                                key={opt.id}
-                                className={`flex items-start gap-3 p-3 rounded-xl border transition-all cursor-pointer ${
-                                  isSelected
-                                    ? "border-ink bg-cream-50/60 shadow-2xs"
-                                    : "border-line/70 bg-white hover:border-line hover:bg-cream-50/20"
-                                }`}
-                              >
-                                <input
-                                  type="radio"
-                                  name="seller2-shipping"
-                                  value={opt.id}
-                                  checked={isSelected}
-                                  onChange={() => setSeller2Method(opt.id)}
-                                  className="mt-1 size-4 accent-ink"
-                                />
-
-                                <div className="flex-1 min-w-0">
-                                  <div className="flex items-center justify-between gap-2">
-                                    <span className="text-[13px] font-semibold text-ink">
-                                      {opt.name}
-                                    </span>
-                                    <span className="text-[13px] font-bold text-ink">
-                                      ${opt.price}
-                                    </span>
-                                  </div>
-
-                                  <p className="text-[11.5px] text-muted mt-0.5">
-                                    {opt.duration}
-                                  </p>
-
-                                  <div className="flex items-center gap-2 mt-2 flex-wrap text-[11px]">
-                                    <span className="inline-flex items-center gap-1 rounded bg-cream-100/80 px-1.5 py-0.5 text-ink-soft">
-                                      <PackageIcon width={11} height={11} />
-                                      <span>Tracking available</span>
-                                    </span>
-
-                                    {opt.status === "confirmed" ? (
-                                      <span className="inline-flex items-center gap-1 rounded bg-emerald-50 px-1.5 py-0.5 text-emerald-800 font-medium">
-                                        <CheckIcon width={10} height={10} className="stroke-[2.5]" />
-                                        <span>{opt.statusText}</span>
-                                      </span>
-                                    ) : (
-                                      <span className="inline-flex items-center gap-1 rounded bg-amber-50 px-1.5 py-0.5 text-amber-800 font-medium">
-                                        <ShieldCheckIcon width={11} height={11} />
-                                        <span>{opt.statusText}</span>
-                                      </span>
-                                    )}
-                                  </div>
-                                </div>
-                              </label>
-                            );
-                          })}
+                        {/* Estimated Delivery Notice Banner */}
+                        <div className="rounded-xl bg-[#fcf8f3] border border-[#ebdccb]/70 p-3.5 flex items-center gap-2.5 text-[12px] sm:text-[12.5px] text-ink-soft">
+                          <div className="text-[#a4532b] shrink-0">
+                            <CalendarIcon className="size-4" />
+                          </div>
+                          <span>
+                            Estimated delivery for this seller:{" "}
+                            <strong className="text-ink font-semibold">
+                              3 – 5 business days (Oct 15 – Oct 20, 2026)
+                            </strong>
+                          </span>
                         </div>
                       </div>
-                    </div>
-
-                    {/* Estimated Delivery Notice Banner */}
-                    <div className="rounded-xl bg-[#fcf8f3] border border-[#ebdccb]/70 p-3.5 flex items-center gap-2.5 text-[12px] sm:text-[12.5px] text-ink-soft">
-                      <div className="text-[#a4532b] shrink-0">
-                        <CalendarIcon className="size-4" />
-                      </div>
-                      <span>
-                        Estimated delivery for this seller:{" "}
-                        <strong className="text-ink font-semibold">
-                          3 – 5 business days (Oct 15 – Oct 20, 2026)
-                        </strong>
-                      </span>
-                    </div>
+                    )}
                   </div>
-                )}
-              </div>
+                );
+              })}
 
               {/* Bottom Return to Cart Link (matching screenshot) */}
               <div className="pt-4">
@@ -705,7 +751,7 @@ export function DeliveryPage() {
             {/* ====================================================== */}
             {/* RIGHT COLUMN: Order Summary (4 cols - narrowed)        */}
             {/* ====================================================== */}
-            <div className="lg:col-span-4 lg:sticky lg:top-19 space-y-4">
+            <div className="lg:col-span-4 lg:sticky lg:top-24 space-y-4">
               <div className="rounded-2xl border border-line/80 bg-white p-5 sm:p-6 shadow-2xs space-y-5">
                 {/* Header */}
                 <div className="border-b border-line/50 pb-3.5">
@@ -713,77 +759,46 @@ export function DeliveryPage() {
                     Order Summary
                   </h2>
                   <p className="mt-0.5 text-[12px] text-muted">
-                    {totalItemCount} items from 2 sellers
+                    {totalItemCount} {totalItemCount === 1 ? "item" : "items"} from {sellerGroups.length} {sellerGroups.length === 1 ? "seller" : "sellers"}
                   </p>
                 </div>
 
-                {/* Items in Summary */}
-                <div className="space-y-3.5">
-                  {/* Item 1 */}
-                  <div className="flex items-center gap-3">
-                    <div className="relative size-14 shrink-0 rounded-xl bg-[#f7f3ec] border border-line/40 overflow-hidden flex items-center justify-center">
-                      <Image
-                        src={ring1}
-                        alt="Solitaire Diamond Ring"
-                        fill
-                        sizes="56px"
-                        className="object-contain"
-                      />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-[13px] font-semibold text-ink leading-snug line-clamp-1">
-                        Solitaire Diamond Ring
-                      </p>
-                      <p className="text-[11.5px] text-muted">Lumea Jewellery • Qty: {qtyRing}</p>
-                    </div>
-                    <span className="font-semibold text-ink text-[13.5px]">
-                      ${(priceRing * qtyRing).toLocaleString()}
-                    </span>
-                  </div>
+                {/* Items in Summary: Price written UNDER each product */}
+                <div className="space-y-4">
+                  {sellerGroups.map((group) =>
+                    group.items.map((item) => {
+                      const qty = quantities[item.id] ?? item.quantity ?? 1;
 
-                  {/* Item 2 */}
-                  <div className="flex items-center gap-3">
-                    <div className="relative size-14 shrink-0 rounded-xl bg-[#f7f3ec] border border-line/40 overflow-hidden flex items-center justify-center">
-                      <Image
-                        src={ring3}
-                        alt="Malachite Clover Necklace"
-                        fill
-                        sizes="56px"
-                        className="object-contain"
-                      />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-[13px] font-semibold text-ink leading-snug line-clamp-1">
-                        Malachite Clover Necklace
-                      </p>
-                      <p className="text-[11.5px] text-muted">Lumea Jewellery • Qty: {qtyNecklace}</p>
-                    </div>
-                    <span className="font-semibold text-ink text-[13.5px]">
-                      ${(priceNecklace * qtyNecklace).toLocaleString()}
-                    </span>
-                  </div>
+                      return (
+                        <div key={`summary-${item.id}`} className="flex items-start gap-3">
+                          {/* Thumbnail with NO padding */}
+                          <div className="relative size-14 shrink-0 rounded-xl bg-[#f7f3ec] border border-line/40 overflow-hidden flex items-center justify-center">
+                            <Image
+                              src={item.image}
+                              alt={item.name}
+                              fill
+                              sizes="56px"
+                              className="object-contain"
+                            />
+                          </div>
 
-                  {/* Item 3 */}
-                  <div className="flex items-center gap-3">
-                    <div className="relative size-14 shrink-0 rounded-xl bg-[#f7f3ec] border border-line/40 overflow-hidden flex items-center justify-center">
-                      <Image
-                        src={pearis}
-                        alt="Pearl Drop Earrings"
-                        fill
-                        sizes="56px"
-                        className="object-contain"
-                      />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-[13px] font-semibold text-ink leading-snug line-clamp-1">
-                        Pearl Drop Earrings
-                      </p>
-                      <p className="text-[11.5px] text-muted">Aurora Jewellery • Qty: {qtyEarrings}</p>
-                    </div>
-                    <span className="font-semibold text-ink text-[13.5px]">
-                      ${(priceEarrings * qtyEarrings).toLocaleString()}
-                    </span>
-                  </div>
+                          {/* Product Info + Price UNDER it */}
+                          <div className="flex-1 min-w-0">
+                            <p className="text-[13px] font-semibold text-ink leading-snug line-clamp-1">
+                              {item.name}
+                            </p>
+                            <p className="text-[11.5px] text-muted mt-0.5">
+                              {group.seller.name} • Qty: {qty}
+                            </p>
+                            {/* Price placed UNDER each product, not on the right */}
+                            <p className="text-[13px] font-bold text-ink mt-1">
+                              ${(item.price * qty).toLocaleString()}
+                            </p>
+                          </div>
+                        </div>
+                      );
+                    })
+                  )}
                 </div>
 
                 {/* Calculation breakdown */}
@@ -793,16 +808,13 @@ export function DeliveryPage() {
                     <span className="font-medium text-ink">${subtotal.toLocaleString()}</span>
                   </div>
 
-                  {/* Dynamic delivery fee per seller */}
-                  <div className="flex items-center justify-between text-ink-soft">
-                    <span>Delivery Fee (Lumea Jewellery)</span>
-                    <span className="font-medium text-ink">${deliveryFee1}</span>
-                  </div>
-
-                  <div className="flex items-center justify-between text-ink-soft">
-                    <span>Delivery Fee (Aurora Jewellery)</span>
-                    <span className="font-medium text-ink">${deliveryFee2}</span>
-                  </div>
+                  {/* Dynamic delivery fee row per active seller */}
+                  {Object.entries(sellerShippingFees).map(([sellerId, s]) => (
+                    <div key={sellerId} className="flex items-center justify-between text-ink-soft">
+                      <span>Delivery Fee ({s.sellerName})</span>
+                      <span className="font-medium text-ink">${s.fee}</span>
+                    </div>
+                  ))}
 
                   <div className="flex items-center justify-between text-emerald-700">
                     <span>Discount</span>
@@ -828,13 +840,13 @@ export function DeliveryPage() {
 
                 {/* Continue to Payment Button */}
                 <div className="pt-1">
-                  <button
-                    type="button"
+                  <Link
+                    href="/payment"
                     className="w-full rounded-full bg-ink py-4 text-[14px] font-semibold text-white shadow-md hover:bg-ink-soft transition-all active:scale-[0.99] cursor-pointer flex items-center justify-center gap-2"
                   >
                     <span>Continue to Payment</span>
                     <ArrowRightIcon width={14} height={14} />
-                  </button>
+                  </Link>
                 </div>
 
                 {/* 3 Trust Items below CTA */}

@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { TopBar } from "../layout/TopBar";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -87,6 +88,7 @@ const PHONE_CODES = [
 ];
 
 export function CheckoutPage() {
+  const router = useRouter();
   const { cart } = useCartWishlist();
 
   // If user has products in cart, display them; otherwise show the default items from design
@@ -112,6 +114,110 @@ export function CheckoutPage() {
   const [postalCode, setPostalCode] = useState("");
   const [saveInfo, setSaveInfo] = useState(false);
   const [sameBilling, setSameBilling] = useState(true);
+
+  // Validation errors
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  // Restore saved checkout address if exists
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("sidra_checkout_address");
+      if (saved) {
+        const data = JSON.parse(saved);
+        if (data.email) setEmail(data.email);
+        if (data.phoneCode) setPhoneCode(data.phoneCode);
+        if (data.phoneNumber) setPhoneNumber(data.phoneNumber);
+        if (data.firstName) setFirstName(data.firstName);
+        if (data.lastName) setLastName(data.lastName);
+        if (data.country) setCountry(data.country);
+        if (data.streetAddress) setStreetAddress(data.streetAddress);
+        if (data.apartment) setApartment(data.apartment);
+        if (data.city) setCity(data.city);
+        if (data.stateProvince) setStateProvince(data.stateProvince);
+        if (data.postalCode) setPostalCode(data.postalCode);
+        if (typeof data.sameBilling === "boolean") setSameBilling(data.sameBilling);
+        if (typeof data.saveInfo === "boolean") setSaveInfo(data.saveInfo);
+      }
+    } catch {
+      // Ignore parse error
+    }
+  }, []);
+
+  const handleContinueToDelivery = (e?: React.MouseEvent) => {
+    if (e) e.preventDefault();
+    const newErrors: Record<string, string> = {};
+
+    if (!email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      newErrors.email = "Please enter a valid email address";
+    }
+
+    if (!firstName.trim()) newErrors.firstName = "First name is required";
+    if (!lastName.trim()) newErrors.lastName = "Last name is required";
+    if (!country.trim()) newErrors.country = "Country is required";
+    if (!streetAddress.trim()) newErrors.streetAddress = "Street address is required";
+    if (!city.trim()) newErrors.city = "City is required";
+    if (!stateProvince.trim()) newErrors.stateProvince = "State/Province is required";
+    if (!postalCode.trim()) newErrors.postalCode = "Postal code is required";
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      const firstKey = Object.keys(newErrors)[0];
+      const elementId =
+        firstKey === "email"
+          ? "co-email"
+          : firstKey === "firstName"
+          ? "co-firstname"
+          : firstKey === "lastName"
+          ? "co-lastname"
+          : firstKey === "country"
+          ? "co-country"
+          : firstKey === "streetAddress"
+          ? "co-street"
+          : firstKey === "city"
+          ? "co-city"
+          : firstKey === "stateProvince"
+          ? "co-state"
+          : "co-postal";
+      const el = document.getElementById(elementId);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "center" });
+        el.focus();
+      }
+      return;
+    }
+
+    setErrors({});
+
+    const countryObj = COUNTRY_OPTIONS.find((c) => c.value === country);
+    const addressData = {
+      email: email.trim(),
+      phoneCode,
+      phoneNumber: phoneNumber.trim(),
+      phone: phoneNumber.trim() ? `${phoneCode} ${phoneNumber.trim()}` : "",
+      firstName: firstName.trim(),
+      lastName: lastName.trim(),
+      fullName: `${firstName.trim()} ${lastName.trim()}`,
+      country,
+      countryLabel: countryObj ? countryObj.label : country,
+      streetAddress: streetAddress.trim(),
+      apartment: apartment.trim(),
+      city: city.trim(),
+      stateProvince: stateProvince.trim(),
+      postalCode: postalCode.trim(),
+      sameBilling,
+      saveInfo,
+    };
+
+    try {
+      localStorage.setItem("sidra_checkout_address", JSON.stringify(addressData));
+    } catch (err) {
+      console.error("Failed to save address to localStorage", err);
+    }
+
+    router.push("/delivery");
+  };
 
   // Promo code dropdown state
   const [isPromoOpen, setIsPromoOpen] = useState(false);
@@ -609,10 +715,20 @@ export function CheckoutPage() {
                       id="co-email"
                       type="email"
                       value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      onChange={(e) => {
+                        setEmail(e.target.value);
+                        if (errors.email) setErrors((prev) => ({ ...prev, email: "" }));
+                      }}
                       placeholder="you@email.com"
-                      className="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-[13.5px] text-ink placeholder:text-muted focus:border-ink focus:outline-none transition-colors shadow-2xs"
+                      className={`w-full rounded-xl border bg-white px-3.5 py-2.5 text-[13.5px] text-ink placeholder:text-muted focus:outline-none transition-colors shadow-2xs ${
+                        errors.email
+                          ? "border-red-500 focus:border-red-500 ring-1 ring-red-500/20"
+                          : "border-line focus:border-ink"
+                      }`}
                     />
+                    {errors.email && (
+                      <p className="mt-1 text-[11.5px] text-red-500 font-medium">{errors.email}</p>
+                    )}
                   </div>
 
                   {/* Phone number */}
@@ -677,10 +793,20 @@ export function CheckoutPage() {
                         id="co-firstname"
                         type="text"
                         value={firstName}
-                        onChange={(e) => setFirstName(e.target.value)}
+                        onChange={(e) => {
+                          setFirstName(e.target.value);
+                          if (errors.firstName) setErrors((prev) => ({ ...prev, firstName: "" }));
+                        }}
                         placeholder="John"
-                        className="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-[13.5px] text-ink placeholder:text-muted focus:border-ink focus:outline-none transition-colors shadow-2xs"
+                        className={`w-full rounded-xl border bg-white px-3.5 py-2.5 text-[13.5px] text-ink placeholder:text-muted focus:outline-none transition-colors shadow-2xs ${
+                          errors.firstName
+                            ? "border-red-500 focus:border-red-500 ring-1 ring-red-500/20"
+                            : "border-line focus:border-ink"
+                        }`}
                       />
+                      {errors.firstName && (
+                        <p className="mt-1 text-[11.5px] text-red-500 font-medium">{errors.firstName}</p>
+                      )}
                     </div>
 
                     <div>
@@ -694,10 +820,20 @@ export function CheckoutPage() {
                         id="co-lastname"
                         type="text"
                         value={lastName}
-                        onChange={(e) => setLastName(e.target.value)}
+                        onChange={(e) => {
+                          setLastName(e.target.value);
+                          if (errors.lastName) setErrors((prev) => ({ ...prev, lastName: "" }));
+                        }}
                         placeholder="Doe"
-                        className="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-[13.5px] text-ink placeholder:text-muted focus:border-ink focus:outline-none transition-colors shadow-2xs"
+                        className={`w-full rounded-xl border bg-white px-3.5 py-2.5 text-[13.5px] text-ink placeholder:text-muted focus:outline-none transition-colors shadow-2xs ${
+                          errors.lastName
+                            ? "border-red-500 focus:border-red-500 ring-1 ring-red-500/20"
+                            : "border-line focus:border-ink"
+                        }`}
                       />
+                      {errors.lastName && (
+                        <p className="mt-1 text-[11.5px] text-red-500 font-medium">{errors.lastName}</p>
+                      )}
                     </div>
                   </div>
 
@@ -713,8 +849,15 @@ export function CheckoutPage() {
                       <select
                         id="co-country"
                         value={country}
-                        onChange={(e) => setCountry(e.target.value)}
-                        className="w-full appearance-none rounded-xl border border-line bg-white px-3.5 py-2.5 pr-10 text-[13.5px] text-ink focus:border-ink focus:outline-none transition-colors shadow-2xs cursor-pointer"
+                        onChange={(e) => {
+                          setCountry(e.target.value);
+                          if (errors.country) setErrors((prev) => ({ ...prev, country: "" }));
+                        }}
+                        className={`w-full appearance-none rounded-xl border bg-white px-3.5 py-2.5 pr-10 text-[13.5px] text-ink focus:outline-none transition-colors shadow-2xs cursor-pointer ${
+                          errors.country
+                            ? "border-red-500 focus:border-red-500 ring-1 ring-red-500/20"
+                            : "border-line focus:border-ink"
+                        }`}
                       >
                         {COUNTRY_OPTIONS.map((opt) => (
                           <option key={opt.value} value={opt.value}>
@@ -726,6 +869,9 @@ export function CheckoutPage() {
                         <ChevronDownIcon width={16} height={16} />
                       </div>
                     </div>
+                    {errors.country && (
+                      <p className="mt-1 text-[11.5px] text-red-500 font-medium">{errors.country}</p>
+                    )}
                   </div>
 
                   {/* Street address & Apartment */}
@@ -741,10 +887,20 @@ export function CheckoutPage() {
                         id="co-street"
                         type="text"
                         value={streetAddress}
-                        onChange={(e) => setStreetAddress(e.target.value)}
+                        onChange={(e) => {
+                          setStreetAddress(e.target.value);
+                          if (errors.streetAddress) setErrors((prev) => ({ ...prev, streetAddress: "" }));
+                        }}
                         placeholder="Street name and house number"
-                        className="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-[13.5px] text-ink placeholder:text-muted focus:border-ink focus:outline-none transition-colors shadow-2xs"
+                        className={`w-full rounded-xl border bg-white px-3.5 py-2.5 text-[13.5px] text-ink placeholder:text-muted focus:outline-none transition-colors shadow-2xs ${
+                          errors.streetAddress
+                            ? "border-red-500 focus:border-red-500 ring-1 ring-red-500/20"
+                            : "border-line focus:border-ink"
+                        }`}
                       />
+                      {errors.streetAddress && (
+                        <p className="mt-1 text-[11.5px] text-red-500 font-medium">{errors.streetAddress}</p>
+                      )}
                     </div>
 
                     <div>
@@ -778,10 +934,20 @@ export function CheckoutPage() {
                         id="co-city"
                         type="text"
                         value={city}
-                        onChange={(e) => setCity(e.target.value)}
+                        onChange={(e) => {
+                          setCity(e.target.value);
+                          if (errors.city) setErrors((prev) => ({ ...prev, city: "" }));
+                        }}
                         placeholder="Istanbul"
-                        className="w-full rounded-xl border border-line bg-white px-3 py-2.5 text-[12.5px] sm:text-[13.5px] text-ink placeholder:text-muted focus:border-ink focus:outline-none transition-colors shadow-2xs"
+                        className={`w-full rounded-xl border bg-white px-3 py-2.5 text-[12.5px] sm:text-[13.5px] text-ink placeholder:text-muted focus:outline-none transition-colors shadow-2xs ${
+                          errors.city
+                            ? "border-red-500 focus:border-red-500 ring-1 ring-red-500/20"
+                            : "border-line focus:border-ink"
+                        }`}
                       />
+                      {errors.city && (
+                        <p className="mt-1 text-[11px] text-red-500 font-medium">{errors.city}</p>
+                      )}
                     </div>
 
                     <div>
@@ -795,8 +961,15 @@ export function CheckoutPage() {
                         <select
                           id="co-state"
                           value={stateProvince}
-                          onChange={(e) => setStateProvince(e.target.value)}
-                          className="w-full appearance-none rounded-xl border border-line bg-white px-2.5 sm:px-3.5 py-2.5 pr-7 sm:pr-9 text-[12.5px] sm:text-[13.5px] text-ink focus:border-ink focus:outline-none transition-colors shadow-2xs cursor-pointer"
+                          onChange={(e) => {
+                            setStateProvince(e.target.value);
+                            if (errors.stateProvince) setErrors((prev) => ({ ...prev, stateProvince: "" }));
+                          }}
+                          className={`w-full appearance-none rounded-xl border bg-white px-2.5 sm:px-3.5 py-2.5 pr-7 sm:pr-9 text-[12.5px] sm:text-[13.5px] text-ink focus:outline-none transition-colors shadow-2xs cursor-pointer ${
+                            errors.stateProvince
+                              ? "border-red-500 focus:border-red-500 ring-1 ring-red-500/20"
+                              : "border-line focus:border-ink"
+                          }`}
                         >
                           <option value="">Select</option>
                           <option value="Istanbul">Istanbul</option>
@@ -811,6 +984,9 @@ export function CheckoutPage() {
                           <ChevronDownIcon width={13} height={13} />
                         </div>
                       </div>
+                      {errors.stateProvince && (
+                        <p className="mt-1 text-[11px] text-red-500 font-medium">{errors.stateProvince}</p>
+                      )}
                     </div>
 
                     <div>
@@ -824,10 +1000,20 @@ export function CheckoutPage() {
                         id="co-postal"
                         type="text"
                         value={postalCode}
-                        onChange={(e) => setPostalCode(e.target.value)}
+                        onChange={(e) => {
+                          setPostalCode(e.target.value);
+                          if (errors.postalCode) setErrors((prev) => ({ ...prev, postalCode: "" }));
+                        }}
                         placeholder="34000"
-                        className="w-full rounded-xl border border-line bg-white px-3 py-2.5 text-[12.5px] sm:text-[13.5px] text-ink placeholder:text-muted focus:border-ink focus:outline-none transition-colors shadow-2xs"
+                        className={`w-full rounded-xl border bg-white px-3 py-2.5 text-[12.5px] sm:text-[13.5px] text-ink placeholder:text-muted focus:outline-none transition-colors shadow-2xs ${
+                          errors.postalCode
+                            ? "border-red-500 focus:border-red-500 ring-1 ring-red-500/20"
+                            : "border-line focus:border-ink"
+                        }`}
                       />
+                      {errors.postalCode && (
+                        <p className="mt-1 text-[11px] text-red-500 font-medium">{errors.postalCode}</p>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -866,13 +1052,14 @@ export function CheckoutPage() {
 
                 {/* Continue to Delivery CTA (Mobile & Tablet only: block lg:hidden) */}
                 <div className="block lg:hidden mt-6">
-                  <Link
-                    href="/delivery"
+                  <button
+                    type="button"
+                    onClick={handleContinueToDelivery}
                     className="w-full rounded-full bg-ink py-4 text-[14px] font-semibold text-white shadow-md hover:bg-ink-soft transition-all active:scale-[0.99] cursor-pointer flex items-center justify-center gap-2"
                   >
                     <span>Continue to Delivery</span>
                     <ArrowRightIcon width={14} height={14} />
-                  </Link>
+                  </button>
                 </div>
 
                 {/* 4 Trust Icons (TABLET ONLY: hidden md:grid lg:hidden) */}
@@ -1154,13 +1341,14 @@ export function CheckoutPage() {
 
               {/* Continue to Delivery CTA (below summary card, matching design) */}
               <div className="mt-6">
-                <Link
-                  href="/delivery"
+                <button
+                  type="button"
+                  onClick={handleContinueToDelivery}
                   className="w-full rounded-full bg-ink py-4 text-[14px] font-semibold text-white shadow-md hover:bg-ink-soft transition-all active:scale-[0.99] cursor-pointer flex items-center justify-center gap-2"
                 >
                   <span>Continue to Delivery</span>
                   <ArrowRightIcon width={14} height={14} />
-                </Link>
+                </button>
               </div>
             </div>
           </div>
