@@ -496,10 +496,10 @@ export function DeliveryPage() {
             <div className="lg:col-span-8 space-y-6">
               {/* Notice Alert Banner (Dynamic Seller Count) */}
               {showAlert && (
-                <div className="rounded-2xl border border-[#f2ded1] bg-[#fef7f2] p-4 sm:p-5 flex items-start justify-between gap-4 shadow-2xs transition-all">
+                <div className="rounded-2xl border border-[#f2ded1] bg-[#fcf8f2] p-4 sm:p-5 flex items-start justify-between gap-4 shadow-2xs transition-all">
                   <div className="flex items-start gap-3.5">
-                    <div className="size-9 rounded-xl bg-[#f8e5d8] text-[#a4532b] grid place-items-center shrink-0 mt-0.5">
-                      <TruckIcon width={20} height={20} />
+                    <div className="size-9 rounded-xl text-[#a4532b] grid place-items-center shrink-0 mt-0.5">
+                      <TruckIcon width={25} height={25} />
                     </div>
                     <div>
                       <h3 className="font-semibold text-ink text-[13.5px] sm:text-[14px]">
@@ -649,6 +649,21 @@ export function DeliveryPage() {
                                 </div>
                               );
                             })}
+
+                            {/* Estimated Delivery Notice Banner (Inside left column under products) */}
+                            <div className="rounded-xl bg-[#fcf8f3] border border-[#ebdccb]/70 p-3.5 flex items-center gap-3 text-[12px] sm:text-[12.5px] text-ink">
+                              <div className="size-8 rounded-full bg-[#fceddf] flex items-center justify-center text-[#a4532b] shrink-0">
+                                <CalendarIcon className="size-4" />
+                              </div>
+                              <div className="min-w-0">
+                                <p className="font-semibold text-ink leading-tight">
+                                  Estimated delivery for this seller
+                                </p>
+                                <p className="text-[12px] text-[#686868] mt-1">
+                                  3 – 5 business days (Oct 15 – Oct 20, 2026)
+                                </p>
+                              </div>
+                            </div>
                           </div>
 
                           {/* Delivery Options Right Column */}
@@ -665,7 +680,7 @@ export function DeliveryPage() {
                                     key={opt.id}
                                     className={`flex items-start gap-3 p-3 rounded-xl border transition-all cursor-pointer ${
                                       isSelected
-                                        ? "border-ink bg-cream-50/60 shadow-2xs"
+                                        ? "border-[#d4b88c] bg-[#fcf8f2] shadow-2xs"
                                         : "border-line/70 bg-white hover:border-line hover:bg-cream-50/20"
                                     }`}
                                   >
@@ -693,18 +708,18 @@ export function DeliveryPage() {
                                       </p>
 
                                       <div className="flex items-center gap-2 mt-2 flex-wrap text-[11px]">
-                                        <span className="inline-flex items-center gap-1 rounded bg-cream-100/80 px-1.5 py-0.5 text-ink-soft">
+                                        <span className="inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-ink-soft">
                                           <PackageIcon width={11} height={11} />
                                           <span>Tracking available</span>
                                         </span>
 
                                         {opt.status === "confirmed" ? (
-                                          <span className="inline-flex items-center gap-1 rounded bg-emerald-50 px-1.5 py-0.5 text-emerald-800 font-medium">
+                                          <span className="inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-emerald-800 font-medium">
                                             <CheckIcon width={10} height={10} className="stroke-[2.5]" />
                                             <span>{opt.statusText}</span>
                                           </span>
                                         ) : (
-                                          <span className="inline-flex items-center gap-1 rounded bg-amber-50 px-1.5 py-0.5 text-amber-800 font-medium">
+                                          <span className="inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-amber-800 font-medium">
                                             <ShieldCheckIcon width={11} height={11} />
                                             <span>{opt.statusText}</span>
                                           </span>
@@ -716,19 +731,6 @@ export function DeliveryPage() {
                               })}
                             </div>
                           </div>
-                        </div>
-
-                        {/* Estimated Delivery Notice Banner */}
-                        <div className="rounded-xl bg-[#fcf8f3] border border-[#ebdccb]/70 p-3.5 flex items-center gap-2.5 text-[12px] sm:text-[12.5px] text-ink-soft">
-                          <div className="text-[#a4532b] shrink-0">
-                            <CalendarIcon className="size-4" />
-                          </div>
-                          <span>
-                            Estimated delivery for this seller:{" "}
-                            <strong className="text-ink font-semibold">
-                              3 – 5 business days (Oct 15 – Oct 20, 2026)
-                            </strong>
-                          </span>
                         </div>
                       </div>
                     )}
@@ -751,7 +753,7 @@ export function DeliveryPage() {
             {/* ====================================================== */}
             {/* RIGHT COLUMN: Order Summary (4 cols - narrowed)        */}
             {/* ====================================================== */}
-            <div className="lg:col-span-4 lg:sticky lg:top-24 space-y-4">
+            <div className="lg:col-span-4 space-y-4">
               <div className="rounded-2xl border border-line/80 bg-white p-5 sm:p-6 shadow-2xs space-y-5">
                 {/* Header */}
                 <div className="border-b border-line/50 pb-3.5">
@@ -852,8 +854,8 @@ export function DeliveryPage() {
                 {/* 3 Trust Items below CTA */}
                 <div className="border-t border-line/60 pt-4 space-y-3.5">
                   <div className="flex items-start gap-3">
-                    <div className="text-ink mt-0.5 shrink-0">
-                      <LockIcon width={18} height={18} />
+                    <div className="text-[#a4532b] mt-0.5 shrink-0">
+                      <LockIcon width={22} height={22} />
                     </div>
                     <div>
                       <p className="text-[12px] font-semibold text-ink">Secure Checkout</p>
@@ -862,8 +864,8 @@ export function DeliveryPage() {
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="text-ink mt-0.5 shrink-0">
-                      <PackageIcon width={18} height={18} />
+                    <div className="text-[#a4532b] mt-0.5 shrink-0">
+                      <PackageIcon width={22} height={22} />
                     </div>
                     <div>
                       <p className="text-[12px] font-semibold text-ink">Free &amp; Easy Returns</p>
@@ -872,8 +874,8 @@ export function DeliveryPage() {
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="text-ink mt-0.5 shrink-0">
-                      <ShieldCheckIcon width={18} height={18} />
+                    <div className="text-[#a4532b] mt-0.5 shrink-0">
+                      <ShieldCheckIcon width={22} height={22} />
                     </div>
                     <div>
                       <p className="text-[12px] font-semibold text-ink">Your Data is Protected</p>
