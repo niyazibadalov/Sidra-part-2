@@ -552,7 +552,7 @@ export function DeliveryPage() {
                               <span>Verified Seller</span>
                             </span>
                           </div>
-                          <div className="flex items-center gap-3 text-[11.5px] text-muted mt-0.5">
+                          <div className="hidden sm:flex items-center gap-3 text-[11.5px] text-muted mt-0.5">
                             <span className="flex items-center gap-1 text-amber-600 font-medium">
                               <StarIcon width={12} height={12} className="fill-amber-500 text-amber-500" />
                               <span>{group.seller.rating}</span>
