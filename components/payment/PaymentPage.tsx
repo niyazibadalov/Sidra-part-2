@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { TopBar } from "../layout/TopBar";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -242,6 +243,7 @@ const SELLER_TEMPLATES = [
 ];
 
 export function PaymentPage() {
+  const router = useRouter();
   const { cart } = useCartWishlist();
 
   // Dynamic Address State loaded from localStorage
@@ -1082,13 +1084,33 @@ export function PaymentPage() {
 
                 {/* Continue to Review CTA */}
                 <div className="pt-2">
-                  <Link
-                    href="/review"
+                  <button
+                    type="button"
+                    onClick={() => {
+                      // Save payment method data to localStorage for Review page
+                      try {
+                        const last4 = cardNumber.replace(/\s/g, "").slice(-4) || "4242";
+                        const paymentData = {
+                          method: selectedMethod,
+                          cardLast4: last4,
+                          cardholderName,
+                          expiryDate: expiryDate === "MM / YY" ? "12/28" : expiryDate,
+                          cardBrand: "visa",
+                          installment,
+                          billingChoice,
+                          saveCard,
+                        };
+                        localStorage.setItem("sidra_payment_method", JSON.stringify(paymentData));
+                      } catch {
+                        // ignore
+                      }
+                      router.push("/review");
+                    }}
                     className="w-full rounded-full bg-ink py-4 text-[14px] font-semibold text-white shadow-md hover:bg-neutral-800 transition-all active:scale-[0.99] cursor-pointer flex items-center justify-center gap-2"
                   >
                     <span>Continue to Review</span>
                     <ArrowRightIcon width={14} height={14} />
-                  </Link>
+                  </button>
                 </div>
 
                 {/* Back to Delivery link */}
