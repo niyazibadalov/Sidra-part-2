@@ -94,7 +94,7 @@ export function Header({ hideMobileTagline = false }: { hideMobileTagline?: bool
           scrolled ? "border-line shadow-[0_6px_24px_-18px_rgba(22,20,18,0.35)]" : "border-transparent"
         }`}
       >
-        <div className="relative mx-auto flex h-16 max-w-[1440px] items-center gap-4 px-4 sm:px-6 lg:h-[72px] lg:gap-8 lg:px-10">
+        <div className="relative mx-auto flex h-16 max-w-360 items-center gap-4 px-4 sm:px-6 lg:h-18 lg:gap-8 lg:px-10">
           {/* Mobile / tablet: menu button */}
           <button
             type="button"
@@ -123,7 +123,7 @@ export function Header({ hideMobileTagline = false }: { hideMobileTagline?: bool
             </ul>
           </nav>
 
-          <SearchField className="ml-auto hidden w-full max-w-[340px] xl:block" />
+          <SearchField className="ml-auto hidden w-full max-w-85 xl:block" />
 
           <div className="ml-auto flex items-center gap-1 xl:ml-0">
             <Link
@@ -155,7 +155,7 @@ export function Header({ hideMobileTagline = false }: { hideMobileTagline?: bool
                 className="hidden h-10 items-center gap-2 rounded-full px-3.5 text-[12.5px] font-medium text-ink bg-cream-100/80 border border-line/60 lg:flex"
               >
                 <UserIcon width={18} height={18} className="shrink-0 text-ink" />
-                <span className="max-w-[100px] xl:max-w-[140px] truncate">
+                <span className="max-w-25 xl:max-w-35 truncate">
                   {currentUser.firstName}
                 </span>
               </div>
@@ -278,7 +278,7 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
               <div className="flex h-11 items-center justify-center gap-2 rounded-full border border-line bg-white px-3 text-sm font-medium text-ink shadow-2xs">
                 <UserIcon width={18} height={18} className="shrink-0 text-ink" />
                 <span
-                  className="max-w-[85px] sm:max-w-[110px] truncate"
+                  className="max-w-21.25 sm:max-w-27.5 truncate"
                   title={currentUser.firstName}
                 >
                   {currentUser.firstName}

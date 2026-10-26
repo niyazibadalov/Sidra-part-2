@@ -10,7 +10,7 @@ const MESSAGES = [
 export function TopBar({ showOnMobile = false }: { showOnMobile?: boolean }) {
   return (
     <div className={`${showOnMobile ? "block" : "hidden md:block"} border-b border-line bg-cream-200 text-[11px] text-ink-soft`}>
-      <div className="relative mx-auto flex h-8 max-w-[1440px] items-center justify-center px-6 lg:px-10">
+      <div className="relative mx-auto flex h-8 max-w-360 items-center justify-center px-6 lg:px-10">
         <ul className="flex items-center gap-3">
           {MESSAGES.map((m, i) => (
             <li
