@@ -426,7 +426,7 @@ export function DeliveryPage() {
         {/* TOP HERO SECTION (No image, title & 4-step indicator)   */}
         {/* ====================================================== */}
         <section className="border-b border-line/60 bg-cream-50/50">
-          <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10 py-7 lg:py-9">
+          <div className="mx-auto max-w-360 px-4 sm:px-6 lg:px-10 py-7 lg:py-9">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
               {/* Left: Title & Subtitle */}
               <div>
@@ -488,7 +488,7 @@ export function DeliveryPage() {
         {/* ====================================================== */}
         {/* MAIN 2-COLUMN CONTENT                                  */}
         {/* ====================================================== */}
-        <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10 py-8 lg:py-12">
+        <div className="mx-auto max-w-360 px-4 sm:px-6 lg:px-10 py-8 lg:py-12">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 xl:gap-10 items-start">
             {/* ====================================================== */}
             {/* LEFT COLUMN: Multi-seller Shipping Options (8 cols)    */}
@@ -603,7 +603,7 @@ export function DeliveryPage() {
                                 >
                                   <div className="flex items-center gap-3.5 min-w-0">
                                     {/* Enlarged image with NO padding */}
-                                    <div className="relative size-20 sm:size-[84px] shrink-0 rounded-xl bg-[#f7f3ec] border border-line/40 overflow-hidden flex items-center justify-center">
+                                    <div className="relative size-20 sm:size-21 shrink-0 rounded-xl bg-[#f7f3ec] border border-line/40 overflow-hidden flex items-center justify-center">
                                       <Image
                                         src={item.image}
                                         alt={item.name}

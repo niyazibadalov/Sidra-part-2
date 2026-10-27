@@ -35,7 +35,7 @@ export function Toast() {
           <HeartIcon width={22} height={22} className="fill-[#b74134] text-[#b74134]" />
         )}
         <span className="absolute -top-1 -right-1 flex size-4 items-center justify-center rounded-full bg-emerald-600 text-[10px] text-white">
-          <CheckIcon width={10} height={10} className="stroke-[3]" />
+          <CheckIcon width={10} height={10} className="stroke-3" />
         </span>
       </div>
 
