@@ -4,6 +4,7 @@ import "./globals.css";
 import { CartWishlistProvider } from "@/context/CartWishlistContext";
 import { AuthProvider } from "@/context/AuthContext";
 import { Toast } from "@/components/common/Toast";
+import { CookieConsent } from "@/components/cookie-consent/CookieConsent";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -39,6 +40,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <CartWishlistProvider>
             {children}
             <Toast />
+            <CookieConsent />
           </CartWishlistProvider>
         </AuthProvider>
       </body>
